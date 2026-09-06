@@ -1,0 +1,569 @@
+/* Styling for the settlement generator.
+
+   Deliberately restrained: black ink on cream paper, which echoes Mausritter's look without
+   copying its trade dress. The Mausritter and Losing Games logos are not used anywhere, as the
+   Third Party Licence forbids it. */
+
+:root {
+    --ink: #1a1713;
+    --ink-soft: #5b544a;
+    --paper: #f6f1e4;
+    --paper-deep: #ece4d2;
+    --rule: #cbbfa6;
+    --accent: #8c3b2e;
+    --accent-soft: #f0e2d8;
+    --locked: #7a6a2f;
+}
+
+.settlement-tool {
+    color: var(--ink);
+    max-width: 62rem;
+}
+
+.settlement-tool h1,
+.settlement-tool h2,
+.settlement-tool h3 {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+/* ---------- Controls ---------- */
+
+.generator-bar {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 2px;
+    padding: 0.9rem 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    align-items: flex-end;
+}
+
+.generator-bar .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.generator-bar label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    font-weight: 700;
+}
+
+.generator-bar input[type="text"],
+.generator-bar select {
+    border: 1px solid var(--rule);
+    background: #fff;
+    border-radius: 2px;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.92rem;
+    min-width: 8rem;
+}
+
+.generator-bar .checkbox {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
+    padding-bottom: 0.35rem;
+}
+
+.generator-bar .checkbox label {
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--ink);
+}
+
+.btn-ink {
+    background: var(--ink);
+    color: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 2px;
+    padding: 0.35rem 0.9rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.btn-ink:hover:not(:disabled) {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.btn-quiet {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 0.35rem 0.7rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.btn-quiet:hover:not(:disabled) {
+    border-color: var(--ink);
+    background: var(--paper-deep);
+}
+
+.btn-ink:disabled,
+.btn-quiet:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.toolbar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+/* ---------- Sheet ---------- */
+
+.sheet {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 2px;
+    padding: 1.5rem 1.75rem;
+}
+
+.sheet-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.75rem;
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
+}
+
+.sheet-title h2 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.sheet-title .seed-tag {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 0.1rem 0.4rem;
+}
+
+.sheet-summary {
+    font-size: 1.02rem;
+    color: var(--ink-soft);
+    margin-bottom: 1.25rem;
+}
+
+.section-heading {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-weight: 700;
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.2rem;
+    margin: 1.75rem 0 0.75rem;
+}
+
+/* ---------- Editable fields ---------- */
+
+.field-row {
+    display: grid;
+    grid-template-columns: 9rem 1fr auto;
+    gap: 0.5rem 0.75rem;
+    align-items: start;
+    padding: 0.3rem 0;
+    border-bottom: 1px dotted var(--rule);
+}
+
+.field-row:last-child {
+    border-bottom: none;
+}
+
+.field-row .field-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    font-weight: 700;
+    padding-top: 0.15rem;
+}
+
+.field-row .field-value {
+    line-height: 1.45;
+}
+
+.field-row .field-value ul {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+.field-row.is-locked {
+    background: #fdf8e6;
+}
+
+.field-row.is-locked .field-value {
+    font-weight: 600;
+}
+
+.field-actions {
+    display: flex;
+    gap: 0.2rem;
+    opacity: 0;
+    transition: opacity 0.12s;
+}
+
+.field-row:hover .field-actions,
+.field-row:focus-within .field-actions,
+.field-row.is-locked .field-actions {
+    opacity: 1;
+}
+
+.icon-btn {
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    line-height: 1;
+    padding: 0.2rem 0.35rem;
+    color: var(--ink-soft);
+}
+
+.icon-btn:hover {
+    border-color: var(--rule);
+    background: #fff;
+    color: var(--ink);
+}
+
+.icon-btn.active {
+    color: var(--locked);
+    border-color: var(--locked);
+    background: #fdf8e6;
+}
+
+.field-editor {
+    width: 100%;
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    padding: 0.25rem 0.4rem;
+    font: inherit;
+    font-size: 0.95rem;
+}
+
+/* ---------- Shops ---------- */
+
+.shop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    gap: 1rem;
+}
+
+.shop {
+    border: 2px solid var(--ink);
+    border-radius: 2px;
+    background: #fffdf7;
+    padding: 0.9rem 1rem 1rem;
+    break-inside: avoid;
+}
+
+.shop-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 0.4rem;
+    margin-bottom: 0.6rem;
+}
+
+.shop-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 0.8rem;
+    flex: none;
+}
+
+.shop-name {
+    font-weight: 700;
+    font-size: 1.08rem;
+    line-height: 1.2;
+}
+
+.shop-type {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    margin-left: auto;
+    text-align: right;
+    flex: none;
+}
+
+.shop dl {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+}
+
+.shop dt {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    font-weight: 700;
+    margin-top: 0.4rem;
+}
+
+.shop dd {
+    margin: 0.05rem 0 0;
+}
+
+.keeper {
+    background: var(--paper-deep);
+    border-left: 3px solid var(--ink);
+    padding: 0.45rem 0.6rem;
+    margin: 0.5rem 0;
+    font-size: 0.88rem;
+}
+
+.keeper .keeper-name {
+    font-weight: 700;
+}
+
+.keeper .keeper-meta {
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+}
+
+.stock-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+    margin-top: 0.4rem;
+}
+
+.stock-table th {
+    text-align: left;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--rule);
+    padding: 0.15rem 0.3rem;
+}
+
+.stock-table td {
+    padding: 0.15rem 0.3rem;
+    border-bottom: 1px dotted var(--rule);
+}
+
+.stock-table td.qty,
+.stock-table td.price {
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.price-note {
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+}
+
+/* ---------- Mausritter-style item cards ---------- */
+
+.card-sheet {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 10rem));
+    gap: 0.6rem;
+}
+
+.item-card {
+    border: 2px solid var(--ink);
+    border-radius: 3px;
+    background: #fffdf7;
+    padding: 0.45rem 0.5rem;
+    min-height: 7.2rem;
+    display: flex;
+    flex-direction: column;
+    break-inside: avoid;
+}
+
+/* Mausritter items occupy inventory slots: most are 1x1, two-handed weapons and armour are
+   wider, and a few are tall. The card mirrors the slot it will take up. */
+.item-card.wide {
+    grid-column: span 2;
+}
+
+.item-card.tall {
+    min-height: 14.6rem;
+}
+
+.item-card .item-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 1.15;
+}
+
+.item-card .item-type {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    margin-top: 0.1rem;
+}
+
+.item-card .item-note {
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    margin-top: 0.25rem;
+    line-height: 1.25;
+}
+
+.item-card .item-foot {
+    margin-top: auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.3rem;
+    padding-top: 0.4rem;
+}
+
+.item-card .item-price {
+    font-weight: 700;
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.usage-dots {
+    display: flex;
+    gap: 0.15rem;
+}
+
+.usage-dots span {
+    width: 0.62rem;
+    height: 0.62rem;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    display: block;
+}
+
+/* ---------- Notices ---------- */
+
+.notice {
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    padding: 0.6rem 0.85rem;
+    border-radius: 2px;
+    font-size: 0.87rem;
+    margin: 1rem 0;
+}
+
+.notice.subtle {
+    border-left-color: var(--rule);
+    background: var(--paper-deep);
+}
+
+.house-rule-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 700;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 2px;
+    padding: 0.05rem 0.3rem;
+    vertical-align: middle;
+}
+
+.status-line {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    min-height: 1.2rem;
+    margin-top: 0.4rem;
+}
+
+.site-footer {
+    margin-top: 3rem;
+    padding: 1rem 0 2rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+}
+
+.site-footer p {
+    margin-bottom: 0.4rem;
+}
+
+/* ---------- Print ---------- */
+
+@media print {
+    @page {
+        margin: 12mm;
+    }
+
+    /* The app chrome is navigation, not content. */
+    .sidebar,
+    .top-row,
+    .generator-bar,
+    .field-actions,
+    .no-print {
+        display: none !important;
+    }
+
+    html, body, .page, main, .content {
+        background: #fff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+        width: auto !important;
+    }
+
+    .settlement-tool {
+        max-width: none;
+    }
+
+    .sheet {
+        border: none;
+        background: #fff;
+        padding: 0;
+    }
+
+    .shop,
+    .item-card,
+    .keeper {
+        background: #fff;
+    }
+
+    .field-row.is-locked {
+        background: #fff;
+    }
+
+    .shop-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .page-break {
+        break-before: page;
+    }
+
+    a[href]::after {
+        content: "";
+    }
+}

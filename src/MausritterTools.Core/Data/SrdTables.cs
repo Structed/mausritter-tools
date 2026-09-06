@@ -6,27 +6,27 @@ namespace MausritterTools.Core.Data;
 public sealed record SettlementTables
 {
     [JsonPropertyName("_source")]
-    public DataProvenance Source { get; init; } = new();
+    public DataProvenance Source { get => field ?? new(); init; } = new();
 
-    public string SizeRoll { get; init; } = "";
+    public string SizeRoll { get => field ?? ""; init; } = "";
 
-    public IReadOnlyList<SettlementSize> Sizes { get; init; } = [];
+    public IReadOnlyList<SettlementSize> Sizes { get => field ?? []; init; } = [];
 
-    public string GovernanceRoll { get; init; } = "";
+    public string GovernanceRoll { get => field ?? ""; init; } = "";
 
-    public IReadOnlyList<GovernanceEntry> Governance { get; init; } = [];
+    public IReadOnlyList<GovernanceEntry> Governance { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> Inhabitants { get; init; } = [];
+    public IReadOnlyList<string> Inhabitants { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> NotableFeatures { get; init; } = [];
+    public IReadOnlyList<string> NotableFeatures { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> Industries { get; init; } = [];
+    public IReadOnlyList<string> Industries { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> Events { get; init; } = [];
+    public IReadOnlyList<string> Events { get => field ?? []; init; } = [];
 
-    public NameSeedTable NameSeeds { get; init; } = new();
+    public NameSeedTable NameSeeds { get => field ?? new(); init; } = new();
 
-    public TavernTable Taverns { get; init; } = new();
+    public TavernTable Taverns { get => field ?? new(); init; } = new();
 }
 
 /// <summary>
@@ -43,7 +43,7 @@ public sealed record SettlementSize
 
     public int SizeValue { get; init; }
 
-    public string Name { get; init; } = "";
+    public string Name { get => field ?? ""; init; } = "";
 
     public string? Population { get; init; }
 
@@ -67,7 +67,7 @@ public sealed record GovernanceEntry
 
     public int RollMax { get; init; }
 
-    public string Text { get; init; } = "";
+    public string Text { get => field ?? ""; init; } = "";
 
     public bool Contains(int roll) => roll >= RollMin && roll <= RollMax;
 }
@@ -81,46 +81,46 @@ public sealed record GovernanceEntry
 /// </remarks>
 public sealed record NameSeedTable
 {
-    public string Note { get; init; } = "";
+    public string Note { get => field ?? ""; init; } = "";
 
-    public IReadOnlyList<string> StartA { get; init; } = [];
+    public IReadOnlyList<string> StartA { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> StartB { get; init; } = [];
+    public IReadOnlyList<string> StartB { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> EndA { get; init; } = [];
+    public IReadOnlyList<string> EndA { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> EndB { get; init; } = [];
+    public IReadOnlyList<string> EndB { get => field ?? []; init; } = [];
 }
 
 /// <summary>The tavern name and specialty meal columns.</summary>
 public sealed record TavernTable
 {
-    public string Note { get; init; } = "";
+    public string Note { get => field ?? ""; init; } = "";
 
-    public IReadOnlyList<string> NameA { get; init; } = [];
+    public IReadOnlyList<string> NameA { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> NameB { get; init; } = [];
+    public IReadOnlyList<string> NameB { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> SpecialtyMeals { get; init; } = [];
+    public IReadOnlyList<string> SpecialtyMeals { get => field ?? []; init; } = [];
 }
 
 /// <summary>Non-player mice tables, imported from the Mausritter SRD.</summary>
 public sealed record NpcTables
 {
     [JsonPropertyName("_source")]
-    public DataProvenance Source { get; init; } = new();
+    public DataProvenance Source { get => field ?? new(); init; } = new();
 
-    public IReadOnlyList<SocialPosition> SocialPositions { get; init; } = [];
+    public IReadOnlyList<SocialPosition> SocialPositions { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<Birthsign> Birthsigns { get; init; } = [];
+    public IReadOnlyList<Birthsign> Birthsigns { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> Appearance { get; init; } = [];
+    public IReadOnlyList<string> Appearance { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> Quirk { get; init; } = [];
+    public IReadOnlyList<string> Quirk { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> Wants { get; init; } = [];
+    public IReadOnlyList<string> Wants { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> Relationship { get; init; } = [];
+    public IReadOnlyList<string> Relationship { get => field ?? []; init; } = [];
 }
 
 /// <summary>A social position and the fee a mouse of that station commands.</summary>
@@ -128,10 +128,10 @@ public sealed record SocialPosition
 {
     public int Roll { get; init; }
 
-    public string Name { get; init; } = "";
+    public string Name { get => field ?? ""; init; } = "";
 
     /// <summary>Dice expression such as <c>d6 x 10p</c>.</summary>
-    public string Payment { get; init; } = "";
+    public string Payment { get => field ?? ""; init; } = "";
 }
 
 /// <summary>A birthsign and its paired virtue and vice.</summary>
@@ -139,11 +139,11 @@ public sealed record Birthsign
 {
     public int Roll { get; init; }
 
-    public string Name { get; init; } = "";
+    public string Name { get => field ?? ""; init; } = "";
 
-    public string Disposition { get; init; } = "";
+    public string Disposition { get => field ?? ""; init; } = "";
 
-    public string Virtue { get; init; } = "";
+    public string Virtue { get => field ?? ""; init; } = "";
 
     public string? Vice { get; init; }
 }
@@ -152,11 +152,11 @@ public sealed record Birthsign
 public sealed record GearTables
 {
     [JsonPropertyName("_source")]
-    public DataProvenance Source { get; init; } = new();
+    public DataProvenance Source { get => field ?? new(); init; } = new();
 
-    public Currency Currency { get; init; } = new();
+    public Currency Currency { get => field ?? new(); init; } = new();
 
-    public IReadOnlyList<GearCategory> Categories { get; init; } = [];
+    public IReadOnlyList<GearCategory> Categories { get => field ?? []; init; } = [];
 
     public GearCategory? FindCategory(string id) =>
         Categories.FirstOrDefault(c => c.Id == id);
@@ -165,24 +165,24 @@ public sealed record GearTables
 /// <summary>Mausritter's only currency.</summary>
 public sealed record Currency
 {
-    public string Name { get; init; } = "pip";
+    public string Name { get => field ?? "pip"; init; } = "pip";
 
-    public string Abbreviation { get; init; } = "p";
+    public string Abbreviation { get => field ?? "p"; init; } = "p";
 
-    public string Note { get; init; } = "";
+    public string Note { get => field ?? ""; init; } = "";
 }
 
 /// <summary>One priced category from the gear list.</summary>
 public sealed record GearCategory
 {
-    public string Id { get; init; } = "";
+    public string Id { get => field ?? ""; init; } = "";
 
-    public string Name { get; init; } = "";
+    public string Name { get => field ?? ""; init; } = "";
 
     /// <summary>Where the category can be bought, when the SRD says so.</summary>
     public string? Availability { get; init; }
 
-    public IReadOnlyList<GearItem> Items { get; init; } = [];
+    public IReadOnlyList<GearItem> Items { get => field ?? []; init; } = [];
 }
 
 /// <summary>
@@ -195,7 +195,7 @@ public sealed record GearCategory
 /// </remarks>
 public sealed record GearItem
 {
-    public string Name { get; init; } = "";
+    public string Name { get => field ?? ""; init; } = "";
 
     /// <summary>Distinguishes variants, e.g. "blank" and "reading" for a book.</summary>
     public string? Qualifier { get; init; }
@@ -203,7 +203,7 @@ public sealed record GearItem
     /// <summary>Parenthetical detail, e.g. "dagger, needle, etc.".</summary>
     public string? Note { get; init; }
 
-    public string PriceText { get; init; } = "";
+    public string PriceText { get => field ?? ""; init; } = "";
 
     public int? Pips { get; init; }
 
@@ -221,27 +221,27 @@ public sealed record GearItem
 public sealed record HirelingTables
 {
     [JsonPropertyName("_source")]
-    public DataProvenance Source { get; init; } = new();
+    public DataProvenance Source { get => field ?? new(); init; } = new();
 
-    public string Recruiting { get; init; } = "";
+    public string Recruiting { get => field ?? ""; init; } = "";
 
-    public string Note { get; init; } = "";
+    public string Note { get => field ?? ""; init; } = "";
 
-    public IReadOnlyList<Hireling> Hirelings { get; init; } = [];
+    public IReadOnlyList<Hireling> Hirelings { get => field ?? []; init; } = [];
 }
 
 /// <summary>A type of hireling, how many are looking for work, and their daily wage.</summary>
 public sealed record Hireling
 {
-    public string Name { get; init; } = "";
+    public string Name { get => field ?? ""; init; } = "";
 
     /// <summary>
     /// Dice expression for how many are available, e.g. <c>d6</c> for a torchbearer or <c>d2</c>
     /// for a blacksmith. A low number implies a scarce, skilled role.
     /// </summary>
-    public string Number { get; init; } = "";
+    public string Number { get => field ?? ""; init; } = "";
 
-    public string WagesText { get; init; } = "";
+    public string WagesText { get => field ?? ""; init; } = "";
 
     public int? WagesPips { get; init; }
 }
@@ -250,13 +250,13 @@ public sealed record Hireling
 public sealed record SpellTables
 {
     [JsonPropertyName("_source")]
-    public DataProvenance Source { get; init; } = new();
+    public DataProvenance Source { get => field ?? new(); init; } = new();
 
-    public string Roll { get; init; } = "";
+    public string Roll { get => field ?? ""; init; } = "";
 
-    public string SaleValue { get; init; } = "";
+    public string SaleValue { get => field ?? ""; init; } = "";
 
-    public IReadOnlyList<Spell> Spells { get; init; } = [];
+    public IReadOnlyList<Spell> Spells { get => field ?? []; init; } = [];
 }
 
 /// <summary>One spell from the 2d8 list.</summary>
@@ -266,9 +266,9 @@ public sealed record Spell
 
     public int RollMax { get; init; }
 
-    public string Name { get; init; } = "";
+    public string Name { get => field ?? ""; init; } = "";
 
-    public string Effect { get; init; } = "";
+    public string Effect { get => field ?? ""; init; } = "";
 
-    public string Recharge { get; init; } = "";
+    public string Recharge { get => field ?? ""; init; } = "";
 }

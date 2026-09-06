@@ -258,6 +258,22 @@ public sealed class GameData
                 }
             }
 
+            // An allow-listed item that does not exist would silently shrink the shop's shelves.
+            foreach (string itemName in service.Stock.ItemNames)
+            {
+                bool exists = service.Stock.Categories
+                    .Select(Gear.FindCategory)
+                    .OfType<GearCategory>()
+                    .SelectMany(category => category.Items)
+                    .Any(item => string.Equals(item.Name, itemName, StringComparison.OrdinalIgnoreCase));
+
+                if (!exists)
+                {
+                    problems.Add(
+                        $"Service '{service.Id}' lists item '{itemName}', which is not in any category it stocks.");
+                }
+            }
+
             bool stocksSomething = service.Stock.Categories.Count > 0 && service.Stock.MaxItems > 0;
             if (!service.ServiceOnly && !stocksSomething)
             {

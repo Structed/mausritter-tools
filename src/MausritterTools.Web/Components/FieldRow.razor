@@ -1,0 +1,134 @@
+@* One line of the settlement sheet: a value that can be locked, hand-edited or re-rolled. *@
+
+<div class="field-row @(IsLocked ? "is-locked" : null)">
+    <div class="field-label">@Label</div>
+
+    <div class="field-value">
+        @if (_editing)
+        {
+            <input class="field-editor"
+                   @bind="_draft"
+                   @bind:event="oninput"
+                   @onkeydown="OnEditorKeyDown"
+                   @onblur="CommitEdit"
+                   @ref="_editor" />
+        }
+        else if (Values.Count > 1)
+        {
+            <ul>
+                @foreach (string value in Values)
+                {
+                    <li>@value</li>
+                }
+            </ul>
+        }
+        else
+        {
+            @(Values.Count == 1 ? Values[0] : string.Empty)
+        }
+    </div>
+
+    <div class="field-actions no-print">
+        <button type="button"
+                class="icon-btn @(IsLocked ? "active" : null)"
+                title="@(IsLocked ? "Unlock so it re-rolls again" : "Lock so re-rolls leave it alone")"
+                aria-pressed="@IsLocked"
+                @onclick="() => OnToggleLock.InvokeAsync(Path)">
+            @(IsLocked ? "\U0001F512" : "\U0001F513")
+        </button>
+
+        <button type="button"
+                class="icon-btn"
+                title="Edit by hand"
+                @onclick="BeginEdit">
+            &#9998;
+        </button>
+
+        <button type="button"
+                class="icon-btn"
+                title="Re-roll just this"
+                @onclick="() => OnReroll.InvokeAsync(Path)">
+            &#8635;
+        </button>
+    </div>
+</div>
+
+@code {
+    private bool _editing;
+    private string _draft = "";
+    private ElementReference _editor;
+    private bool _focusPending;
+
+    [Parameter, EditorRequired]
+    public string Label { get; set; } = "";
+
+    /// <summary>The generator field path this row edits, e.g. <c>settlement/event</c>.</summary>
+    [Parameter, EditorRequired]
+    public string Path { get; set; } = "";
+
+    /// <summary>The value, or several values for a field such as a city's two industries.</summary>
+    [Parameter, EditorRequired]
+    public IReadOnlyList<string> Values { get; set; } = [];
+
+    [Parameter]
+    public bool IsLocked { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnToggleLock { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnReroll { get; set; }
+
+    /// <summary>Raised with the path and the edited text. Multiple values arrive newline-separated.</summary>
+    [Parameter]
+    public EventCallback<(string Path, string Value)> OnEdit { get; set; }
+
+    private void BeginEdit()
+    {
+        _draft = string.Join('\n', Values);
+        _editing = true;
+        _focusPending = true;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!_focusPending)
+        {
+            return;
+        }
+
+        _focusPending = false;
+        await _editor.FocusAsync();
+    }
+
+    private async Task OnEditorKeyDown(KeyboardEventArgs args)
+    {
+        switch (args.Key)
+        {
+            case "Enter":
+                await CommitEdit();
+                break;
+            case "Escape":
+                _editing = false;
+                break;
+        }
+    }
+
+    private async Task CommitEdit()
+    {
+        if (!_editing)
+        {
+            return;
+        }
+
+        _editing = false;
+
+        string trimmed = _draft.Trim();
+        if (trimmed.Length == 0 || trimmed == string.Join('\n', Values))
+        {
+            return;
+        }
+
+        await OnEdit.InvokeAsync((Path, trimmed));
+    }
+}

@@ -1,0 +1,103 @@
+@using MausritterTools.Core.Model
+
+@* One shop: sign, type, quirk, proprietor and stock. *@
+
+<article class="shop">
+    <header class="shop-head">
+        <span class="shop-number" title="Map key @Shop.Index">@Shop.Index</span>
+        <span class="shop-name">@Shop.SignName</span>
+        <span class="shop-type">@Shop.Service.Name</span>
+    </header>
+
+    <p class="mb-2">@Shop.Service.Blurb</p>
+
+    <dl>
+        <dt>Quirk</dt>
+        <dd>@Shop.Quirk</dd>
+    </dl>
+
+    <div class="keeper">
+        <div class="keeper-name">@Shop.Keeper.FullName</div>
+        <div>@Shop.Keeper.Appearance. @Shop.Keeper.Quirk.</div>
+        <div class="keeper-meta">
+            @Shop.Keeper.Position.Name &middot; @Shop.Keeper.Purse.ToString("N0")p on paw &middot;
+            born under the @Shop.Keeper.Birthsign.Name (@Shop.Keeper.Disposition)
+        </div>
+        <div class="keeper-meta">Wants: @Shop.Keeper.Wants.</div>
+        @if (Shop.Keeper.RelationshipSummary is { } relationship)
+        {
+            <div class="keeper-meta">@relationship</div>
+        }
+    </div>
+
+    @if (Shop.Service.ServiceTerms is { } terms)
+    {
+        <dl>
+            <dt>Terms</dt>
+            <dd>@terms</dd>
+        </dl>
+    }
+
+    @if (Shop.Service.OffersRepairs)
+    {
+        <dl>
+            <dt>Repairs</dt>
+            <dd>Clears a usage dot for 10% of the item's original cost.</dd>
+        </dl>
+    }
+
+    @if (Shop.Service.BuysSpells)
+    {
+        <dl>
+            <dt>Spells</dt>
+            <dd>Buys a fully charged spell for d6 &times; 100p. A depleted one is worth half.</dd>
+        </dl>
+    }
+
+    @if (Shop.Stock.Count > 0)
+    {
+        <table class="stock-table">
+            <thead>
+                <tr>
+                    <th>@(Shop.Service.OffersHirelings ? "Looking for work" : "In stock")</th>
+                    <th class="qty">@(Shop.Service.OffersHirelings ? "No." : "Qty")</th>
+                    <th class="price">@(Shop.Service.OffersHirelings ? "Per day" : "Price")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (StockEntry entry in Shop.Stock)
+                {
+                    <tr>
+                        <td>
+                            @entry.DisplayName
+                            @if (entry.Item.Note is { Length: > 0 } note)
+                            {
+                                <span class="price-note"> (@note)</span>
+                            }
+                        </td>
+                        <td class="qty">@(entry.Quantity?.ToString() ?? "—")</td>
+                        <td class="price">@entry.PriceText</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (Shop.PriceAdjustmentPercent != 0)
+        {
+            <p class="price-note mt-1">
+                Prices run @Math.Abs(Shop.PriceAdjustmentPercent)%
+                @(Shop.PriceAdjustmentPercent > 0 ? "above" : "below") the listed rate here.
+            </p>
+        }
+    }
+
+    <details class="mt-2">
+        <summary class="price-note">Where this comes from</summary>
+        <p class="price-note mt-1 mb-0">@Shop.Service.SrdBasis</p>
+    </details>
+</article>
+
+@code {
+    [Parameter, EditorRequired]
+    public Shop Shop { get; set; } = new();
+}

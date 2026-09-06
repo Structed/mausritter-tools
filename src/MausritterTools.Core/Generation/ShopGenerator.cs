@@ -238,12 +238,16 @@ public static class ShopGenerator
             return [];
         }
 
-        List<GearItem> pool = [];
+        // The category travels with each item so the card can show the right usage dots without
+        // a fragile reverse lookup: a padlock, for instance, appears in two categories.
+        List<(GearItem Item, string CategoryId)> pool = [];
         foreach (string categoryId in service.Stock.Categories)
         {
             if (data.Gear.FindCategory(categoryId) is { } category)
             {
-                pool.AddRange(category.Items);
+                pool.AddRange(category.Items
+                    .Where(service.Stock.Allows)
+                    .Select(item => (item, category.Id)));
             }
         }
 
@@ -257,12 +261,12 @@ public static class ShopGenerator
         int span = Math.Max(0, service.Stock.MaxItems - service.Stock.MinItems);
         int wanted = service.Stock.MinItems + (span == 0 ? 0 : dice.NextIndex(span + 1));
 
-        IReadOnlyList<GearItem> items = dice.PickDistinct(pool, wanted);
+        IReadOnlyList<(GearItem Item, string CategoryId)> items = dice.PickDistinct(pool, wanted);
 
         List<StockEntry> stock = new(items.Count);
-        foreach (GearItem item in items.OrderBy(i => i.DisplayName, StringComparer.Ordinal))
+        foreach ((GearItem item, string categoryId) in items.OrderBy(i => i.Item.DisplayName, StringComparer.Ordinal))
         {
-            stock.Add(BuildStockEntry(data, dice, service, item, priceAdjustmentPercent));
+            stock.Add(BuildStockEntry(data, dice, service, item, categoryId, priceAdjustmentPercent));
         }
 
         return stock;
@@ -273,6 +277,7 @@ public static class ShopGenerator
         DiceRoller dice,
         ServiceDefinition service,
         GearItem item,
+        string categoryId,
         int adjustmentPercent)
     {
         // Prices such as "x10p" for silvering and "10%" per repair dot are modifiers rather than
@@ -282,6 +287,7 @@ public static class ShopGenerator
             return new StockEntry
             {
                 Item = item,
+                CategoryId = categoryId,
                 Pips = null,
                 PriceText = item.PriceText,
                 Quantity = null
@@ -300,6 +306,7 @@ public static class ShopGenerator
         return new StockEntry
         {
             Item = item,
+            CategoryId = categoryId,
             Pips = adjusted,
             PriceText = priceText,
             Quantity = RollQuantity(data, dice, service, item, listed)

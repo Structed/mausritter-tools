@@ -13,22 +13,22 @@ namespace MausritterTools.Core.Data;
 public sealed record ServiceTables
 {
     [JsonPropertyName("_source")]
-    public DataProvenance Source { get; init; } = new();
+    public DataProvenance Source { get => field ?? new(); init; } = new();
 
     /// <summary>How far a shop's prices may drift from the listed price, either way.</summary>
     public int PriceVariancePercent { get; init; }
 
-    public string PriceVarianceNote { get; init; } = "";
+    public string PriceVarianceNote { get => field ?? ""; init; } = "";
 
-    public IReadOnlyList<ShopCountRange> ShopCountBySize { get; init; } = [];
+    public IReadOnlyList<ShopCountRange> ShopCountBySize { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<ServiceDefinition> Services { get; init; } = [];
+    public IReadOnlyList<ServiceDefinition> Services { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<SignPattern> ShopSignPatterns { get; init; } = [];
+    public IReadOnlyList<SignPattern> ShopSignPatterns { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> ShopSignAdjectives { get; init; } = [];
+    public IReadOnlyList<string> ShopSignAdjectives { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> ShopQuirks { get; init; } = [];
+    public IReadOnlyList<string> ShopQuirks { get => field ?? []; init; } = [];
 
     public ShopCountRange? CountForSize(int sizeValue) =>
         ShopCountBySize.FirstOrDefault(r => r.SizeValue == sizeValue);
@@ -39,7 +39,7 @@ public sealed record ShopCountRange
 {
     public int SizeValue { get; init; }
 
-    public string Name { get; init; } = "";
+    public string Name { get => field ?? ""; init; } = "";
 
     public int Min { get; init; }
 
@@ -49,12 +49,12 @@ public sealed record ShopCountRange
 /// <summary>A kind of shop or service that can appear in a settlement.</summary>
 public sealed record ServiceDefinition
 {
-    public string Id { get; init; } = "";
+    public string Id { get => field ?? ""; init; } = "";
 
-    public string Name { get; init; } = "";
+    public string Name { get => field ?? ""; init; } = "";
 
     /// <summary>What the proprietor is called, e.g. "smith".</summary>
-    public string KeeperTitle { get; init; } = "";
+    public string KeeperTitle { get => field ?? ""; init; } = "";
 
     /// <summary>Smallest settlement size this service appears in.</summary>
     public int MinSize { get; init; } = 1;
@@ -73,14 +73,14 @@ public sealed record ServiceDefinition
     /// <summary>Baseline adjustment applied to this service's prices.</summary>
     public int PriceModifierPercent { get; init; }
 
-    public StockProfile Stock { get; init; } = new();
+    public StockProfile Stock { get => field ?? new(); init; } = new();
 
-    public IReadOnlyList<string> SignNouns { get; init; } = [];
+    public IReadOnlyList<string> SignNouns { get => field ?? []; init; } = [];
 
     /// <summary>The quoted SRD rule this service is derived from, shown in the UI for transparency.</summary>
-    public string SrdBasis { get; init; } = "";
+    public string SrdBasis { get => field ?? ""; init; } = "";
 
-    public string Blurb { get; init; } = "";
+    public string Blurb { get => field ?? ""; init; } = "";
 
     /// <summary>A service with no sellable stock, such as a bank.</summary>
     public bool ServiceOnly { get; init; }
@@ -105,19 +105,34 @@ public sealed record ServiceDefinition
 /// <summary>Which gear categories a shop stocks, and how deeply.</summary>
 public sealed record StockProfile
 {
-    public IReadOnlyList<string> Categories { get; init; } = [];
+    public IReadOnlyList<string> Categories { get => field ?? []; init; } = [];
+
+    /// <summary>
+    /// Restricts stock to these item names.
+    /// </summary>
+    /// <remarks>
+    /// The SRD's mouse-made tools are one undifferentiated list of hardware, so a shop that draws
+    /// from it freely ends up with an apothecary selling wooden poles. Specialist shops name the
+    /// items that suit them instead. An empty list means the whole category is fair game.
+    /// </remarks>
+    public IReadOnlyList<string> ItemNames { get => field ?? []; init; } = [];
 
     public int MinItems { get; init; }
 
     public int MaxItems { get; init; }
+
+    /// <summary>Whether an item from a stocked category may appear on the shelves.</summary>
+    public bool Allows(GearItem item) =>
+        ItemNames.Count == 0 ||
+        ItemNames.Contains(item.Name, StringComparer.OrdinalIgnoreCase);
 }
 
 /// <summary>A template for a shop sign, e.g. <c>The {adjective} {noun}</c>.</summary>
 public sealed record SignPattern
 {
-    public string Id { get; init; } = "";
+    public string Id { get => field ?? ""; init; } = "";
 
-    public string Template { get; init; } = "";
+    public string Template { get => field ?? ""; init; } = "";
 
     public int Weight { get; init; } = 10;
 }
@@ -126,11 +141,11 @@ public sealed record SignPattern
 public sealed record NameTables
 {
     [JsonPropertyName("_source")]
-    public DataProvenance Source { get; init; } = new();
+    public DataProvenance Source { get => field ?? new(); init; } = new();
 
-    public IReadOnlyList<string> GivenNames { get; init; } = [];
+    public IReadOnlyList<string> GivenNames { get => field ?? []; init; } = [];
 
-    public IReadOnlyList<string> FamilyNames { get; init; } = [];
+    public IReadOnlyList<string> FamilyNames { get => field ?? []; init; } = [];
 }
 
 /// <summary>
@@ -143,14 +158,17 @@ public sealed record NameTables
 public sealed record HostTables
 {
     [JsonPropertyName("_source")]
-    public DataProvenance Source { get; init; } = new();
+    public DataProvenance Source { get => field ?? new(); init; } = new();
 
-    public string DesignNote { get; init; } = "";
+    public string DesignNote { get => field ?? ""; init; } = "";
 
-    public IReadOnlyDictionary<string, string> Shapes { get; init; } =
-        new Dictionary<string, string>();
+    public IReadOnlyDictionary<string, string> Shapes
+    {
+        get => field ?? new Dictionary<string, string>();
+        init;
+    } = new Dictionary<string, string>();
 
-    public IReadOnlyList<HostObject> Hosts { get; init; } = [];
+    public IReadOnlyList<HostObject> Hosts { get => field ?? []; init; } = [];
 
     /// <summary>Hosts that suit the given terrain, falling back to all of them.</summary>
     public IReadOnlyList<HostObject> ForTerrain(string? terrain)
@@ -168,17 +186,17 @@ public sealed record HostTables
 /// <summary>One host object, with the metadata the map generator needs.</summary>
 public sealed record HostObject
 {
-    public string Id { get; init; } = "";
+    public string Id { get => field ?? ""; init; } = "";
 
-    public string Name { get; init; } = "";
+    public string Name { get => field ?? ""; init; } = "";
 
     /// <summary>How the settlement sits relative to the host, e.g. "inside", "beneath".</summary>
-    public string Preposition { get; init; } = "in";
+    public string Preposition { get => field ?? "in"; init; } = "in";
 
     /// <summary>Layout archetype: hollow, linear, vessel, boxy, warren or sprawl.</summary>
-    public string Shape { get; init; } = "hollow";
+    public string Shape { get => field ?? "hollow"; init; } = "hollow";
 
-    public IReadOnlyList<string> Terrain { get; init; } = [];
+    public IReadOnlyList<string> Terrain { get => field ?? []; init; } = [];
 
     public int Weight { get; init; } = 50;
 
@@ -191,7 +209,7 @@ public sealed record HostObject
     /// </summary>
     public string? Article { get; init; }
 
-    public string Description { get; init; } = "";
+    public string Description { get => field ?? ""; init; } = "";
 
     /// <summary>e.g. "inside an old farmhouse stump".</summary>
     public string Describe()

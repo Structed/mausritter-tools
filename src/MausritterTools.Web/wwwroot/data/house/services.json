@@ -160,7 +160,12 @@
       "allowDuplicates": false,
       "requiresHumanTown": false,
       "priceModifierPercent": 20,
-      "stock": { "categories": ["tools-mouse-made"], "minItems": 3, "maxItems": 5 },
+      "stock": {
+        "categories": ["tools-mouse-made"],
+        "itemNames": ["Bottle", "Waterskin", "Perfume", "Grease", "Glue", "Cookpots", "Hourglass", "Bellows"],
+        "minItems": 3,
+        "maxItems": 5
+      },
       "signNouns": ["Mortar", "Pestle", "Poultice", "Tincture", "Sprig", "Simples"],
       "srdBasis": "Extrapolated from the Industry table entry \"Gardens of rare herbs. Drying racks are guarded\" and the SRD's perfume and soap entries. Mausritter has no apothecary rules; treat the stock as flavour.",
       "blurb": "Bundles of drying herbs, and advice you did not ask for."
@@ -174,7 +179,12 @@
       "allowDuplicates": false,
       "requiresHumanTown": false,
       "priceModifierPercent": 0,
-      "stock": { "categories": ["tools-mouse-made"], "minItems": 2, "maxItems": 4 },
+      "stock": {
+        "categories": ["tools-mouse-made"],
+        "itemNames": ["Book", "Chalk", "Hourglass", "Bottle", "Mirror"],
+        "minItems": 2,
+        "maxItems": 4
+      },
       "signNouns": ["Quill", "Folio", "Ledger", "Margin", "Inkpot", "Codex"],
       "srdBasis": "The scholar hireling has a Number of d2, and the SRD prices a blank book at 300p and a reading book at 600p.",
       "blurb": "Books at 300p blank and 600p written, and a scholar who will read them to you."
@@ -205,9 +215,14 @@
       "allowDuplicates": false,
       "requiresHumanTown": false,
       "priceModifierPercent": 50,
-      "stock": { "categories": ["tools-human-made", "tools-mouse-made"], "minItems": 2, "maxItems": 4 },
+      "stock": {
+        "categories": ["tools-mouse-made"],
+        "itemNames": ["Mirror", "Musical instrument", "Hourglass", "Set of loaded dice", "Perfume", "Horn", "Lockpicks"],
+        "minItems": 2,
+        "maxItems": 4
+      },
       "signNouns": ["Oddity", "Wonder", "Relic", "Curio", "Rummage"],
-      "srdBasis": "\"If unwanted, a fully charged spell can usually be sold for d6 x 100p in a settlement. A depleted spell's value is halved.\" Note the SRD only covers selling spells, never buying them, so a dealer who sells spells is entirely a house rule.",
+      "srdBasis": "\"If unwanted, a fully charged spell can usually be sold for d6 x 100p in a settlement. A depleted spell's value is halved.\" Note the SRD only covers selling spells, never buying them, so a dealer who sells spells is entirely a house rule. Stock is limited to mouse-made oddities because human-made goods are gated on being near a human town.",
       "blurb": "Will buy a spell off you for d6 x 100p. Selling one back is another matter.",
       "buysSpells": true
     }

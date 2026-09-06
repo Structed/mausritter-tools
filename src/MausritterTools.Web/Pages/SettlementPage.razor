@@ -1,0 +1,586 @@
+@page "/settlement"
+@using System.Text
+@using MausritterTools.Core.Data
+@using MausritterTools.Core.Generation
+@using MausritterTools.Core.Model
+@using MausritterTools.Core.Randomness
+@using MausritterTools.Core.Serialization
+@using MausritterTools.Web.Components
+@using MausritterTools.Web.Services
+@using Microsoft.AspNetCore.Components.Forms
+@implements IDisposable
+@inject GameDataProvider DataProvider
+@inject BrowserInterop Browser
+@inject NavigationManager Navigation
+
+<PageTitle>@(_settlement is null ? "Settlement generator" : $"{_settlement.Name} — Mausritter Tools")</PageTitle>
+
+<div class="settlement-tool">
+    <h1>Settlement generator</h1>
+
+    @if (_loadError is { } loadError)
+    {
+        <div class="notice">
+            <strong>The Mausritter tables could not be loaded.</strong>
+            <p class="mb-0 mt-1">@loadError</p>
+        </div>
+    }
+    else if (_generator is null)
+    {
+        <p>Loading the Mausritter tables…</p>
+    }
+    else
+    {
+        <p class="lead">
+            Rolls a whole mouse settlement: who runs it, what they trade, what is happening today,
+            and every shop with its keeper and stock. Lock anything you like, re-roll the rest.
+        </p>
+
+        <div class="generator-bar no-print">
+            <div class="field">
+                <label for="seed">Seed</label>
+                <input id="seed" type="text" value="@_seedText" @onchange="OnSeedChanged" spellcheck="false" />
+            </div>
+
+            <div class="field">
+                <label for="size">Size</label>
+                <select id="size" @onchange="OnSizeChanged">
+                    <option value="" selected="@(_options.Size is null)">Roll it (2d6, keep lowest)</option>
+                    @foreach (SettlementSize size in _data!.Settlement.Sizes)
+                    {
+                        <option value="@size.SizeValue" selected="@(_options.Size == size.SizeValue)">
+                            @size.Describe()
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="terrain">Terrain</label>
+                <select id="terrain" @onchange="OnTerrainChanged">
+                    <option value="" selected="@(_options.Terrain is null)">Anywhere</option>
+                    @foreach ((string value, string label) in Terrains)
+                    {
+                        <option value="@value" selected="@(_options.Terrain == value)">@label</option>
+                    }
+                </select>
+            </div>
+
+            <div class="field checkbox">
+                <input id="human" type="checkbox" checked="@_options.NearHumanTown" @onchange="OnHumanTownChanged" />
+                <label for="human" title="The SRD gates human-made goods on geography, not size">
+                    Near a human town
+                </label>
+            </div>
+
+            <div class="toolbar-actions">
+                <button type="button" class="btn-ink" @onclick="RollNew">Roll a new settlement</button>
+                <button type="button" class="btn-quiet" @onclick="RerollUnlocked" disabled="@(!HasPins)">
+                    Re-roll unlocked
+                </button>
+                <button type="button" class="btn-quiet" @onclick="CopyLink">Copy link</button>
+                <button type="button" class="btn-quiet" @onclick="ExportJson">Export JSON</button>
+                <label class="btn-quiet mb-0" style="cursor:pointer">
+                    Import JSON
+                    <InputFile OnChange="ImportJson" accept=".json,application/json" style="display:none" />
+                </label>
+                <button type="button" class="btn-quiet" @onclick="Print">Print</button>
+            </div>
+        </div>
+
+        <div class="status-line no-print" role="status" aria-live="polite">@_status</div>
+
+        @if (_settlement is { } settlement)
+        {
+            <div class="sheet">
+                <div class="sheet-title">
+                    <h2>@settlement.Name</h2>
+                    <span class="seed-tag">seed @SeedCodec.Encode(settlement.Seed)</span>
+                </div>
+                <p class="sheet-summary">@settlement.Summary</p>
+
+                <h3 class="section-heading">The settlement</h3>
+
+                <FieldRow Label="Name" Path="settlement/name"
+                          Values="@(new[] { settlement.Name })"
+                          IsLocked="@IsLocked("settlement/name")"
+                          OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
+
+                <FieldRow Label="Size" Path="settlement/size"
+                          Values="@(new[] { settlement.Size.Describe() })"
+                          IsLocked="@IsLocked("settlement/size")"
+                          OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
+
+                <FieldRow Label="Built" Path="settlement/host"
+                          Values="@(new[] { $"{Capitalise(settlement.Host.Describe())} — {settlement.Host.Description}" })"
+                          IsLocked="@IsLocked("settlement/host")"
+                          OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
+
+                <FieldRow Label="Governance" Path="settlement/governance"
+                          Values="@(new[] { $"{settlement.Governance} (d6 + size = {settlement.GovernanceRoll})" })"
+                          IsLocked="@IsLocked("settlement/governance")"
+                          OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
+
+                <FieldRow Label="Inhabitants" Path="settlement/inhabitants"
+                          Values="@(new[] { settlement.Inhabitants })"
+                          IsLocked="@IsLocked("settlement/inhabitants")"
+                          OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
+
+                <FieldRow Label="@(settlement.NotableFeatures.Count > 1 ? "Features" : "Feature")"
+                          Path="settlement/features"
+                          Values="settlement.NotableFeatures"
+                          IsLocked="@IsLocked("settlement/features")"
+                          OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
+
+                <FieldRow Label="@(settlement.Industries.Count > 1 ? "Industries" : "Industry")"
+                          Path="settlement/industries"
+                          Values="settlement.Industries"
+                          IsLocked="@IsLocked("settlement/industries")"
+                          OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
+
+                <FieldRow Label="Right now" Path="settlement/event"
+                          Values="@(new[] { settlement.Event })"
+                          IsLocked="@IsLocked("settlement/event")"
+                          OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
+
+                @if (settlement.Tavern is { } tavern)
+                {
+                    <h3 class="section-heading">Tavern</h3>
+
+                    <FieldRow Label="Sign" Path="tavern/name"
+                              Values="@(new[] { tavern.Name })"
+                              IsLocked="@IsLocked("tavern/name")"
+                              OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
+
+                    <FieldRow Label="Specialty" Path="tavern/meal"
+                              Values="@(new[] { tavern.SpecialtyMeal })"
+                              IsLocked="@IsLocked("tavern/meal")"
+                              OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
+
+                    <FieldRow Label="Landlord" Path="tavern/keeper/name"
+                              Values="@(new[] { $"{tavern.Keeper.FullName} — {tavern.Keeper.Appearance}. {tavern.Keeper.Quirk}. Wants: {tavern.Keeper.Wants}." })"
+                              IsLocked="@IsLocked("tavern/keeper/name")"
+                              OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
+                }
+
+                <h3 class="section-heading">
+                    Shops and services
+                    <span class="house-rule-tag" title="Mausritter has no settlement services table">House rule</span>
+                </h3>
+
+                @if (settlement.Shops.Count == 0)
+                {
+                    <p class="notice subtle mb-0">
+                        Nothing is for sale here. A settlement this small trades in favours and IOUs,
+                        not shopfronts.
+                    </p>
+                }
+                else
+                {
+                    <div class="shop-grid">
+                        @foreach (Shop shop in settlement.Shops)
+                        {
+                            <ShopView Shop="shop" />
+                        }
+                    </div>
+
+                    @if (CardableStock.Count > 0)
+                    {
+                        <h3 class="section-heading page-break">Item cards</h3>
+                        <p class="price-note">
+                            Everything on sale, as cards to cut out. Dots are usage; wide cards take
+                            two inventory slots.
+                        </p>
+                        <div class="card-sheet">
+                            @foreach (StockEntry entry in CardableStock)
+                            {
+                                @* CategoryId is a string parameter, so it needs @ to be treated as
+                                   an expression rather than a literal. *@
+                                <ItemCardView Entry="entry" CategoryId="@entry.CategoryId" />
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        }
+
+        <div class="notice subtle no-print">
+            <strong>What is official and what is not.</strong>
+            The settlement, tavern and non-player mice tables come from the Mausritter SRD.
+            Mausritter has no shops or services table, so that whole layer &mdash; which services
+            exist, how settlement size gates them, and the mouse names &mdash; is original to this
+            tool. Each shop lists the SRD rule it was extrapolated from under
+            &ldquo;where this comes from&rdquo;.
+        </div>
+    }
+
+    <LicenceFooter />
+</div>
+
+@code {
+    private const string StorageKey = "mausritter-tools.settlement";
+
+    private static readonly (string Value, string Label)[] Terrains =
+    [
+        ("countryside", "Countryside"),
+        ("forest", "Forest"),
+        ("river", "River"),
+        ("human-town", "Human town")
+    ];
+
+    private GameData? _data;
+    private SettlementGenerator? _generator;
+    private Settlement? _settlement;
+    private GenerationOptions _options = new();
+    private string _seedText = "";
+    private string _status = "";
+    private string? _loadError;
+    private bool _restoring;
+
+    private bool HasPins => _options.Pins.Count > 0;
+
+    private IReadOnlyList<StockEntry> CardableStock =>
+        _settlement is null
+            ? []
+            : [.. _settlement.Shops
+                .Where(shop => !shop.Service.ServiceOnly)
+                .SelectMany(shop => shop.Stock)
+                .Where(entry => ItemCard.IsCardable(entry.Item))];
+
+    protected override async Task OnInitializedAsync()
+    {
+        Navigation.LocationChanged += OnLocationChanged;
+
+        try
+        {
+            _data = await DataProvider.GetDataAsync();
+            _generator = await DataProvider.GetGeneratorAsync();
+        }
+        catch (Exception ex)
+        {
+            _loadError = ex.Message;
+            return;
+        }
+
+        await RestoreStateAsync();
+    }
+
+    /// <summary>
+    /// Restores from the URL when there is a seed in it, and otherwise from the last autosave, so
+    /// a shared link always wins over whatever the visitor was last looking at.
+    /// </summary>
+    private async Task RestoreStateAsync()
+    {
+        if (TryReadOptionsFromUrl(out GenerationOptions fromUrl))
+        {
+            _options = fromUrl;
+            Regenerate(updateUrl: false);
+            return;
+        }
+
+        string? saved = await Browser.ReadStorageAsync(StorageKey);
+        if (saved is { Length: > 0 })
+        {
+            try
+            {
+                _options = SettlementSerializer.FromJson(saved);
+                Regenerate(updateUrl: true);
+                return;
+            }
+            catch (SettlementFormatException)
+            {
+                await Browser.ClearStorageAsync(StorageKey);
+            }
+        }
+
+        _options = new GenerationOptions { Seed = SeedCodec.CreateRandom() };
+        Regenerate(updateUrl: true);
+    }
+
+    private bool TryReadOptionsFromUrl(out GenerationOptions options)
+    {
+        options = new GenerationOptions();
+
+        Uri uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        Dictionary<string, string> query = ParseQuery(uri.Query);
+
+        if (!query.TryGetValue("s", out string? seedText) ||
+            !SeedCodec.TryDecode(seedText, out uint seed))
+        {
+            return false;
+        }
+
+        options = new GenerationOptions
+        {
+            Seed = seed,
+            Size = query.TryGetValue("size", out string? sizeText) && int.TryParse(sizeText, out int size)
+                ? size
+                : null,
+            NearHumanTown = query.TryGetValue("human", out string? human) && human == "1",
+            Terrain = query.TryGetValue("terrain", out string? terrain) && terrain.Length > 0
+                ? terrain
+                : null
+        };
+
+        return true;
+    }
+
+    private static Dictionary<string, string> ParseQuery(string query)
+    {
+        Dictionary<string, string> parsed = new(StringComparer.OrdinalIgnoreCase);
+
+        foreach (string pair in query.TrimStart('?').Split('&', StringSplitOptions.RemoveEmptyEntries))
+        {
+            string[] parts = pair.Split('=', 2);
+            parsed[Uri.UnescapeDataString(parts[0])] =
+                parts.Length > 1 ? Uri.UnescapeDataString(parts[1]) : "";
+        }
+
+        return parsed;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs args)
+    {
+        if (_restoring || _generator is null)
+        {
+            return;
+        }
+
+        if (TryReadOptionsFromUrl(out GenerationOptions fromUrl) && fromUrl.Seed != _options.Seed)
+        {
+            _options = fromUrl;
+            Regenerate(updateUrl: false);
+            StateHasChanged();
+        }
+    }
+
+    private void Regenerate(bool updateUrl)
+    {
+        if (_generator is null)
+        {
+            return;
+        }
+
+        _settlement = _generator.Generate(_options);
+        _seedText = SeedCodec.Encode(_options.Seed);
+
+        if (updateUrl)
+        {
+            UpdateUrl();
+        }
+
+        _ = SaveStateAsync();
+    }
+
+    /// <summary>
+    /// Keeps the address bar in step with the settings. Only the settings go in the URL; locks and
+    /// hand edits would make it unwieldy, so those live in the autosave and the JSON export.
+    /// </summary>
+    private void UpdateUrl()
+    {
+        StringBuilder query = new($"?s={SeedCodec.Encode(_options.Seed)}");
+
+        if (_options.Size is { } size)
+        {
+            query.Append($"&size={size}");
+        }
+
+        if (_options.NearHumanTown)
+        {
+            query.Append("&human=1");
+        }
+
+        if (_options.Terrain is { Length: > 0 } terrain)
+        {
+            query.Append($"&terrain={Uri.EscapeDataString(terrain)}");
+        }
+
+        _restoring = true;
+        Navigation.NavigateTo($"settlement{query}", forceLoad: false, replace: true);
+        _restoring = false;
+    }
+
+    private async Task SaveStateAsync()
+    {
+        if (_settlement is null)
+        {
+            return;
+        }
+
+        await Browser.WriteStorageAsync(StorageKey, SettlementSerializer.ToJson(_settlement, _options));
+    }
+
+    private void RollNew()
+    {
+        // A fresh seed re-rolls everything except the values the user has locked.
+        _options = _options with { Seed = SeedCodec.CreateRandom(), Rerolls = new Dictionary<string, int>() };
+        Regenerate(updateUrl: true);
+        _status = HasPins ? "Rolled a new settlement, keeping your locked entries." : "";
+    }
+
+    private void RerollUnlocked()
+    {
+        _options = _options with { Seed = SeedCodec.CreateRandom(), Rerolls = new Dictionary<string, int>() };
+        Regenerate(updateUrl: true);
+        _status = $"Re-rolled everything except {_options.Pins.Count} locked entr{(_options.Pins.Count == 1 ? "y" : "ies")}.";
+    }
+
+    private void OnSeedChanged(ChangeEventArgs args)
+    {
+        string text = args.Value?.ToString() ?? "";
+
+        if (!SeedCodec.TryDecode(text, out uint seed))
+        {
+            _status = $"'{text}' is not a valid seed.";
+            _seedText = SeedCodec.Encode(_options.Seed);
+            return;
+        }
+
+        _options = _options with { Seed = seed };
+        Regenerate(updateUrl: true);
+        _status = "";
+    }
+
+    private void OnSizeChanged(ChangeEventArgs args)
+    {
+        string text = args.Value?.ToString() ?? "";
+
+        _options = _options with { Size = int.TryParse(text, out int size) ? size : null };
+
+        // The size drives which services are legal, so a stale pinned size would contradict it.
+        _options = _options.WithoutPin("settlement/size");
+
+        Regenerate(updateUrl: true);
+    }
+
+    private void OnTerrainChanged(ChangeEventArgs args)
+    {
+        string text = args.Value?.ToString() ?? "";
+
+        _options = (_options with { Terrain = text.Length > 0 ? text : null })
+            .WithoutPin("settlement/host");
+
+        Regenerate(updateUrl: true);
+    }
+
+    private void OnHumanTownChanged(ChangeEventArgs args)
+    {
+        _options = _options with { NearHumanTown = args.Value is true };
+        Regenerate(updateUrl: true);
+    }
+
+    private bool IsLocked(string path) => _options.IsPinned(path);
+
+    private void ToggleLock(string path)
+    {
+        if (_options.IsPinned(path))
+        {
+            _options = _options.WithoutPin(path);
+            _status = "Unlocked.";
+        }
+        else
+        {
+            // Locking freezes the value as it stands, so it survives any later re-roll.
+            _options = _options.WithPin(path, CurrentValueOf(path));
+            _status = "Locked. Re-rolls will leave this alone.";
+        }
+
+        Regenerate(updateUrl: false);
+    }
+
+    private void Reroll(string path)
+    {
+        _options = _options.WithReroll(path);
+        Regenerate(updateUrl: false);
+        _status = "";
+    }
+
+    private void Edit((string Path, string Value) edit)
+    {
+        _options = _options.WithPin(edit.Path, edit.Value);
+        Regenerate(updateUrl: false);
+        _status = "Edited and locked, so a re-roll will not overwrite it.";
+    }
+
+    /// <summary>
+    /// The value a path currently shows, which is what locking should freeze.
+    /// </summary>
+    /// <remarks>
+    /// Composed display strings such as "Village (150-300 mice)" are reduced to the plain table
+    /// entry, because the generator matches pins against the underlying table rather than the
+    /// decorated text.
+    /// </remarks>
+    private string CurrentValueOf(string path)
+    {
+        if (_settlement is not { } s)
+        {
+            return "";
+        }
+
+        return path switch
+        {
+            "settlement/name" => s.Name,
+            "settlement/size" => s.Size.Name,
+            "settlement/host" => s.Host.Name,
+            "settlement/governance" => s.Governance,
+            "settlement/inhabitants" => s.Inhabitants,
+            "settlement/features" => string.Join('\n', s.NotableFeatures),
+            "settlement/industries" => string.Join('\n', s.Industries),
+            "settlement/event" => s.Event,
+            "tavern/name" => s.Tavern?.Name ?? "",
+            "tavern/meal" => s.Tavern?.SpecialtyMeal ?? "",
+            "tavern/keeper/name" => s.Tavern?.Keeper.FullName ?? "",
+            _ => ""
+        };
+    }
+
+    private async Task CopyLink()
+    {
+        bool copied = await Browser.CopyTextAsync(Navigation.Uri);
+        _status = copied ? "Link copied." : "Could not reach the clipboard. Copy the address bar instead.";
+    }
+
+    private async Task ExportJson()
+    {
+        if (_settlement is not { } settlement)
+        {
+            return;
+        }
+
+        await Browser.DownloadTextAsync(
+            SettlementSerializer.SuggestFileName(settlement),
+            "application/json",
+            SettlementSerializer.ToJson(settlement, _options));
+
+        _status = "Exported.";
+    }
+
+    private async Task ImportJson(InputFileChangeEventArgs args)
+    {
+        try
+        {
+            // Generous but bounded: an exported settlement is a few tens of kilobytes.
+            await using Stream stream = args.File.OpenReadStream(maxAllowedSize: 2 * 1024 * 1024);
+            using StreamReader reader = new(stream);
+
+            _options = SettlementSerializer.FromJson(await reader.ReadToEndAsync());
+            Regenerate(updateUrl: true);
+            _status = $"Imported {args.File.Name}.";
+        }
+        catch (SettlementFormatException ex)
+        {
+            _status = $"Could not import that file. {ex.Message}";
+        }
+        catch (IOException ex)
+        {
+            _status = $"Could not read that file. {ex.Message}";
+        }
+    }
+
+    private async Task Print() => await Browser.PrintAsync();
+
+    private static string Capitalise(string value) =>
+        value.Length == 0 ? value : char.ToUpperInvariant(value[0]) + value[1..];
+
+    public void Dispose() => Navigation.LocationChanged -= OnLocationChanged;
+}

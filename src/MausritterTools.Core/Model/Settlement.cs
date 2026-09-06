@@ -85,6 +85,15 @@ public sealed record StockEntry
     public GearItem Item { get; init; } = new();
 
     /// <summary>
+    /// The gear category this item came from, e.g. <c>light-sources</c>.
+    /// </summary>
+    /// <remarks>
+    /// Recorded when the stock is built rather than looked up again later. Two categories can list
+    /// the same item name, so a reverse lookup is both fragile and ambiguous.
+    /// </remarks>
+    public string CategoryId { get; init; } = "";
+
+    /// <summary>
     /// The adjusted price in pips, or <c>null</c> when the listed price is a modifier such as
     /// "x10p" or "10%" rather than an amount.
     /// </summary>
