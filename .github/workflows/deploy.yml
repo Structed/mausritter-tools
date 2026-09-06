@@ -1,0 +1,77 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PROJECT_PATH: src/MausritterTools.Web/MausritterTools.Web.csproj
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore ${{ env.PROJECT_PATH }}
+
+      - name: Publish
+        run: dotnet publish ${{ env.PROJECT_PATH }} --configuration Release --no-restore --output publish
+
+      - name: Rewrite base href for GitHub Pages
+        run: |
+          repo_name='${{ github.repository }}'
+          repo_name="${repo_name#*/}"
+          if [[ "$repo_name" == *.github.io ]]; then
+            base_href='/'
+          else
+            base_href="/$repo_name/"
+          fi
+          echo "Using base href: $base_href"
+          sed -i "s|<base href=\"/\" />|<base href=\"$base_href\" />|g" publish/wwwroot/index.html
+          grep -qF "<base href=\"$base_href\" />" publish/wwwroot/index.html \
+            || { echo "::error::Failed to rewrite <base href> in index.html"; exit 1; }
+
+      - name: Add SPA fallback and disable Jekyll
+        run: |
+          cp publish/wwwroot/index.html publish/wwwroot/404.html
+          touch publish/wwwroot/.nojekyll
+
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: publish/wwwroot
+
+  deploy:
+    needs: build
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    # Allow one concurrent deployment, but never cancel one that is mid-flight.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
