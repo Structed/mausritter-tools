@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MausritterTools.Web/MausritterTools.Web.csproj" />
+  </Folder>
+</Solution>
