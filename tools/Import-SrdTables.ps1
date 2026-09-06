@@ -213,10 +213,20 @@ function ConvertTo-GearItem {
 
     $raw = $ItemText.Trim()
     $note = $null
+    $unit = $null
 
     if ($raw -match '^(.*?)\s*\(([^)]*)\)\s*$') {
         $raw = $Matches[1].Trim()
-        $note = $Matches[2].Trim()
+        $parenthetical = $Matches[2].Trim()
+
+        # "(per night)" is a rate, not a description. Promoting it to perUnit lets the app render
+        # "1p per night" instead of a bare "1p" that misrepresents the price.
+        if ($parenthetical -match '^per\s+(.+)$') {
+            $unit = $Matches[1].Trim()
+        }
+        else {
+            $note = $parenthetical
+        }
     }
 
     $name = Clear-Markdown $raw
@@ -229,7 +239,6 @@ function ConvertTo-GearItem {
 
     $price = $PriceText.Trim()
     $pips = $null
-    $unit = $null
 
     if ($price -match '^(\d+)p$') {
         $pips = [int]$Matches[1]

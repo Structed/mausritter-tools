@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!-- The tests exercise internal helpers such as NameForge.Join directly, rather than
+         widening the public API purely to make them reachable. -->
+    <InternalsVisibleTo Include="MausritterTools.Core.Tests" />
+  </ItemGroup>
+
 </Project>

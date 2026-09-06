@@ -408,15 +408,15 @@
       "items": [
         {
           "name": "Bunkhouse bed",
-          "note": "per night",
           "priceText": "1p",
-          "pips": 1
+          "pips": 1,
+          "perUnit": "night"
         },
         {
           "name": "Private room",
-          "note": "per night",
           "priceText": "5p",
-          "pips": 5
+          "pips": 5,
+          "perUnit": "night"
         },
         {
           "name": "Hot bath",
