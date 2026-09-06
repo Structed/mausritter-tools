@@ -1,0 +1,74 @@
+{
+  "_source": {
+    "describes": "Hirelings",
+    "work": "Mausritter System Reference Document",
+    "version": "2.3.1",
+    "url": "https://mausritter.com/srd/",
+    "sourceFiles": [
+      "15-recruiting-help.md"
+    ],
+    "licence": "CC BY 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "This work is based on Mausritter (https://mausritter.com), a product of Losing Games and Isaac Williams, and is licensed for use under the Creative Commons Attribution 4.0 International (CC BY 4.0) licence.",
+    "generatedBy": "tools/Import-SrdTables.ps1",
+    "warning": "Generated file. Do not edit by hand; re-run the importer instead."
+  },
+  "recruiting": "Spend a day asking around. Make a WIL save or pay 20p. If successful, roll the Number for that type of hireling.",
+  "note": "The SRD states that settlement size determines which hirelings are available, but never gives the mapping. The gating used by this app is a house rule.",
+  "hirelings": [
+    {
+      "name": "Torchbearer",
+      "number": "d6",
+      "wagesText": "1p",
+      "wagesPips": 1
+    },
+    {
+      "name": "Labourer",
+      "number": "d6",
+      "wagesText": "2p",
+      "wagesPips": 2
+    },
+    {
+      "name": "Tunnel digger",
+      "number": "d4",
+      "wagesText": "5p",
+      "wagesPips": 5
+    },
+    {
+      "name": "Armourer/blacksmith",
+      "number": "d2",
+      "wagesText": "8p",
+      "wagesPips": 8
+    },
+    {
+      "name": "Local guide",
+      "number": "d4",
+      "wagesText": "10p",
+      "wagesPips": 10
+    },
+    {
+      "name": "Mouse-at-arms",
+      "number": "d6",
+      "wagesText": "10p",
+      "wagesPips": 10
+    },
+    {
+      "name": "Scholar",
+      "number": "d2",
+      "wagesText": "20p",
+      "wagesPips": 20
+    },
+    {
+      "name": "Knight",
+      "number": "d3",
+      "wagesText": "25p",
+      "wagesPips": 25
+    },
+    {
+      "name": "Interpreter",
+      "number": "d2",
+      "wagesText": "30p",
+      "wagesPips": 30
+    }
+  ]
+}

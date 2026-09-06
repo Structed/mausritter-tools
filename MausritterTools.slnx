@@ -1,5 +1,9 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/MausritterTools.Core/MausritterTools.Core.csproj" />
     <Project Path="src/MausritterTools.Web/MausritterTools.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MausritterTools.Core.Tests/MausritterTools.Core.Tests.csproj" />
   </Folder>
 </Solution>
