@@ -2,6 +2,7 @@ using System.Text.Json;
 using MausritterTools.Core.Data;
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Interop.FantasiaArchive;
+using MausritterTools.Core.Mapping;
 using MausritterTools.Core.Model;
 using MausritterTools.Core.Serialization;
 
@@ -72,7 +73,7 @@ public class FantasiaArchiveExportTests
 
         // The app derives the database name from the file name, so these are not cosmetic.
         Assert.Equal(
-            ["locations.txt", "characters.txt", "guilds.txt", "items.txt"],
+            ["locations.txt", "characters.txt", "items.txt"],
             export.Files.Select(file => file.Name));
     }
 
@@ -222,8 +223,6 @@ public class FantasiaArchiveExportTests
         (Settlement settlement, _) = Build(data: game);
         FantasiaArchiveExport export = Export();
 
-        Assert.Single(Documents(export, FantasiaArchiveBlueprints.Locations));
-
         int businesses = settlement.Shops.Count + (settlement.Tavern is null ? 0 : 1);
 
         // Counted the way a reader would count it off the sheet, rather than by re-implementing the
@@ -234,10 +233,80 @@ public class FantasiaArchiveExportTests
             .Distinct(StringComparer.Ordinal)
             .Count();
 
-        // Each file also carries the folder document that keeps a merge tidy.
-        Assert.Equal(businesses + 1, Documents(export, FantasiaArchiveBlueprints.Guilds).Count);
+        // The settlement, plus one building per shop and the tavern.
+        Assert.Equal(businesses + 1, Documents(export, FantasiaArchiveBlueprints.Locations).Count);
+
+        // These two also carry the folder document that keeps a merge tidy.
         Assert.Equal(businesses + 1, Documents(export, FantasiaArchiveBlueprints.Characters).Count);
         Assert.Equal(distinctItems + 1, Documents(export, FantasiaArchiveBlueprints.Items).Count);
+    }
+
+    /// <summary>
+    /// A shop is a numbered building on the settlement's map, so it is a place, and it belongs
+    /// inside the settlement rather than in a tree of its own.
+    /// </summary>
+    [Fact]
+    public void EachShopIsABuildingParentedToTheSettlement()
+    {
+        GameData game = TestData.Game;
+        (Settlement settlement, _) = Build(data: game);
+        FantasiaArchiveExport export = Export();
+
+        List<JsonElement> locations = [.. Documents(export, FantasiaArchiveBlueprints.Locations)];
+
+        JsonElement place = locations.Single(d =>
+            Field(d, FantasiaArchiveBlueprints.Common.Name).GetString() == settlement.Name);
+
+        string settlementId = place.GetProperty("_id").GetString()!;
+
+        List<JsonElement> premises =
+            [.. locations.Where(d => d.GetProperty("_id").GetString() != settlementId)];
+
+        Assert.Equal(settlement.Shops.Count + (settlement.Tavern is null ? 0 : 1), premises.Count);
+
+        foreach (JsonElement building in premises)
+        {
+            Assert.Equal(
+                FantasiaArchiveBlueprints.PremisesLocationType,
+                Field(building, FantasiaArchiveBlueprints.Location.LocationType).GetString());
+
+            JsonElement parent = Field(building, FantasiaArchiveBlueprints.Common.ParentDocument)
+                .GetProperty("value");
+
+            Assert.Equal(settlementId, parent.GetProperty("_id").GetString());
+        }
+    }
+
+    /// <summary>
+    /// The tree sorts on <c>order</c>, and a shop's number is the one the map legend keys it by, so
+    /// the two must agree or the database renumbers the map.
+    /// </summary>
+    [Fact]
+    public void BuildingsAreOrderedByTheirMapNumber()
+    {
+        GameData game = TestData.Game;
+        (Settlement settlement, GenerationOptions options) = Build(data: game);
+        FantasiaArchiveExport export = Export();
+
+        SettlementMap map = MapGenerator.Generate(settlement, options.Seed, game.Text.Grammar);
+
+        Dictionary<string, int> orderByName = Documents(export, FantasiaArchiveBlueprints.Locations)
+            .Where(d => Field(d, FantasiaArchiveBlueprints.Location.LocationType).GetString()
+                == FantasiaArchiveBlueprints.PremisesLocationType)
+            .ToDictionary(
+                d => Field(d, FantasiaArchiveBlueprints.Common.Name).GetString()!,
+                d => Field(d, FantasiaArchiveBlueprints.Common.Order).GetInt32());
+
+        Assert.NotEmpty(map.Legend);
+
+        foreach (MapLegendEntry entry in map.Legend)
+        {
+            Assert.True(
+                orderByName.TryGetValue(entry.Name, out int order),
+                $"The map keys '{entry.Name}' but no building document carries that name.");
+
+            Assert.Equal(entry.Key, order);
+        }
     }
 
     /// <summary>
@@ -382,10 +451,11 @@ public class FantasiaArchiveExportTests
 
         Assert.Equal(names.Count, names.Distinct(StringComparer.Ordinal).Count());
 
-        // A city stocks the same staples in more than one shop, so at least one item must show it.
+        // A city stocks the same staples in more than one shop, so at least one item must be linked
+        // to the settlement plus two or more of its buildings.
         Assert.Contains(items, item =>
-            TryField(item, FantasiaArchiveBlueprints.Item.ConnectedGroups, out JsonElement groups) &&
-            Targets(groups).Count() > 1);
+            TryField(item, FantasiaArchiveBlueprints.Item.ConnectedLocations, out JsonElement places) &&
+            Targets(places).Count() > 2);
     }
 
     /// <summary>
@@ -401,34 +471,31 @@ public class FantasiaArchiveExportTests
         FantasiaArchiveExport export = FantasiaArchiveExporter.Export(
             settlement, options, german.Text, Timestamp, german.Locale.Code);
 
-        JsonElement location = Documents(export, FantasiaArchiveBlueprints.Locations).Single();
+        List<JsonElement> locations = [.. Documents(export, FantasiaArchiveBlueprints.Locations)];
 
-        Assert.Equal(
-            FantasiaArchiveBlueprints.LocationTypeForSize(settlement.Size.SizeValue),
-            Field(location, FantasiaArchiveBlueprints.Location.LocationType).GetString());
+        JsonElement place = locations.Single(d =>
+            Field(d, FantasiaArchiveBlueprints.Common.Name).GetString() == settlement.Name);
 
         // "City" for a Stadt: the key the app's dropdown offers, not the word the reader sees.
-        Assert.Equal("City", Field(location, FantasiaArchiveBlueprints.Location.LocationType).GetString());
+        Assert.Equal(
+            FantasiaArchiveBlueprints.LocationTypeForSize(settlement.Size.SizeValue),
+            Field(place, FantasiaArchiveBlueprints.Location.LocationType).GetString());
+
+        Assert.Equal("City", Field(place, FantasiaArchiveBlueprints.Location.LocationType).GetString());
 
         string[] permitted =
         [
-            "Guild", "Trade group", "Company", "Mercenary group", "Security group", "Military group",
-            "Economical group", "Civil group", "Criminal group", "Academic group", "Faction",
-            "Charity", "Spy/Underground network", "Secret society", "Other"
+            "Area", "Body of water", "Building", "City", "Continent", "Country", "Forest", "Galaxy",
+            "Hamlet", "Island", "Landmark", "Landmass", "Moon", "Mountain", "Planet",
+            "Planetary System", "Star System", "Structure", "Terrain formation", "Town", "Universe",
+            "Village", "Other", "Unique"
         ];
 
-        foreach (JsonElement guild in Documents(export, FantasiaArchiveBlueprints.Guilds))
+        foreach (JsonElement location in locations)
         {
-            if (!TryField(guild, FantasiaArchiveBlueprints.Guild.GroupType, out JsonElement groupType) ||
-                groupType.ValueKind != JsonValueKind.Array)
-            {
-                continue;
-            }
-
-            foreach (JsonElement value in groupType.EnumerateArray())
-            {
-                Assert.Contains(value.GetString(), permitted);
-            }
+            Assert.Contains(
+                Field(location, FantasiaArchiveBlueprints.Location.LocationType).GetString(),
+                permitted);
         }
     }
 
@@ -478,11 +545,13 @@ public class FantasiaArchiveExportTests
         string note = german.Text.Licence.TranslationNote ?? "";
         Assert.NotEmpty(note);
 
-        JsonElement location = Documents(export, FantasiaArchiveBlueprints.Locations).Single();
+        JsonElement place = Documents(export, FantasiaArchiveBlueprints.Locations).Single(d =>
+            Field(d, FantasiaArchiveBlueprints.Common.Name).GetString() == settlement.Name);
+
         Assert.Contains(
             note,
             System.Net.WebUtility.HtmlDecode(
-                Field(location, FantasiaArchiveBlueprints.Common.Description).GetString()!),
+                Field(place, FantasiaArchiveBlueprints.Common.Description).GetString()!),
             StringComparison.Ordinal);
     }
 

@@ -217,7 +217,7 @@
       "Wähle den Ordner {folder} selbst aus, nicht die Dateien darin."
     ],
     "readMeWarning": "Lege nichts anderes in den Ordner {folder}. Fantasia Archive liest jede Datei darin als Datenbank, deshalb zerstört schon eine vergessene Notiz oder ein Screenshot den Import. Genau darum liegt diese Anleitung neben dem Ordner und nicht darin.",
-    "readMeNote": "Die Siedlung kommt als Location an, ihr Wirtshaus und ihre Läden als Organizations, deren Wirte und Händler als Characters und deren Waren als Items, alle miteinander verknüpft. Die Siedlung trägt außerdem unsichtbar ihren Startwert mit sich, sodass du sie zurückholen kannst: sichere das Projekt erneut aus Fantasia Archive heraus und importiere diesen Ordner in den Siedlungsgenerator.",
+    "readMeNote": "Die Siedlung kommt als Location an, ihr Wirtshaus und ihre Läden als Gebäude darin, nummeriert wie auf der Karte. Deren Wirte und Händler kommen als Characters an, deren Waren als Items, alle miteinander verknüpft. Die Siedlung trägt außerdem unsichtbar ihren Startwert mit sich, sodass du sie zurückholen kannst: sichere das Projekt erneut aus Fantasia Archive heraus und importiere diesen Ordner in den Siedlungsgenerator.",
     "readMeVersionNote": "Geschrieben für Fantasia Archive v1, das Format, das alle veröffentlichten Versionen lesen."
   },
 

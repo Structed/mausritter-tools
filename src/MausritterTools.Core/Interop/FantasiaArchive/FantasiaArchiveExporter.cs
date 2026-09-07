@@ -115,37 +115,38 @@ public static class FantasiaArchiveExporter
             foreach (string type in new[]
                      {
                          FantasiaArchiveBlueprints.Characters,
-                         FantasiaArchiveBlueprints.Guilds,
                          FantasiaArchiveBlueprints.Items
                      })
             {
                 _categories[type] = Mint($"fa/{type}/category");
             }
 
+            // The tavern first, then the shops in order, which is the same order the map numbers
+            // them in, so a premises' position in this list is its number on the map.
             if (settlement.Tavern is { } tavern)
             {
                 _businesses.Add(new Business(
-                    Mint("fa/guilds/tavern"),
+                    Mint("fa/locations/tavern"),
                     Mint("fa/characters/tavern/keeper"),
                     tavern.Name,
                     text.Settlement.Sections.Tavern,
-                    "tavern",
                     text.Settlement.Labels.Landlord,
                     tavern.Keeper,
-                    null));
+                    null,
+                    _businesses.Count + 1));
             }
 
             foreach (Shop shop in settlement.Shops)
             {
                 _businesses.Add(new Business(
-                    Mint($"fa/guilds/{shop.Id}"),
+                    Mint($"fa/locations/{shop.Id}"),
                     Mint($"fa/characters/{shop.Id}/keeper"),
                     shop.SignName,
                     shop.ServiceName,
-                    shop.Service.Id,
                     shop.Service.KeeperTitle,
                     shop.Keeper,
-                    shop));
+                    shop,
+                    _businesses.Count + 1));
             }
 
             CollectItems();
@@ -153,11 +154,10 @@ public static class FantasiaArchiveExporter
 
         public IReadOnlyList<ExportedFile> Build() =>
         [
-            File(FantasiaArchiveBlueprints.Locations, [BuildSettlement()]),
+            File(FantasiaArchiveBlueprints.Locations,
+                [BuildSettlement(), .. _businesses.Select(BuildPremises)]),
             File(FantasiaArchiveBlueprints.Characters,
                 [Category(FantasiaArchiveBlueprints.Characters), .. _businesses.Select(BuildKeeper)]),
-            File(FantasiaArchiveBlueprints.Guilds,
-                [Category(FantasiaArchiveBlueprints.Guilds), .. _businesses.Select(BuildBusiness)]),
             File(FantasiaArchiveBlueprints.Items,
                 [Category(FantasiaArchiveBlueprints.Items), .. _items.Select(BuildItem)])
         ];
@@ -305,11 +305,6 @@ public static class FantasiaArchiveExporter
                         FantasiaArchiveBlueprints.Characters,
                         FantasiaArchiveBlueprints.Character.CurrentLocation))])),
 
-                new(FantasiaArchiveBlueprints.Location.ConnectedGroups, new ManyRelationshipValue(
-                    [.. _businesses.Select(b => b.GuildId.Link(
-                        FantasiaArchiveBlueprints.Guilds,
-                        FantasiaArchiveBlueprints.Guild.ConnectedLocations))])),
-
                 new(FantasiaArchiveBlueprints.Location.ConnectedItems, new ManyRelationshipValue(
                     [.. _items.Select(i => i.Id.Link(
                         FantasiaArchiveBlueprints.Items,
@@ -347,16 +342,29 @@ public static class FantasiaArchiveExporter
                         FantasiaArchiveBlueprints.Locations,
                         FantasiaArchiveBlueprints.Location.CurrentCharacters)])),
 
-                new(FantasiaArchiveBlueprints.Character.LeadingGroups, new ManyRelationshipValue(
-                    [business.GuildId.Link(
-                        FantasiaArchiveBlueprints.Guilds,
-                        FantasiaArchiveBlueprints.Guild.LeadingCharacters)]))
+                // Tied to the premises rather than resident in it. Fantasia Archive has no
+                // "proprietor" relationship between a mouse and a place, so who keeps which shop is
+                // said in the title and in both descriptions instead of being overstated here.
+                new(FantasiaArchiveBlueprints.Character.ConnectedPlaces, new ManyRelationshipValue(
+                    [business.PlaceId.Link(
+                        FantasiaArchiveBlueprints.Locations,
+                        FantasiaArchiveBlueprints.Location.ConnectedCharacters)]))
             ];
 
             return Build(FantasiaArchiveBlueprints.Characters, business.KeeperId, fields);
         }
 
-        private Document BuildBusiness(Business business)
+        /// <summary>
+        /// A shop or the tavern, as a building inside the settlement.
+        /// </summary>
+        /// <remarks>
+        /// A place rather than an organisation, because that is what it is here: a numbered building
+        /// on the settlement's map, which the legend keys by that number. Modelling it as an
+        /// organisation would also have to call a single mouse's stall a "trade group" with a member
+        /// count, and would leave it sitting in a separate tree from the settlement it stands in.
+        /// Parenting it to the settlement puts it where a reader would look for it.
+        /// </remarks>
+        private Document BuildPremises(Business business)
         {
             List<RelationshipTarget> stock =
             [
@@ -364,39 +372,32 @@ public static class FantasiaArchiveExporter
                     .Where(item => item.SoldBy.Any(sale => sale.Business == business))
                     .Select(item => item.Id.Link(
                         FantasiaArchiveBlueprints.Items,
-                        FantasiaArchiveBlueprints.Item.ConnectedGroups))
+                        FantasiaArchiveBlueprints.Item.ConnectedLocations))
             ];
 
             List<DocumentField> fields =
             [
                 .. Settings(
-                    FantasiaArchiveBlueprints.Guilds,
+                    FantasiaArchiveBlueprints.Locations,
                     business.SignName,
-                    parent: _categories[FantasiaArchiveBlueprints.Guilds],
+                    parent: _settlementId,
                     tags: [MausritterTag, _settlement.Name, business.ServiceName],
-                    description: BusinessDescription(business)),
+                    description: BusinessDescription(business),
+                    // The tree sorts on this, so the shops line up in map order.
+                    order: business.MapKey),
 
-                new(FantasiaArchiveBlueprints.Guild.GroupType,
-                    new StringsValue(FantasiaArchiveBlueprints.GroupTypeForService(business.ServiceId))),
+                new(FantasiaArchiveBlueprints.Location.LocationType,
+                    new TextValue(FantasiaArchiveBlueprints.PremisesLocationType)),
 
-                // One-directional, so unlike the others it needs no answering entry on the place.
-                new(FantasiaArchiveBlueprints.Guild.Headquarters, new SingleRelationshipValue(
-                    _settlementId.Link(FantasiaArchiveBlueprints.Locations))),
-
-                new(FantasiaArchiveBlueprints.Guild.LeadingCharacters, new ManyRelationshipValue(
+                new(FantasiaArchiveBlueprints.Location.ConnectedCharacters, new ManyRelationshipValue(
                     [business.KeeperId.Link(
                         FantasiaArchiveBlueprints.Characters,
-                        FantasiaArchiveBlueprints.Character.LeadingGroups)])),
+                        FantasiaArchiveBlueprints.Character.ConnectedPlaces)])),
 
-                new(FantasiaArchiveBlueprints.Guild.ConnectedLocations, new ManyRelationshipValue(
-                    [_settlementId.Link(
-                        FantasiaArchiveBlueprints.Locations,
-                        FantasiaArchiveBlueprints.Location.ConnectedGroups)])),
-
-                new(FantasiaArchiveBlueprints.Guild.ConnectedItems, new ManyRelationshipValue(stock))
+                new(FantasiaArchiveBlueprints.Location.ConnectedItems, new ManyRelationshipValue(stock))
             ];
 
-            return Build(FantasiaArchiveBlueprints.Guilds, business.GuildId, fields);
+            return Build(FantasiaArchiveBlueprints.Locations, business.PlaceId, fields);
         }
 
         private Document BuildItem(StockedItem item)
@@ -441,15 +442,18 @@ public static class FantasiaArchiveExporter
 
                 new(FantasiaArchiveBlueprints.Item.Features, new ListValue(features)),
 
+                // The settlement and every shop in it that stocks the thing, so it can be found
+                // either by asking where to buy it or by browsing a particular shop's shelves.
                 new(FantasiaArchiveBlueprints.Item.ConnectedLocations, new ManyRelationshipValue(
-                    [_settlementId.Link(
+                [
+                    _settlementId.Link(
                         FantasiaArchiveBlueprints.Locations,
-                        FantasiaArchiveBlueprints.Location.ConnectedItems)])),
+                        FantasiaArchiveBlueprints.Location.ConnectedItems),
 
-                new(FantasiaArchiveBlueprints.Item.ConnectedGroups, new ManyRelationshipValue(
-                    [.. item.SoldBy.Select(sale => sale.Business.GuildId.Link(
-                        FantasiaArchiveBlueprints.Guilds,
-                        FantasiaArchiveBlueprints.Guild.ConnectedItems))]))
+                    .. item.SoldBy.Select(sale => sale.Business.PlaceId.Link(
+                        FantasiaArchiveBlueprints.Locations,
+                        FantasiaArchiveBlueprints.Location.ConnectedItems))
+                ]))
             ];
 
             return Build(FantasiaArchiveBlueprints.Items, item.Id, fields);
@@ -500,13 +504,14 @@ public static class FantasiaArchiveExporter
             string name,
             Identity? parent,
             IReadOnlyList<string> tags,
-            string description) =>
+            string description,
+            int order = 0) =>
         [
             new(FantasiaArchiveBlueprints.Common.Name, new TextValue(name)),
             new(FantasiaArchiveBlueprints.Common.ParentDocument, new SingleRelationshipValue(
                 parent?.Link(type))),
             new(FantasiaArchiveBlueprints.Common.CategorySwitch, new SwitchValue(false)),
-            new(FantasiaArchiveBlueprints.Common.Order, new NumberValue(0)),
+            new(FantasiaArchiveBlueprints.Common.Order, new NumberValue(order)),
             new(FantasiaArchiveBlueprints.Common.Tags, new StringsValue(tags)),
             new(FantasiaArchiveBlueprints.Common.OtherNames, new ListValue([])),
             new(FantasiaArchiveBlueprints.Common.CategoryDescription, new TextValue("")),
@@ -573,8 +578,15 @@ public static class FantasiaArchiveExporter
         {
             List<string> blocks =
             [
-                Labelled(_text.Settlement.Labels.Sign, business.SignName),
-                Paragraph(business.ServiceName)
+                // The map number matters: the settlement's map keys this building by it.
+                Paragraph(TextTemplate.Format(
+                    _text.Shop.MapKeyTitle, ("index", business.MapKey.ToString(_culture)))),
+
+                Paragraph(business.ServiceName),
+
+                // Said in prose because Fantasia Archive has no relationship that means "keeps this
+                // shop"; the mouse is linked to the building, and this is what that link means.
+                Labelled(Capitalise(business.KeeperTitle), business.Keeper.FullName)
             ];
 
             if (business.Shop is { } shop)
@@ -730,15 +742,20 @@ public static class FantasiaArchiveExporter
     }
 
     /// <summary>A tavern or shop, its keeper, and the identities both were given.</summary>
+    /// <param name="PlaceId">The premises, which is a location in its own right.</param>
+    /// <param name="MapKey">
+    /// Its number on the settlement map. The map numbers the tavern first and then the shops in
+    /// order, which is the order these are built in, so the position carries across.
+    /// </param>
     private sealed record Business(
-        Identity GuildId,
+        Identity PlaceId,
         Identity KeeperId,
         string SignName,
         string ServiceName,
-        string ServiceId,
         string KeeperTitle,
         MouseNpc Keeper,
-        Shop? Shop);
+        Shop? Shop,
+        int MapKey);
 
     /// <summary>One distinct piece of gear, and every shop that stocks it.</summary>
     private sealed record StockedItem(Identity Id, StockEntry First)

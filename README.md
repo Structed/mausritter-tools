@@ -49,9 +49,16 @@ into the current one**. Instructions ship inside the ZIP, deliberately *beside* 
 than in it: the merge reads every file in the folder it is given as a database, so a readme sitting
 next to the dumps would break the import.
 
-The settlement becomes a Location, its tavern and shops become Organizations, their keepers become
-Characters and their stock becomes Items, all cross-linked. One piece of gear is one Item however
-many shops sell it, with a price per shop.
+The settlement becomes a Location, and its tavern and shops become buildings *inside* it, parented to
+it and ordered by the number the map legend keys them with. Their keepers become Characters and their
+stock becomes Items. One piece of gear is one Item however many shops sell it, with a price per shop.
+
+Shops are places rather than Organizations because that is what they are here: numbered buildings on
+the settlement's map. Modelling one as an organisation would have to call a single mouse's stall a
+"trade group" with a member count, and would leave it in a separate tree from the settlement it
+stands in. The cost of the choice is that Fantasia Archive has no relationship meaning "keeps this
+shop" between a mouse and a place, so the keeper is linked to the building as a connected character
+and the proprietor is named in the keeper's title and in both descriptions.
 
 The settlement's document also carries the seed, the locks and the hand edits in a field no
 blueprint declares, which the app therefore never renders, edits or discards. That is what makes the
@@ -72,10 +79,9 @@ Some things that are easy to get wrong here, all covered by `FantasiaArchiveExpo
   one, so a document without `_rev` and a matching `_revisions` is dropped silently.
 - **Both ends of a relationship must be written.** The app only fills in the far side when a user
   saves a document in its own UI, never on import.
-- **Its select values are keys, not prose.** `locationType` and `groupType` are fixed English
-  strings in the app's own dropdowns, so they are derived from the settlement's size value and the
-  service id and stay English in a German export. This is the same rule the data files follow, just
-  applied to somebody else's keys.
+- **Its select values are keys, not prose.** `locationType` is a fixed English string in the app's
+  own dropdown, so it is derived from the settlement's size value and stays English in a German
+  export. This is the same rule the data files follow, just applied to somebody else's keys.
 - **Document ids are derived from the settlement's whole generation state** — its seed, settings,
   locks and hand edits — not drawn at random, so re-exporting the same settlement produces the same
   file and merging it a second time changes nothing instead of duplicating it. Deriving them from

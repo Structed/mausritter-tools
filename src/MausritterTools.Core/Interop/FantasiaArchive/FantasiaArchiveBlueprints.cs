@@ -29,15 +29,11 @@ public static class FantasiaArchiveBlueprints
     /// <summary>People. Files as <c>characters.txt</c>.</summary>
     public const string Characters = "characters";
 
-    /// <summary>Organisations and other groups, which is where shops fit. Files as <c>guilds.txt</c>.</summary>
-    public const string Guilds = "guilds";
-
     /// <summary>Objects. Files as <c>items.txt</c>.</summary>
     public const string Items = "items";
 
     /// <summary>Every type this exporter emits, in the order the files are written.</summary>
-    public static IReadOnlyList<string> AllTypes { get; } =
-        [Locations, Characters, Guilds, Items];
+    public static IReadOnlyList<string> AllTypes { get; } = [Locations, Characters, Items];
 
     /// <summary>
     /// The URL every document carries, which the app's router depends on being exactly this shape.
@@ -49,7 +45,6 @@ public static class FantasiaArchiveBlueprints
     {
         Locations => "mdi-map-marker-radius",
         Characters => "mdi-account",
-        Guilds => "mdi-account-group",
         Items => "mdi-sword",
         _ => ""
     };
@@ -61,7 +56,6 @@ public static class FantasiaArchiveBlueprints
     {
         Locations => "Locations/Geography",
         Characters => "Characters",
-        Guilds => "Organizations/Other groups",
         Items => "Items",
         _ => ""
     };
@@ -106,8 +100,11 @@ public static class FantasiaArchiveBlueprints
         /// <summary>Residents. Pairs with <see cref="Character.CurrentLocation"/>.</summary>
         public const string CurrentCharacters = "pairedCurrentCharactersNew";
 
-        /// <summary>Organisations based here. Pairs with <see cref="Guild.ConnectedLocations"/>.</summary>
-        public const string ConnectedGroups = "connectedOther";
+        /// <summary>
+        /// Mice tied to this place without necessarily living in it. Pairs with
+        /// <see cref="Character.ConnectedPlaces"/>.
+        /// </summary>
+        public const string ConnectedCharacters = "pairedConnectedCharacter";
 
         /// <summary>Objects found here. Pairs with <see cref="Item.ConnectedLocations"/>.</summary>
         public const string ConnectedItems = "pairedConnectedItems";
@@ -127,35 +124,11 @@ public static class FantasiaArchiveBlueprints
         /// <summary>Where they live. Pairs with <see cref="Location.CurrentCharacters"/>.</summary>
         public const string CurrentLocation = "pairedCurrentLocationNew";
 
-        /// <summary>What they run. Pairs with <see cref="Guild.LeadingCharacters"/>.</summary>
-        public const string LeadingGroups = "leadingOtherLeaders";
-    }
-
-    /// <summary>Field ids on an organisation.</summary>
-    public static class Guild
-    {
-        /// <summary>A multi-select, so its value is a list of keys.</summary>
-        public const string GroupType = "groupType";
-
-        /// <summary>Where it operates from. One-directional, so it needs no reverse side.</summary>
-        public const string Headquarters = "headquarters";
-
-        /// <summary>Member count, and free text rather than a number.</summary>
-        public const string Population = "population";
-
-        /// <summary>What its members are called.</summary>
-        public const string FollowerName = "followerName";
-
-        public const string Traditions = "traditions";
-
-        /// <summary>Who runs it. Pairs with <see cref="Character.LeadingGroups"/>.</summary>
-        public const string LeadingCharacters = "leadingCharacters";
-
-        /// <summary>Where it sits. Pairs with <see cref="Location.ConnectedGroups"/>.</summary>
-        public const string ConnectedLocations = "connectedLocations";
-
-        /// <summary>What it deals in. Pairs with <see cref="Item.ConnectedGroups"/>.</summary>
-        public const string ConnectedItems = "pairedConnectedItems";
+        /// <summary>
+        /// Places they are tied to, which is where a shop's keeper is linked to their shop. Pairs
+        /// with <see cref="Location.ConnectedCharacters"/>.
+        /// </summary>
+        public const string ConnectedPlaces = "pairedConnectedPlaces";
     }
 
     /// <summary>Field ids on an object.</summary>
@@ -172,9 +145,6 @@ public static class FantasiaArchiveBlueprints
 
         /// <summary>Where it can be found. Pairs with <see cref="Location.ConnectedItems"/>.</summary>
         public const string ConnectedLocations = "pairedConnectedLocations";
-
-        /// <summary>Who sells it. Pairs with <see cref="Guild.ConnectedItems"/>.</summary>
-        public const string ConnectedGroups = "pairedConnectedOtherGroups";
     }
 
     /// <summary>
@@ -217,18 +187,7 @@ public static class FantasiaArchiveBlueprints
     };
 
     /// <summary>
-    /// Group types, which are fixed strings in the app's own multi-select.
+    /// What a shop or tavern is: a building, which is what it is on the settlement's map.
     /// </summary>
-    /// <remarks>
-    /// Keyed off the service id rather than its name, so a German export still writes the key the
-    /// app expects. Almost everything a mouse settlement offers is a trade; the exceptions are the
-    /// ones the SRD itself frames as something else.
-    /// </remarks>
-    public static IReadOnlyList<string> GroupTypeForService(string serviceId) => serviceId switch
-    {
-        "bank" => ["Economical group"],
-        "scriptorium" => ["Academic group"],
-        "hireling-hall" => ["Civil group"],
-        _ => ["Trade group"]
-    };
+    public const string PremisesLocationType = "Building";
 }

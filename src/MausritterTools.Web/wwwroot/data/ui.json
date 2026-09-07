@@ -217,7 +217,7 @@
       "Select the {folder} folder itself, not the files inside it."
     ],
     "readMeWarning": "Do not put anything else in the {folder} folder. Fantasia Archive reads every file in it as a database, so a stray note or screenshot will break the import. That is exactly why these instructions are outside the folder rather than in it.",
-    "readMeNote": "The settlement arrives as a Location, its tavern and shops as Organizations, their keepers as Characters and their stock as Items, all linked to each other. The settlement also quietly carries the seed it was generated from, so you can bring it back: save the project out of Fantasia Archive again and import that folder into the settlement generator.",
+    "readMeNote": "The settlement arrives as a Location, with its tavern and shops as buildings inside it, numbered as they are on the map. Their keepers arrive as Characters and their stock as Items, all linked to each other. The settlement also quietly carries the seed it was generated from, so you can bring it back: save the project out of Fantasia Archive again and import that folder into the settlement generator.",
     "readMeVersionNote": "Written for Fantasia Archive v1, the format every released version reads."
   },
 
