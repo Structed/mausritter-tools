@@ -1,0 +1,235 @@
+{
+  "locale": "en",
+
+  "app": {
+    "title": "Mausritter Tools",
+    "description": "Browser-based tools for the Mausritter tabletop roleplaying game.",
+    "pageTitlePattern": "{page} — Mausritter Tools"
+  },
+
+  "nav": {
+    "brand": "Mausritter Tools",
+    "menuTitle": "Navigation menu",
+    "home": "Home",
+    "settlement": "Settlement generator",
+    "about": "About",
+    "languageLabel": "Language"
+  },
+
+  "home": {
+    "heading": "Mausritter Tools",
+    "leadHtml": "A collection of browser-based helpers for running and playing <a href=\"https://mausritter.com/\" target=\"_blank\" rel=\"noopener\">Mausritter</a>.",
+    "noServerHtml": "Everything runs entirely in your browser — there is no server and nothing is uploaded.",
+    "toolsHeading": "Tools",
+    "settlementItemHtml": "<a href=\"settlement\"><strong>Settlement generator</strong></a> — rolls a whole mouse settlement: who governs it, what they trade, what is happening as the players arrive, plus every shop with its keeper, quirks and priced stock. Lock what you like, re-roll the rest, then share it as a link or print it.",
+    "aboutLinkText": "How this works, and what is official"
+  },
+
+  "about": {
+    "heading": "About",
+    "leadHtml": "Mausritter Tools is a small set of browser-based helpers for <a href=\"https://mausritter.com/\" target=\"_blank\" rel=\"noopener\">Mausritter</a>, the tabletop roleplaying game of brave mice by Isaac Williams.",
+
+    "howItWorks": {
+      "heading": "How it works",
+      "paragraphsHtml": [
+        "The whole app is a static site that runs in your browser. There is no server, no account and no analytics, and nothing you generate is uploaded anywhere. A settlement is produced purely from its seed, so the same link always rebuilds the same settlement.",
+        "Locking a value freezes it in place so that re-rolling everything else leaves it alone. Editing a value locks it too. Because locks and hand edits would make a link unwieldy, the address bar carries only the seed and the generator settings; the full state travels through the JSON export, and is kept in your browser's local storage between visits."
+      ]
+    },
+
+    "official": {
+      "heading": "What is official, and what is not",
+      "paragraphsHtml": [
+        "The settlement tables, the tavern table, the non-player mice tables, gear prices, hirelings and spells are all taken from the Mausritter SRD, which is published under CC BY 4.0. They are imported directly from the SRD source rather than retyped, so the wording is the author's own.",
+        "<strong>Mausritter has no shops or services table.</strong> The SRD says only that taverns appear in hamlets and larger, that warbands can be recruited in a town or city, that human-made goods are found near human populations, that a bank charges 1% to retrieve what it holds, that repairs cost 10% of an item's price per usage dot, and that “the size of the settlement determines what types of hireling are available” without ever saying how. Everything else about shops in this tool — which services exist, how size gates them, their stock, quirks and names — is <strong>an unofficial house rule original to this project</strong>. Each shop shows the SRD rule it was extrapolated from, so you can see where the line falls.",
+        "Mouse names are also original. The SRD contains no name tables, and the lists used by the official generator are not published under a licence that permits reuse."
+      ]
+    },
+
+    "translation": {
+      "heading": "About the German edition",
+      "paragraphsHtml": [
+        "The German version of this tool is <strong>an unofficial fan translation by the mausritter-tools contributors</strong>. It is not the official German edition of Mausritter, is not endorsed by Losing Games, and no official German translation was used as a source. CC BY 4.0 permits translation as long as the change is declared, which is what this notice does.",
+        "A settlement does not change when you change language. Every table is translated row for row, so the same seed produces the same place in both languages and a link shared between a German and an English player shows the same settlement — only the words differ."
+      ]
+    },
+
+    "dataSources": {
+      "heading": "Data sources",
+      "contentColumn": "Content",
+      "sourceColumn": "Source",
+      "licenceColumn": "Licence",
+      "originalSource": "Original to this project",
+      "originalLicence": "Original work"
+    },
+
+    "source": {
+      "heading": "Source",
+      "paragraphsHtml": [
+        "The code, the imported tables and the importer script are on <a href=\"https://github.com/Structed/mausritter-tools\" target=\"_blank\" rel=\"noopener\">GitHub</a>."
+      ]
+    },
+
+    "support": {
+      "heading": "Support Mausritter",
+      "paragraphsHtml": [
+        "This tool is no substitute for the game. Mausritter is pay-what-you-want in digital form and well worth owning: <a href=\"https://mausritter.com/\" target=\"_blank\" rel=\"noopener\">mausritter.com</a>."
+      ]
+    }
+  },
+
+  "notFound": {
+    "heading": "Not found",
+    "message": "Sorry, the page you are looking for does not exist.",
+    "backLink": "Back to the tools"
+  },
+
+  "settlement": {
+    "pageTitle": "Settlement generator",
+    "heading": "Settlement generator",
+    "leadHtml": "Rolls a whole mouse settlement: who runs it, what they trade, what is happening today, and every shop with its keeper and stock. Lock anything you like, re-roll the rest.",
+    "loadErrorHeading": "The Mausritter tables could not be loaded.",
+    "loading": "Loading the Mausritter tables…",
+
+    "controls": {
+      "seedLabel": "Seed",
+      "sizeLabel": "Size",
+      "sizeRollOption": "Roll it (2d6, keep lowest)",
+      "terrainLabel": "Terrain",
+      "terrainAnyOption": "Anywhere",
+      "terrainOptions": ["Countryside", "Forest", "River", "Human town"],
+      "nearHumanLabel": "Near a human town",
+      "nearHumanTitle": "The SRD gates human-made goods on geography, not size",
+      "rollNew": "Roll a new settlement",
+      "rerollUnlocked": "Re-roll unlocked",
+      "copyLink": "Copy link",
+      "exportJson": "Export JSON",
+      "importJson": "Import JSON",
+      "print": "Print"
+    },
+
+    "sections": {
+      "seedTag": "seed {seed}",
+      "settlement": "The settlement",
+      "tavern": "Tavern",
+      "shops": "Shops and services",
+      "houseRuleTag": "House rule",
+      "houseRuleTitle": "Mausritter has no settlement services table",
+      "noShops": "Nothing is for sale here. A settlement this small trades in favours and IOUs, not shopfronts.",
+      "itemCards": "Item cards",
+      "itemCardsNote": "Everything on sale, as cards to cut out. Dots are usage; wide cards take two inventory slots.",
+      "officialNoticeHeading": "What is official and what is not.",
+      "officialNoticeHtml": "The settlement, tavern and non-player mice tables come from the Mausritter SRD. Mausritter has no shops or services table, so that whole layer — which services exist, how settlement size gates them, and the mouse names — is original to this tool. Each shop lists the SRD rule it was extrapolated from under “where this comes from”."
+    },
+
+    "labels": {
+      "name": "Name",
+      "size": "Size",
+      "built": "Built",
+      "governance": "Governance",
+      "inhabitants": "Inhabitants",
+      "feature": "Feature",
+      "features": "Features",
+      "industry": "Industry",
+      "industries": "Industries",
+      "rightNow": "Right now",
+      "sign": "Sign",
+      "specialty": "Specialty",
+      "landlord": "Landlord",
+      "builtValue": "{host} — {description}",
+      "governanceValue": "{governance} (d6 + size = {roll})",
+      "keeperValue": "{name} — {appearance}. {quirk}. Wants: {wants}."
+    },
+
+    "map": {
+      "heading": "The map",
+      "redrawTitle": "Re-draw the map",
+      "downloadTitle": "Download the map as SVG",
+      "caption": "{host}. Numbered buildings are keyed below.",
+      "ariaLabel": "Map of the settlement, {host}"
+    },
+
+    "status": {
+      "mapRedrawn": "Re-drew the map. The settlement itself is unchanged.",
+      "mapDownloaded": "Map downloaded.",
+      "rolledNewKeepingLocks": "Rolled a new settlement, keeping your locked entries.",
+      "rerolledExceptOne": "Re-rolled everything except 1 locked entry.",
+      "rerolledExceptMany": "Re-rolled everything except {count} locked entries.",
+      "invalidSeed": "'{seed}' is not a valid seed.",
+      "unlocked": "Unlocked.",
+      "locked": "Locked. Re-rolls will leave this alone.",
+      "edited": "Edited and locked, so a re-roll will not overwrite it.",
+      "linkCopied": "Link copied.",
+      "clipboardFailed": "Could not reach the clipboard. Copy the address bar instead.",
+      "exported": "Exported.",
+      "imported": "Imported {file}.",
+      "importFailed": "Could not import that file. {message}",
+      "readFailed": "Could not read that file. {message}",
+      "languageChanged": "Switched to {language}. The same seed, the same settlement."
+    }
+  },
+
+  "fieldRow": {
+    "lockTitle": "Lock so re-rolls leave it alone",
+    "unlockTitle": "Unlock so it re-rolls again",
+    "editTitle": "Edit by hand",
+    "rerollTitle": "Re-roll just this"
+  },
+
+  "shop": {
+    "mapKeyTitle": "Map key {index}",
+    "quirk": "Quirk",
+    "terms": "Terms",
+    "repairs": "Repairs",
+    "repairsText": "Clears a usage dot for 10% of the item's original cost.",
+    "spells": "Spells",
+    "spellsText": "Buys a fully charged spell for d6 × 100p. A depleted one is worth half.",
+    "keeperMeta": "{position} · {purse} on paw · born under the {birthsign} ({disposition})",
+    "wants": "Wants: {wants}.",
+    "inStock": "In stock",
+    "quantity": "Qty",
+    "price": "Price",
+    "lookingForWork": "Looking for work",
+    "number": "No.",
+    "perDay": "Per day",
+    "priceAbove": "Prices run {percent}% above the listed rate here.",
+    "priceBelow": "Prices run {percent}% below the listed rate here.",
+    "whereThisComesFrom": "Where this comes from"
+  },
+
+  "itemCard": {
+    "usageDotsTitle": "{count} usage dots"
+  },
+
+  "licence": {
+    "basedOnHtml": "This work is based on <a href=\"https://mausritter.com\" target=\"_blank\" rel=\"noopener\">Mausritter</a>, a product of Losing Games and Isaac Williams, and is licensed for use under the <a href=\"https://creativecommons.org/licenses/by/4.0/\" target=\"_blank\" rel=\"noopener\">Creative Commons Attribution 4.0 International (CC BY 4.0)</a> licence.",
+    "independentHtml": "Mausritter Tools is an independent production by the mausritter-tools contributors and is not affiliated with Losing Games. It is published under the Mausritter Third Party Licence.",
+    "copyrightHtml": "Mausritter is copyright Losing Games.",
+    "houseRuleNote": "Shops, services and mouse names are unofficial house rules original to this tool. Mausritter itself has no settlement services table.",
+    "translationNote": null
+  },
+
+  "error": {
+    "unhandled": "An unhandled error has occurred.",
+    "reload": "Reload"
+  },
+
+  "grammar": {
+    "summaryWithPopulation": "A {size} of {population}, {host}.",
+    "summaryWithoutPopulation": "A {size}, {host}.",
+    "sizeWithPopulation": "{name} ({population})",
+    "relationshipSummary": "{other}: {kind}",
+    "lowercaseInlineNouns": true,
+    "tavernLegendDetail": "Tavern — {meal}",
+    "shopLegendDetail": "{service} — {keeper}",
+    "tavernNamePattern": "The {adjective} {noun}",
+    "defaultTavernName": "The Tavern",
+    "unnamedSettlement": "Unnamed",
+    "defaultGivenName": "Mouse",
+    "defaultFamilyName": "Of-No-Name",
+    "articles": {
+      "indefiniteNominative": {},
+      "dativeDefinite": {}
+    }
+  }
+}

@@ -45,6 +45,15 @@ public sealed record SettlementSize
 
     public string Name { get => field ?? ""; init; } = "";
 
+    /// <summary>
+    /// The grammatical gender of <see cref="Name"/>, <c>m</c>, <c>f</c> or <c>n</c>.
+    /// </summary>
+    /// <remarks>
+    /// Absent in English, which needs no such thing. Supplied by translations so the settlement
+    /// summary can open with the right article: "Ein Dorf", but "Eine Stadt".
+    /// </remarks>
+    public string? NameGender { get; init; }
+
     public string? Population { get; init; }
 
     public bool HasTavern { get; init; }
@@ -54,7 +63,15 @@ public sealed record SettlementSize
     public int IndustryCount { get; init; } = 1;
 
     /// <summary>e.g. "Village (150-300 mice)".</summary>
-    public string Describe() => Population is null ? Name : $"{Name} ({Population})";
+    public string Describe(GrammarText grammar)
+    {
+        ArgumentNullException.ThrowIfNull(grammar);
+
+        return Population is null
+            ? Name
+            : TextTemplate.Format(
+                grammar.SizeWithPopulation, ("name", Name), ("population", Population));
+    }
 }
 
 /// <summary>
@@ -101,7 +118,21 @@ public sealed record TavernTable
 
     public IReadOnlyList<string> NameB { get => field ?? []; init; } = [];
 
+    /// <summary>
+    /// The gender of each noun in <see cref="NameB"/>, position for position.
+    /// </summary>
+    /// <remarks>
+    /// Empty in English. A translation supplies it so the sign can pick between "Zum" and "Zur";
+    /// the adjective needs no such treatment because its dative ending is the same for all three
+    /// genders, so the translated <see cref="NameA"/> column ships already declined.
+    /// </remarks>
+    public IReadOnlyList<string> NameBGenders { get => field ?? []; init; } = [];
+
     public IReadOnlyList<string> SpecialtyMeals { get => field ?? []; init; } = [];
+
+    /// <summary>The gender of the noun at <paramref name="index"/>, or <c>null</c> if untagged.</summary>
+    public string? GenderAt(int index) =>
+        index >= 0 && index < NameBGenders.Count ? NameBGenders[index] : null;
 }
 
 /// <summary>Non-player mice tables, imported from the Mausritter SRD.</summary>

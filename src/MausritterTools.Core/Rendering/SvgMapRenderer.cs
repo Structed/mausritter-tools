@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text;
+using MausritterTools.Core.Data;
 using MausritterTools.Core.Mapping;
 using MausritterTools.Core.Randomness;
 
@@ -16,18 +17,31 @@ namespace MausritterTools.Core.Rendering;
 /// </remarks>
 public static class SvgMapRenderer
 {
-    public static string Render(SettlementMap map, uint seed)
+    private const string DefaultAriaLabel = "Map of the settlement, {host}";
+
+    /// <summary>Renders the map.</summary>
+    /// <param name="map">The generated map.</param>
+    /// <param name="seed">Seeds the pen's wobble, so a redraw is reproducible.</param>
+    /// <param name="ariaLabelPattern">
+    /// The accessible label, with a <c>{host}</c> placeholder. Optional so that geometry tests need
+    /// not load a language.
+    /// </param>
+    public static string Render(SettlementMap map, uint seed, string? ariaLabelPattern = null)
     {
         ArgumentNullException.ThrowIfNull(map);
 
         RoughPen pen = new(SeedDerivation.CreateStream(seed, "map/render"));
+
+        string ariaLabel = Escape(TextTemplate.Format(
+            ariaLabelPattern is { Length: > 0 } pattern ? pattern : DefaultAriaLabel,
+            ("host", map.HostName)));
 
         StringBuilder svg = new();
 
         svg.Append(
             $"""
              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {RoughPen.N(map.Width)} {RoughPen.N(map.Height)}" 
-             role="img" aria-label="Map of the settlement, {Escape(map.HostName)}" class="settlement-map">
+             role="img" aria-label="{ariaLabel}" class="settlement-map">
              """);
 
         AppendDefs(svg, seed);

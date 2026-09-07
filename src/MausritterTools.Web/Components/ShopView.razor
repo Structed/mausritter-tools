@@ -1,10 +1,11 @@
+@using MausritterTools.Core.Data
 @using MausritterTools.Core.Model
 
 @* One shop: sign, type, quirk, proprietor and stock. *@
 
 <article class="shop">
     <header class="shop-head">
-        <span class="shop-number" title="Map key @Shop.Index">@Shop.Index</span>
+        <span class="shop-number" title="@TextTemplate.Format(Text.Shop.MapKeyTitle, ("index", Shop.Index.ToString()))">@Shop.Index</span>
         <span class="shop-name">@Shop.SignName</span>
         <span class="shop-type">@Shop.Service.Name</span>
     </header>
@@ -12,18 +13,15 @@
     <p class="mb-2">@Shop.Service.Blurb</p>
 
     <dl>
-        <dt>Quirk</dt>
+        <dt>@Text.Shop.Quirk</dt>
         <dd>@Shop.Quirk</dd>
     </dl>
 
     <div class="keeper">
         <div class="keeper-name">@Shop.Keeper.FullName</div>
         <div>@Shop.Keeper.Appearance. @Shop.Keeper.Quirk.</div>
-        <div class="keeper-meta">
-            @Shop.Keeper.Position.Name &middot; @Shop.Keeper.Purse.ToString("N0")p on paw &middot;
-            born under the @Shop.Keeper.Birthsign.Name (@Shop.Keeper.Disposition)
-        </div>
-        <div class="keeper-meta">Wants: @Shop.Keeper.Wants.</div>
+        <div class="keeper-meta">@KeeperMeta</div>
+        <div class="keeper-meta">@TextTemplate.Format(Text.Shop.Wants, ("wants", Shop.Keeper.Wants))</div>
         @if (Shop.Keeper.RelationshipSummary is { } relationship)
         {
             <div class="keeper-meta">@relationship</div>
@@ -33,7 +31,7 @@
     @if (Shop.Service.ServiceTerms is { } terms)
     {
         <dl>
-            <dt>Terms</dt>
+            <dt>@Text.Shop.Terms</dt>
             <dd>@terms</dd>
         </dl>
     }
@@ -41,16 +39,16 @@
     @if (Shop.Service.OffersRepairs)
     {
         <dl>
-            <dt>Repairs</dt>
-            <dd>Clears a usage dot for 10% of the item's original cost.</dd>
+            <dt>@Text.Shop.Repairs</dt>
+            <dd>@Text.Shop.RepairsText</dd>
         </dl>
     }
 
     @if (Shop.Service.BuysSpells)
     {
         <dl>
-            <dt>Spells</dt>
-            <dd>Buys a fully charged spell for d6 &times; 100p. A depleted one is worth half.</dd>
+            <dt>@Text.Shop.Spells</dt>
+            <dd>@Text.Shop.SpellsText</dd>
         </dl>
     }
 
@@ -59,9 +57,9 @@
         <table class="stock-table">
             <thead>
                 <tr>
-                    <th>@(Shop.Service.OffersHirelings ? "Looking for work" : "In stock")</th>
-                    <th class="qty">@(Shop.Service.OffersHirelings ? "No." : "Qty")</th>
-                    <th class="price">@(Shop.Service.OffersHirelings ? "Per day" : "Price")</th>
+                    <th>@(Shop.Service.OffersHirelings ? Text.Shop.LookingForWork : Text.Shop.InStock)</th>
+                    <th class="qty">@(Shop.Service.OffersHirelings ? Text.Shop.Number : Text.Shop.Quantity)</th>
+                    <th class="price">@(Shop.Service.OffersHirelings ? Text.Shop.PerDay : Text.Shop.Price)</th>
                 </tr>
             </thead>
             <tbody>
@@ -84,20 +82,35 @@
 
         @if (Shop.PriceAdjustmentPercent != 0)
         {
-            <p class="price-note mt-1">
-                Prices run @Math.Abs(Shop.PriceAdjustmentPercent)%
-                @(Shop.PriceAdjustmentPercent > 0 ? "above" : "below") the listed rate here.
-            </p>
+            <p class="price-note mt-1">@PriceNote</p>
         }
     }
 
     <details class="mt-2">
-        <summary class="price-note">Where this comes from</summary>
+        <summary class="price-note">@Text.Shop.WhereThisComesFrom</summary>
         <p class="price-note mt-1 mb-0">@Shop.Service.SrdBasis</p>
     </details>
 </article>
 
 @code {
+    [CascadingParameter]
+    private UiText Text { get; set; } = new();
+
     [Parameter, EditorRequired]
     public Shop Shop { get; set; } = new();
+
+    /// <summary>The pip abbreviation, so a purse reads "340p" in any language.</summary>
+    [Parameter]
+    public string PipAbbreviation { get; set; } = "p";
+
+    private string KeeperMeta => TextTemplate.Format(
+        Text.Shop.KeeperMeta,
+        ("position", Shop.Keeper.Position.Name),
+        ("purse", $"{Shop.Keeper.Purse:N0}{PipAbbreviation}"),
+        ("birthsign", Shop.Keeper.Birthsign.Name),
+        ("disposition", Shop.Keeper.Disposition));
+
+    private string PriceNote => TextTemplate.Format(
+        Shop.PriceAdjustmentPercent > 0 ? Text.Shop.PriceAbove : Text.Shop.PriceBelow,
+        ("percent", Math.Abs(Shop.PriceAdjustmentPercent).ToString()));
 }

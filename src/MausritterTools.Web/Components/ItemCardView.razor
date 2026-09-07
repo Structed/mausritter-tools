@@ -26,7 +26,7 @@
 
         @if (UsageDots > 0)
         {
-            <span class="usage-dots" title="@UsageDots usage dots">
+            <span class="usage-dots" title="@TextTemplate.Format(Text.ItemCard.UsageDotsTitle, ("count", UsageDots.ToString()))">
                 @for (int i = 0; i < UsageDots; i++)
                 {
                     <span></span>
@@ -37,6 +37,9 @@
 </div>
 
 @code {
+    [CascadingParameter]
+    private UiText Text { get; set; } = new();
+
     [Parameter, EditorRequired]
     public StockEntry Entry { get; set; } = new();
 

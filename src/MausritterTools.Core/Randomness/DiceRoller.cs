@@ -58,6 +58,44 @@ public sealed class DiceRoller(IRandomSource source)
     }
 
     /// <summary>
+    /// Picks up to <paramref name="count"/> distinct positions in a list of
+    /// <paramref name="length"/> items.
+    /// </summary>
+    /// <remarks>
+    /// Exposed alongside <see cref="PickDistinct{T}"/> because a caller sometimes needs to know
+    /// <em>which</em> row it drew, not just what was written in it: a translated table carries
+    /// grammatical gender in a parallel column, and only the position lines the two up.
+    /// </remarks>
+    public IReadOnlyList<int> PickDistinctIndices(int length, int count)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(length);
+        ArgumentOutOfRangeException.ThrowIfNegative(count);
+
+        int take = Math.Min(count, length);
+        if (take == 0)
+        {
+            return [];
+        }
+
+        // Partial Fisher-Yates over an index buffer, so elements need not be equatable.
+        int[] indices = new int[length];
+        for (int i = 0; i < indices.Length; i++)
+        {
+            indices[i] = i;
+        }
+
+        List<int> picked = new(take);
+        for (int i = 0; i < take; i++)
+        {
+            int swap = i + NextIndex(indices.Length - i);
+            (indices[i], indices[swap]) = (indices[swap], indices[i]);
+            picked.Add(indices[i]);
+        }
+
+        return picked;
+    }
+
+    /// <summary>
     /// Picks up to <paramref name="count"/> distinct elements, preserving no particular order.
     /// </summary>
     /// <remarks>
@@ -67,34 +105,26 @@ public sealed class DiceRoller(IRandomSource source)
     public IReadOnlyList<T> PickDistinct<T>(IReadOnlyList<T> items, int count)
     {
         ArgumentNullException.ThrowIfNull(items);
-        ArgumentOutOfRangeException.ThrowIfNegative(count);
 
-        int take = Math.Min(count, items.Count);
-        if (take == 0)
-        {
-            return [];
-        }
-
-        // Partial Fisher-Yates over an index buffer, so elements need not be equatable.
-        int[] indices = new int[items.Count];
-        for (int i = 0; i < indices.Length; i++)
-        {
-            indices[i] = i;
-        }
-
-        var picked = new List<T>(take);
-        for (int i = 0; i < take; i++)
-        {
-            int swap = i + NextIndex(indices.Length - i);
-            (indices[i], indices[swap]) = (indices[swap], indices[i]);
-            picked.Add(items[indices[i]]);
-        }
-
-        return picked;
+        return [.. PickDistinctIndices(items.Count, count).Select(index => items[index])];
     }
 
     /// <summary>Picks one element with probability proportional to its weight.</summary>
     public T PickWeighted<T>(IReadOnlyList<T> items, Func<T, int> weightSelector)
+    {
+        ArgumentNullException.ThrowIfNull(items);
+
+        return items[PickWeightedIndex(items, weightSelector)];
+    }
+
+    /// <summary>
+    /// Picks one position with probability proportional to its weight.
+    /// </summary>
+    /// <remarks>
+    /// The position, not the element, because a caller that needs to record what it drew must be
+    /// able to name the row even when two rows happen to hold equal values.
+    /// </remarks>
+    public int PickWeightedIndex<T>(IReadOnlyList<T> items, Func<T, int> weightSelector)
     {
         ArgumentNullException.ThrowIfNull(items);
         ArgumentNullException.ThrowIfNull(weightSelector);
@@ -111,20 +141,20 @@ public sealed class DiceRoller(IRandomSource source)
 
         if (total <= 0)
         {
-            return Pick(items);
+            return NextIndex(items.Count);
         }
 
         int target = (int)_source.NextUInt32((uint)total);
-        foreach (T item in items)
+        for (int i = 0; i < items.Count; i++)
         {
-            target -= Math.Max(0, weightSelector(item));
+            target -= Math.Max(0, weightSelector(items[i]));
             if (target < 0)
             {
-                return item;
+                return i;
             }
         }
 
-        return items[^1];
+        return items.Count - 1;
     }
 
     /// <summary>Returns a shuffled copy of <paramref name="items"/>.</summary>

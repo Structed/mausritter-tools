@@ -63,15 +63,7 @@ public class OutputQualityTests
         // so "Worked together of Rush Thistledown" was the original bug.
         foreach (string kind in TestData.Game.Npc.Relationship)
         {
-            MouseNpc npc = new()
-            {
-                GivenName = "Rush",
-                FamilyName = "Thistledown",
-                RelationshipKind = kind,
-                RelatedTo = "Clove Pennywhistle"
-            };
-
-            string summary = npc.RelationshipSummary!;
+            string summary = MouseNpc.DescribeRelationship(kind, "Clove Pennywhistle", TestData.Grammar)!;
 
             Assert.StartsWith("Clove Pennywhistle: ", summary, StringComparison.Ordinal);
             Assert.DoesNotContain(" of ", summary, StringComparison.Ordinal);

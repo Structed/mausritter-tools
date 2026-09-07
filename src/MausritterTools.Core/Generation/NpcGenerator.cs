@@ -28,10 +28,15 @@ public static class NpcGenerator
         if (context.TryGetPin($"{basePath}/name", out string pinnedName))
         {
             (given, family) = SplitName(pinnedName);
+            context.Record($"{basePath}/name", pinnedName);
         }
         else
         {
-            (given, family) = NameForge.MouseName(context.Dice($"{basePath}/name"), data.Names);
+            (given, family) = NameForge.MouseName(
+                context.Dice($"{basePath}/name"), data.Names, data.Text.Grammar);
+
+            // A mouse's name is two rows joined, so there is no single row to point a lock at.
+            context.Record($"{basePath}/name", $"{given} {family}");
         }
 
         SocialPosition position = PickPosition(tables, context, $"{basePath}/position");
@@ -63,8 +68,12 @@ public static class NpcGenerator
 
         if (context.TryGetPin(path, out string pinned))
         {
-            SocialPosition? match = tables.SocialPositions
-                .FirstOrDefault(p => string.Equals(p.Name, pinned, StringComparison.OrdinalIgnoreCase));
+            context.Record(path, pinned);
+
+            SocialPosition? match = PinReference.TryGetIndex(pinned, out int index) && index < tables.SocialPositions.Count
+                ? tables.SocialPositions[index]
+                : tables.SocialPositions
+                    .FirstOrDefault(p => string.Equals(p.Name, pinned, StringComparison.OrdinalIgnoreCase));
 
             if (match is not null)
             {
@@ -77,8 +86,23 @@ public static class NpcGenerator
         DiceRoller dice = context.Dice(path);
         int roll = dice.Roll(tables.SocialPositions.Count);
 
-        return tables.SocialPositions.FirstOrDefault(p => p.Roll == roll)
-               ?? tables.SocialPositions[roll - 1];
+        int rolledIndex = -1;
+        for (int i = 0; i < tables.SocialPositions.Count; i++)
+        {
+            if (tables.SocialPositions[i].Roll == roll)
+            {
+                rolledIndex = i;
+                break;
+            }
+        }
+
+        if (rolledIndex < 0)
+        {
+            rolledIndex = roll - 1;
+        }
+
+        context.Record(path, PinReference.ForIndex(rolledIndex));
+        return tables.SocialPositions[rolledIndex];
     }
 
     private static Birthsign PickBirthsign(NpcTables tables, RollContext context, string path)
@@ -90,8 +114,12 @@ public static class NpcGenerator
 
         if (context.TryGetPin(path, out string pinned))
         {
-            Birthsign? match = tables.Birthsigns
-                .FirstOrDefault(b => string.Equals(b.Name, pinned, StringComparison.OrdinalIgnoreCase));
+            context.Record(path, pinned);
+
+            Birthsign? match = PinReference.TryGetIndex(pinned, out int index) && index < tables.Birthsigns.Count
+                ? tables.Birthsigns[index]
+                : tables.Birthsigns
+                    .FirstOrDefault(b => string.Equals(b.Name, pinned, StringComparison.OrdinalIgnoreCase));
 
             if (match is not null)
             {
@@ -99,7 +127,10 @@ public static class NpcGenerator
             }
         }
 
-        return context.Dice(path).Pick(tables.Birthsigns);
+        int birthsignIndex = context.Dice(path).NextIndex(tables.Birthsigns.Count);
+        context.Record(path, PinReference.ForIndex(birthsignIndex));
+
+        return tables.Birthsigns[birthsignIndex];
     }
 
     /// <summary>Splits a hand-edited full name back into its parts.</summary>

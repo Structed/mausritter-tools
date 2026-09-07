@@ -77,6 +77,12 @@ public sealed record ServiceDefinition
 
     public IReadOnlyList<string> SignNouns { get => field ?? []; init; } = [];
 
+    /// <summary>
+    /// The gender of each noun in <see cref="SignNouns"/>, position for position.
+    /// </summary>
+    /// <remarks>Empty in English; supplied by translations that need it to choose an article.</remarks>
+    public IReadOnlyList<string> SignNounGenders { get => field ?? []; init; } = [];
+
     /// <summary>The quoted SRD rule this service is derived from, shown in the UI for transparency.</summary>
     public string SrdBasis { get => field ?? ""; init; } = "";
 
@@ -100,6 +106,10 @@ public sealed record ServiceDefinition
     /// <summary>Whether this service can appear in the given settlement.</summary>
     public bool IsAvailable(int sizeValue, bool nearHumanTown) =>
         sizeValue >= MinSize && (!RequiresHumanTown || nearHumanTown);
+
+    /// <summary>The gender of the sign noun at <paramref name="index"/>, or <c>null</c> if untagged.</summary>
+    public string? SignNounGenderAt(int index) =>
+        index >= 0 && index < SignNounGenders.Count ? SignNounGenders[index] : null;
 }
 
 /// <summary>Which gear categories a shop stocks, and how deeply.</summary>
@@ -211,9 +221,24 @@ public sealed record HostObject
 
     public string Description { get => field ?? ""; init; } = "";
 
+    /// <summary>
+    /// The complete prepositional phrase, e.g. "in einem hohlen Baumstumpf".
+    /// </summary>
+    /// <remarks>
+    /// English composes this from a preposition, an article chosen by first letter, and the name.
+    /// German cannot: the article agrees with the noun's gender and the adjective declines with it,
+    /// so the phrase is supplied whole rather than assembled from parts.
+    /// </remarks>
+    public string? Phrase { get; init; }
+
     /// <summary>e.g. "inside an old farmhouse stump".</summary>
     public string Describe()
     {
+        if (Phrase is { Length: > 0 } phrase)
+        {
+            return phrase;
+        }
+
         string name = Name.ToLowerInvariant();
         string article = Article ?? (name.Length > 0 && "aeiou".Contains(name[0]) ? "an" : "a");
 

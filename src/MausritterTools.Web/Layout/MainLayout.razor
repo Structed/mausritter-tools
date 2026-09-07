@@ -1,16 +1,61 @@
-﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+@inherits LayoutComponentBase
+@using MausritterTools.Core.Data
+@using MausritterTools.Web.Services
+@implements IDisposable
+@inject GameDataProvider DataProvider
+@inject LocaleState Locale
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://github.com/Structed/mausritter-tools" target="_blank" rel="noopener">GitHub</a>
+@* The UI text is loaded once here and cascaded, so no component has to fetch it for itself and
+   every one of them changes language at the same moment. *@
+
+<CascadingValue Value="_text">
+    <div class="page">
+        <div class="sidebar">
+            <NavMenu />
         </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+        <main>
+            <div class="top-row px-4">
+                <a href="https://github.com/Structed/mausritter-tools" target="_blank" rel="noopener">GitHub</a>
+            </div>
+
+            <article class="content px-4">
+                @Body
+            </article>
+        </main>
+    </div>
+</CascadingValue>
+
+@code {
+    private UiText _text = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Locale.Changed += OnLanguageChanged;
+        await LoadTextAsync();
+    }
+
+    private async Task LoadTextAsync()
+    {
+        try
+        {
+            _text = await DataProvider.GetTextAsync();
+        }
+        catch (GameDataException)
+        {
+            // Labels will be blank, which is bad, but the page still renders and the settlement
+            // page shows the real error against the data file it failed on.
+            _text = new UiText();
+        }
+
+        await Locale.ApplyToDocumentAsync(_text);
+    }
+
+    private async Task OnLanguageChanged()
+    {
+        await LoadTextAsync();
+        StateHasChanged();
+    }
+
+    public void Dispose() => Locale.Changed -= OnLanguageChanged;
+}

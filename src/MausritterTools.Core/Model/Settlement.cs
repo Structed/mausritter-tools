@@ -38,9 +38,25 @@ public sealed record Settlement
 
     public IReadOnlyList<Shop> Shops { get; init; } = [];
 
-    /// <summary>e.g. "A village of 150-300 mice, inside a hollow tree stump".</summary>
-    public string Summary =>
-        $"A {Size.Name.ToLowerInvariant()}{(Size.Population is null ? "" : $" of {Size.Population}")}, {Host.Describe()}.";
+    /// <summary>
+    /// What each field path would be locked to, keyed by path.
+    /// </summary>
+    /// <remarks>
+    /// Table-drawn values are recorded as a position rather than as text, so that locking a value
+    /// and then switching language keeps the lock pointing at the same row instead of stranding one
+    /// line of the sheet in the wrong language.
+    /// </remarks>
+    public IReadOnlyDictionary<string, string> PinValues { get; init; } =
+        new Dictionary<string, string>();
+
+    /// <summary>
+    /// e.g. "A village of 150-300 mice, inside a hollow tree stump".
+    /// </summary>
+    /// <remarks>
+    /// Composed by the generator rather than here, because the sentence's shape is a property of
+    /// the language and only the generator has the loaded text for it.
+    /// </remarks>
+    public string Summary { get; init; } = "";
 }
 
 /// <summary>The settlement's tavern or inn.</summary>
@@ -143,12 +159,35 @@ public sealed record MouseNpc
     /// The relationship as a readable note, when there is one.
     /// </summary>
     /// <remarks>
+    /// Composed by the generator via <see cref="DescribeRelationship"/>, since whether the noun is
+    /// lower-cased in the middle of a sentence depends on the language.
+    /// </remarks>
+    public string? RelationshipSummary { get; init; }
+
+    /// <summary>
+    /// Writes a keeper's tie to another mouse, e.g. "Rush Thistledown: worked together".
+    /// </summary>
+    /// <remarks>
     /// Phrased as "name: kind" rather than "kind of name" because the SRD's relationship column
     /// mixes nouns with phrases. "Parent of Rush" reads well, but "Worked together of Rush" does
     /// not; "Rush Thistledown: worked together" works for every entry in the table.
     /// </remarks>
-    public string? RelationshipSummary =>
-        RelationshipKind is null || RelatedTo is null
-            ? null
-            : $"{RelatedTo}: {char.ToLowerInvariant(RelationshipKind[0])}{RelationshipKind[1..]}";
+    public static string? DescribeRelationship(string? kind, string? relatedTo, GrammarText grammar)
+    {
+        ArgumentNullException.ThrowIfNull(grammar);
+
+        if (kind is not { Length: > 0 } || relatedTo is null)
+        {
+            return null;
+        }
+
+        // English lets a noun sit mid-sentence in lower case; German capitalises every noun, and
+        // lower-casing one there would simply look like a typo.
+        string phrased = grammar.LowercaseInlineNouns
+            ? char.ToLowerInvariant(kind[0]) + kind[1..]
+            : kind;
+
+        return TextTemplate.Format(
+            grammar.RelationshipSummary, ("other", relatedTo), ("kind", phrased));
+    }
 }

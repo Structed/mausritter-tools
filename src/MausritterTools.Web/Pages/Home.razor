@@ -1,32 +1,28 @@
 @page "/"
+@using MausritterTools.Core.Data
 @using MausritterTools.Web.Components
 
-<PageTitle>Mausritter Tools</PageTitle>
+<PageTitle>@Text.App.Title</PageTitle>
 
 <div class="settlement-tool">
-    <h1>Mausritter Tools</h1>
+    <h1>@Text.Home.Heading</h1>
 
-    <p class="lead">
-        A collection of browser-based helpers for running and playing
-        <a href="https://mausritter.com/" target="_blank" rel="noopener">Mausritter</a>.
-    </p>
+    <p class="lead">@((MarkupString)Text.Home.LeadHtml)</p>
 
-    <p>
-        Everything runs entirely in your browser &mdash; there is no server and nothing is uploaded.
-    </p>
+    <p>@((MarkupString)Text.Home.NoServerHtml)</p>
 
-    <h2>Tools</h2>
+    <h2>@Text.Home.ToolsHeading</h2>
 
     <ul>
-        <li>
-            <a href="settlement"><strong>Settlement generator</strong></a> &mdash; rolls a whole
-            mouse settlement: who governs it, what they trade, what is happening as the players
-            arrive, plus every shop with its keeper, quirks and priced stock. Lock what you like,
-            re-roll the rest, then share it as a link or print it.
-        </li>
+        <li>@((MarkupString)Text.Home.SettlementItemHtml)</li>
     </ul>
 
-    <p><a href="about">How this works, and what is official</a>.</p>
+    <p><a href="about">@Text.Home.AboutLinkText</a>.</p>
 
     <LicenceFooter ShowHouseRuleNote="false" />
 </div>
+
+@code {
+    [CascadingParameter]
+    private UiText Text { get; set; } = new();
+}

@@ -9,13 +9,35 @@ internal static class TestData
 {
     private static readonly Lazy<GameData> Shared = new(() => LoadAsync().GetAwaiter().GetResult());
 
+    private static readonly Dictionary<string, GameData> Localised = new(StringComparer.Ordinal);
+
     /// <summary>The loaded and validated game data, shared across tests.</summary>
     public static GameData Game => Shared.Value;
 
+    /// <summary>The English UI text and sentence patterns.</summary>
+    public static GrammarText Grammar => Game.Text.Grammar;
+
     public static string DataRoot { get; } = FindDataRoot();
 
-    public static Task<GameData> LoadAsync() =>
-        GameData.LoadAsync(new FileSystemDataFileReader(DataRoot));
+    public static Task<GameData> LoadAsync(Locale? locale = null) =>
+        GameData.LoadAsync(new FileSystemDataFileReader(DataRoot), locale);
+
+    /// <summary>The data as loaded in one language, so translations can be compared against it.</summary>
+    public static GameData In(Locale locale)
+    {
+        ArgumentNullException.ThrowIfNull(locale);
+
+        lock (Localised)
+        {
+            if (!Localised.TryGetValue(locale.Code, out GameData? data))
+            {
+                data = LoadAsync(locale).GetAwaiter().GetResult();
+                Localised[locale.Code] = data;
+            }
+
+            return data;
+        }
+    }
 
     private static string FindDataRoot()
     {

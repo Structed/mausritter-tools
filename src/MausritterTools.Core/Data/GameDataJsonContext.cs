@@ -25,4 +25,5 @@ namespace MausritterTools.Core.Data;
 [JsonSerializable(typeof(StockProfile))]
 [JsonSerializable(typeof(NameTables))]
 [JsonSerializable(typeof(HostTables))]
+[JsonSerializable(typeof(UiText))]
 internal sealed partial class GameDataJsonContext : JsonSerializerContext;

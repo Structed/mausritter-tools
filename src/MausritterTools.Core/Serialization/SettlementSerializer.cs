@@ -14,11 +14,20 @@ namespace MausritterTools.Core.Serialization;
 [JsonSerializable(typeof(SettlementDocument))]
 internal sealed partial class SettlementDocumentJsonContext : JsonSerializerContext;
 
+/// <summary>What an imported file yielded: how to rebuild it, and the language it was read in.</summary>
+/// <param name="Options">Everything needed to regenerate the settlement.</param>
+/// <param name="Locale">The language code recorded in the file, if it carried one.</param>
+public sealed record SettlementImport(GenerationOptions Options, string? Locale);
+
 /// <summary>Reads and writes exported settlement files.</summary>
 public static class SettlementSerializer
 {
     /// <summary>Serialises a settlement and the options that produced it.</summary>
-    public static string ToJson(Settlement settlement, GenerationOptions options, DateTimeOffset? timestamp = null)
+    public static string ToJson(
+        Settlement settlement,
+        GenerationOptions options,
+        DateTimeOffset? timestamp = null,
+        string? locale = null)
     {
         ArgumentNullException.ThrowIfNull(settlement);
         ArgumentNullException.ThrowIfNull(options);
@@ -26,6 +35,7 @@ public static class SettlementSerializer
         SettlementDocument document = new()
         {
             GeneratedUtc = (timestamp ?? DateTimeOffset.UtcNow).UtcDateTime.ToString("o"),
+            Locale = locale,
             Options = SettlementDocumentOptions.From(options),
             Settlement = SettlementSnapshot.From(settlement)
         };
@@ -42,7 +52,13 @@ public static class SettlementSerializer
     /// before a table update is rebuilt against the current tables.
     /// </remarks>
     /// <exception cref="SettlementFormatException">The file is not a settlement export.</exception>
-    public static GenerationOptions FromJson(string json)
+    public static GenerationOptions FromJson(string json) => Read(json).Options;
+
+    /// <summary>
+    /// Reads an exported file, including the language it was written in.
+    /// </summary>
+    /// <exception cref="SettlementFormatException">The file is not a settlement export.</exception>
+    public static SettlementImport Read(string json)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(json);
 
@@ -73,7 +89,7 @@ public static class SettlementSerializer
                 $"That file was written by a newer version of this tool (format version {document.Version}).");
         }
 
-        return document.Options.ToGenerationOptions();
+        return new SettlementImport(document.Options.ToGenerationOptions(), document.Locale);
     }
 
     /// <summary>A filename-safe name for the exported file, e.g. <c>owlmill-c21p6.json</c>.</summary>

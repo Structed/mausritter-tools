@@ -113,19 +113,44 @@ public static class ShopGenerator
 
         MouseNpc keeper = NpcGenerator.Generate(data, context, $"{path}/keeper");
 
-        string sign = context.TryGetPin($"{path}/sign", out string pinnedSign)
-            ? pinnedSign
-            : PickDistinctly(
+        string sign;
+        if (context.TryGetPin($"{path}/sign", out string pinnedSign))
+        {
+            sign = pinnedSign;
+        }
+        else
+        {
+            sign = PickDistinctly(
                 usedSigns,
                 attempt => NameForge.ShopSign(
-                    context.Dice(Attempted($"{path}/sign", attempt)), data.Services, service, keeper.FamilyName),
+                    context.Dice(Attempted($"{path}/sign", attempt)),
+                    data.Services,
+                    service,
+                    keeper.FamilyName,
+                    data.Text.Grammar),
                 // Two signs sharing an adjective ("The Stubborn Quench" beside "The Stubborn
                 // Pestle") is the collision worth avoiding, so compare on the leading words.
                 SignFingerprint);
+        }
 
-        string quirk = context.TryGetPin($"{path}/quirk", out string pinnedQuirk)
-            ? pinnedQuirk
-            : PickUnused(context.Dice($"{path}/quirk"), data.Services.ShopQuirks, usedQuirks);
+        // A sign is assembled from a pattern rather than drawn from a row, so a lock keeps the words.
+        context.Record($"{path}/sign", sign);
+
+        string quirk;
+        if (context.TryGetPin($"{path}/quirk", out string pinnedQuirk))
+        {
+            quirk = PinReference.Resolve(pinnedQuirk, data.Services.ShopQuirks);
+            context.Record($"{path}/quirk", pinnedQuirk);
+        }
+        else
+        {
+            (quirk, int quirkIndex) = PickUnused(
+                context.Dice($"{path}/quirk"), data.Services.ShopQuirks, usedQuirks);
+
+            context.Record(
+                $"{path}/quirk",
+                quirkIndex < 0 ? quirk : PinReference.ForIndex(quirkIndex));
+        }
 
         int adjustment = RollPriceAdjustment(data, context, service, $"{path}/prices");
 
@@ -147,25 +172,40 @@ public static class ShopGenerator
         attempt == 0 ? path : $"{path}/retry{attempt}";
 
     /// <summary>
-    /// Picks an entry that has not been used yet by drawing from the unused entries directly.
+    /// Picks an entry that has not been used yet by drawing from the unused entries directly, and
+    /// reports where it sits in the original table so a lock can point at that row.
     /// </summary>
     /// <remarks>
     /// Preferred over retrying a blind roll, which can exhaust its attempts once most of a small
     /// table is spoken for. Falls back to the whole table when a settlement has more shops than
     /// the table has entries.
     /// </remarks>
-    private static string PickUnused(DiceRoller dice, IReadOnlyList<string> table, HashSet<string> used)
+    private static (string Value, int Index) PickUnused(
+        DiceRoller dice, IReadOnlyList<string> table, HashSet<string> used)
     {
         if (table.Count == 0)
         {
-            return "";
+            return ("", -1);
         }
 
-        List<string> available = [.. table.Where(entry => !used.Contains(entry))];
-        string picked = dice.Pick(available.Count > 0 ? available : table);
+        List<int> available = [];
+        for (int i = 0; i < table.Count; i++)
+        {
+            if (!used.Contains(table[i]))
+            {
+                available.Add(i);
+            }
+        }
 
-        used.Add(picked);
-        return picked;
+        if (available.Count == 0)
+        {
+            available = [.. Enumerable.Range(0, table.Count)];
+        }
+
+        int index = available[dice.NextIndex(available.Count)];
+
+        used.Add(table[index]);
+        return (table[index], index);
     }
 
     /// <summary>
