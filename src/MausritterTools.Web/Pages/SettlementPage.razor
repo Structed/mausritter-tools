@@ -13,80 +13,83 @@
 @implements IDisposable
 @inject GameDataProvider DataProvider
 @inject BrowserInterop Browser
+@inject LocaleState Languages
 @inject NavigationManager Navigation
 
-<PageTitle>@(_settlement is null ? "Settlement generator" : $"{_settlement.Name} — Mausritter Tools")</PageTitle>
+<PageTitle>
+    @(_settlement is null
+        ? _text.Settlement.PageTitle
+        : TextTemplate.Format(_text.App.PageTitlePattern, ("page", _settlement.Name)))
+</PageTitle>
 
 <div class="settlement-tool">
-    <h1>Settlement generator</h1>
+    <h1>@_text.Settlement.Heading</h1>
 
     @if (_loadError is { } loadError)
     {
         <div class="notice">
-            <strong>The Mausritter tables could not be loaded.</strong>
+            <strong>@_text.Settlement.LoadErrorHeading</strong>
             <p class="mb-0 mt-1">@loadError</p>
         </div>
     }
     else if (_generator is null)
     {
-        <p>Loading the Mausritter tables…</p>
+        <p>@_text.Settlement.Loading</p>
     }
     else
     {
-        <p class="lead">
-            Rolls a whole mouse settlement: who runs it, what they trade, what is happening today,
-            and every shop with its keeper and stock. Lock anything you like, re-roll the rest.
-        </p>
+        <p class="lead">@((MarkupString)_text.Settlement.LeadHtml)</p>
 
         <div class="generator-bar no-print">
             <div class="field">
-                <label for="seed">Seed</label>
+                <label for="seed">@_text.Settlement.Controls.SeedLabel</label>
                 <input id="seed" type="text" value="@_seedText" @onchange="OnSeedChanged" spellcheck="false" />
             </div>
 
             <div class="field">
-                <label for="size">Size</label>
+                <label for="size">@_text.Settlement.Controls.SizeLabel</label>
                 <select id="size" @onchange="OnSizeChanged">
-                    <option value="" selected="@(_options.Size is null)">Roll it (2d6, keep lowest)</option>
+                    <option value="" selected="@(_options.Size is null)">@_text.Settlement.Controls.SizeRollOption</option>
                     @foreach (SettlementSize size in _data!.Settlement.Sizes)
                     {
                         <option value="@size.SizeValue" selected="@(_options.Size == size.SizeValue)">
-                            @size.Describe()
+                            @size.Describe(_text.Grammar)
                         </option>
                     }
                 </select>
             </div>
 
             <div class="field">
-                <label for="terrain">Terrain</label>
+                <label for="terrain">@_text.Settlement.Controls.TerrainLabel</label>
                 <select id="terrain" @onchange="OnTerrainChanged">
-                    <option value="" selected="@(_options.Terrain is null)">Anywhere</option>
-                    @foreach ((string value, string label) in Terrains)
+                    <option value="" selected="@(_options.Terrain is null)">@_text.Settlement.Controls.TerrainAnyOption</option>
+                    @for (int i = 0; i < TerrainValues.Length; i++)
                     {
-                        <option value="@value" selected="@(_options.Terrain == value)">@label</option>
+                        string value = TerrainValues[i];
+                        <option value="@value" selected="@(_options.Terrain == value)">@TerrainLabel(i)</option>
                     }
                 </select>
             </div>
 
             <div class="field checkbox">
                 <input id="human" type="checkbox" checked="@_options.NearHumanTown" @onchange="OnHumanTownChanged" />
-                <label for="human" title="The SRD gates human-made goods on geography, not size">
-                    Near a human town
+                <label for="human" title="@_text.Settlement.Controls.NearHumanTitle">
+                    @_text.Settlement.Controls.NearHumanLabel
                 </label>
             </div>
 
             <div class="toolbar-actions">
-                <button type="button" class="btn-ink" @onclick="RollNew">Roll a new settlement</button>
+                <button type="button" class="btn-ink" @onclick="RollNew">@_text.Settlement.Controls.RollNew</button>
                 <button type="button" class="btn-quiet" @onclick="RerollUnlocked" disabled="@(!HasPins)">
-                    Re-roll unlocked
+                    @_text.Settlement.Controls.RerollUnlocked
                 </button>
-                <button type="button" class="btn-quiet" @onclick="CopyLink">Copy link</button>
-                <button type="button" class="btn-quiet" @onclick="ExportJson">Export JSON</button>
+                <button type="button" class="btn-quiet" @onclick="CopyLink">@_text.Settlement.Controls.CopyLink</button>
+                <button type="button" class="btn-quiet" @onclick="ExportJson">@_text.Settlement.Controls.ExportJson</button>
                 <label class="btn-quiet mb-0" style="cursor:pointer">
-                    Import JSON
+                    @_text.Settlement.Controls.ImportJson
                     <InputFile OnChange="ImportJson" accept=".json,application/json" style="display:none" />
                 </label>
-                <button type="button" class="btn-quiet" @onclick="Print">Print</button>
+                <button type="button" class="btn-quiet" @onclick="Print">@_text.Settlement.Controls.Print</button>
             </div>
         </div>
 
@@ -97,115 +100,115 @@
             <div class="sheet">
                 <div class="sheet-title">
                     <h2>@settlement.Name</h2>
-                    <span class="seed-tag">seed @SeedCodec.Encode(settlement.Seed)</span>
+                    <span class="seed-tag">
+                        @TextTemplate.Format(_text.Settlement.Sections.SeedTag, ("seed", SeedCodec.Encode(settlement.Seed)))
+                    </span>
                 </div>
                 <p class="sheet-summary">@settlement.Summary</p>
 
                 @if (_map is { } map)
                 {
                     <h3 class="section-heading">
-                        The map
+                        @_text.Settlement.Map.Heading
                         <span class="no-print">
-                            <button type="button" class="icon-btn" title="Re-draw the map" @onclick="RerollMap">&#8635;</button>
-                            <button type="button" class="icon-btn" title="Download the map as SVG" @onclick="DownloadMap">&#8615;</button>
+                            <button type="button" class="icon-btn" title="@_text.Settlement.Map.RedrawTitle" @onclick="RerollMap">&#8635;</button>
+                            <button type="button" class="icon-btn" title="@_text.Settlement.Map.DownloadTitle" @onclick="DownloadMap">&#8615;</button>
                         </span>
                     </h3>
 
                     <MapView Map="map" Svg="@_mapSvg" />
                 }
 
-                <h3 class="section-heading">The settlement</h3>
+                <h3 class="section-heading">@_text.Settlement.Sections.Settlement</h3>
 
-                <FieldRow Label="Name" Path="settlement/name"
+                <FieldRow Label="@_text.Settlement.Labels.Name" Path="settlement/name"
                           Values="@(new[] { settlement.Name })"
                           IsLocked="@IsLocked("settlement/name")"
                           OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
 
-                <FieldRow Label="Size" Path="settlement/size"
-                          Values="@(new[] { settlement.Size.Describe() })"
+                <FieldRow Label="@_text.Settlement.Labels.Size" Path="settlement/size"
+                          Values="@(new[] { settlement.Size.Describe(_text.Grammar) })"
                           IsLocked="@IsLocked("settlement/size")"
                           OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
 
-                <FieldRow Label="Built" Path="settlement/host"
-                          Values="@(new[] { $"{Capitalise(settlement.Host.Describe())} — {settlement.Host.Description}" })"
+                <FieldRow Label="@_text.Settlement.Labels.Built" Path="settlement/host"
+                          Values="@(new[] { BuiltValue(settlement) })"
                           IsLocked="@IsLocked("settlement/host")"
                           OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
 
-                <FieldRow Label="Governance" Path="settlement/governance"
-                          Values="@(new[] { $"{settlement.Governance} (d6 + size = {settlement.GovernanceRoll})" })"
+                <FieldRow Label="@_text.Settlement.Labels.Governance" Path="settlement/governance"
+                          Values="@(new[] { GovernanceValue(settlement) })"
                           IsLocked="@IsLocked("settlement/governance")"
                           OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
 
-                <FieldRow Label="Inhabitants" Path="settlement/inhabitants"
+                <FieldRow Label="@_text.Settlement.Labels.Inhabitants" Path="settlement/inhabitants"
                           Values="@(new[] { settlement.Inhabitants })"
                           IsLocked="@IsLocked("settlement/inhabitants")"
                           OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
 
-                <FieldRow Label="@(settlement.NotableFeatures.Count > 1 ? "Features" : "Feature")"
+                <FieldRow Label="@(settlement.NotableFeatures.Count > 1 ? _text.Settlement.Labels.Features : _text.Settlement.Labels.Feature)"
                           Path="settlement/features"
                           Values="settlement.NotableFeatures"
                           IsLocked="@IsLocked("settlement/features")"
                           OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
 
-                <FieldRow Label="@(settlement.Industries.Count > 1 ? "Industries" : "Industry")"
+                <FieldRow Label="@(settlement.Industries.Count > 1 ? _text.Settlement.Labels.Industries : _text.Settlement.Labels.Industry)"
                           Path="settlement/industries"
                           Values="settlement.Industries"
                           IsLocked="@IsLocked("settlement/industries")"
                           OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
 
-                <FieldRow Label="Right now" Path="settlement/event"
+                <FieldRow Label="@_text.Settlement.Labels.RightNow" Path="settlement/event"
                           Values="@(new[] { settlement.Event })"
                           IsLocked="@IsLocked("settlement/event")"
                           OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
 
                 @if (settlement.Tavern is { } tavern)
                 {
-                    <h3 class="section-heading">Tavern</h3>
+                    <h3 class="section-heading">@_text.Settlement.Sections.Tavern</h3>
 
-                    <FieldRow Label="Sign" Path="tavern/name"
+                    <FieldRow Label="@_text.Settlement.Labels.Sign" Path="tavern/name"
                               Values="@(new[] { tavern.Name })"
                               IsLocked="@IsLocked("tavern/name")"
                               OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
 
-                    <FieldRow Label="Specialty" Path="tavern/meal"
+                    <FieldRow Label="@_text.Settlement.Labels.Specialty" Path="tavern/meal"
                               Values="@(new[] { tavern.SpecialtyMeal })"
                               IsLocked="@IsLocked("tavern/meal")"
                               OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
 
-                    <FieldRow Label="Landlord" Path="tavern/keeper/name"
-                              Values="@(new[] { $"{tavern.Keeper.FullName} — {tavern.Keeper.Appearance}. {tavern.Keeper.Quirk}. Wants: {tavern.Keeper.Wants}." })"
+                    <FieldRow Label="@_text.Settlement.Labels.Landlord" Path="tavern/keeper/name"
+                              Values="@(new[] { KeeperValue(tavern.Keeper) })"
                               IsLocked="@IsLocked("tavern/keeper/name")"
                               OnToggleLock="ToggleLock" OnReroll="Reroll" OnEdit="Edit" />
                 }
 
                 <h3 class="section-heading">
-                    Shops and services
-                    <span class="house-rule-tag" title="Mausritter has no settlement services table">House rule</span>
+                    @_text.Settlement.Sections.Shops
+                    <span class="house-rule-tag" title="@_text.Settlement.Sections.HouseRuleTitle">
+                        @_text.Settlement.Sections.HouseRuleTag
+                    </span>
                 </h3>
 
                 @if (settlement.Shops.Count == 0)
                 {
-                    <p class="notice subtle mb-0">
-                        Nothing is for sale here. A settlement this small trades in favours and IOUs,
-                        not shopfronts.
-                    </p>
+                    <p class="notice subtle mb-0">@_text.Settlement.Sections.NoShops</p>
                 }
                 else
                 {
                     <div class="shop-grid">
                         @foreach (Shop shop in settlement.Shops)
                         {
-                            <ShopView Shop="shop" />
+                            <ShopView Shop="shop"
+                                      PipAbbreviation="@_data!.Gear.Currency.Abbreviation"
+                                      Culture="_data!.Locale.FormatCulture" />
                         }
                     </div>
 
                     @if (CardableStock.Count > 0)
                     {
-                        <h3 class="section-heading page-break">Item cards</h3>
-                        <p class="price-note">
-                            Everything on sale, as cards to cut out. Dots are usage; wide cards take
-                            two inventory slots.
-                        </p>
+                        <h3 class="section-heading page-break">@_text.Settlement.Sections.ItemCards</h3>
+                        <p class="price-note">@_text.Settlement.Sections.ItemCardsNote</p>
                         <div class="card-sheet">
                             @foreach (StockEntry entry in CardableStock)
                             {
@@ -220,12 +223,8 @@
         }
 
         <div class="notice subtle no-print">
-            <strong>What is official and what is not.</strong>
-            The settlement, tavern and non-player mice tables come from the Mausritter SRD.
-            Mausritter has no shops or services table, so that whole layer &mdash; which services
-            exist, how settlement size gates them, and the mouse names &mdash; is original to this
-            tool. Each shop lists the SRD rule it was extrapolated from under
-            &ldquo;where this comes from&rdquo;.
+            <strong>@_text.Settlement.Sections.OfficialNoticeHeading</strong>
+            @((MarkupString)_text.Settlement.Sections.OfficialNoticeHtml)
         </div>
     }
 
@@ -235,15 +234,14 @@
 @code {
     private const string StorageKey = "mausritter-tools.settlement";
 
-    private static readonly (string Value, string Label)[] Terrains =
-    [
-        ("countryside", "Countryside"),
-        ("forest", "Forest"),
-        ("river", "River"),
-        ("human-town", "Human town")
-    ];
+    /// <summary>
+    /// Terrain keys, matched against the host tables. These are identifiers, not labels, and are
+    /// never translated; their display names come from the loaded text, in this order.
+    /// </summary>
+    private static readonly string[] TerrainValues = ["countryside", "forest", "river", "human-town"];
 
     private GameData? _data;
+    private UiText _text = new();
     private SettlementGenerator? _generator;
     private Settlement? _settlement;
     private SettlementMap? _map;
@@ -256,6 +254,28 @@
 
     private bool HasPins => _options.Pins.Count > 0;
 
+    private string TerrainLabel(int index) =>
+        index < _text.Settlement.Controls.TerrainOptions.Count
+            ? _text.Settlement.Controls.TerrainOptions[index]
+            : TerrainValues[index];
+
+    private string BuiltValue(Settlement settlement) => TextTemplate.Format(
+        _text.Settlement.Labels.BuiltValue,
+        ("host", Capitalise(settlement.Host.Describe())),
+        ("description", settlement.Host.Description));
+
+    private string GovernanceValue(Settlement settlement) => TextTemplate.Format(
+        _text.Settlement.Labels.GovernanceValue,
+        ("governance", settlement.Governance),
+        ("roll", settlement.GovernanceRoll.ToString()));
+
+    private string KeeperValue(MouseNpc keeper) => TextTemplate.Format(
+        _text.Settlement.Labels.KeeperValue,
+        ("name", keeper.FullName),
+        ("appearance", keeper.Appearance),
+        ("quirk", keeper.Quirk),
+        ("wants", keeper.Wants));
+
     private IReadOnlyList<StockEntry> CardableStock =>
         _settlement is null
             ? []
@@ -267,19 +287,55 @@
     protected override async Task OnInitializedAsync()
     {
         Navigation.LocationChanged += OnLocationChanged;
+        Languages.Changed += OnLanguageChanged;
 
-        try
+        if (!await LoadDataAsync())
         {
-            _data = await DataProvider.GetDataAsync();
-            _generator = await DataProvider.GetGeneratorAsync();
-        }
-        catch (Exception ex)
-        {
-            _loadError = ex.Message;
             return;
         }
 
         await RestoreStateAsync();
+    }
+
+    private async Task<bool> LoadDataAsync()
+    {
+        try
+        {
+            _data = await DataProvider.GetDataAsync();
+            _text = _data.Text;
+            _generator = await DataProvider.GetGeneratorAsync();
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _loadError = ex.Message;
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Rebuilds the sheet in the newly chosen language.
+    /// </summary>
+    /// <remarks>
+    /// The seed and every lock are kept. Tables are translated row for row, so the same seed lands
+    /// on the same rows and this is genuinely the same settlement, re-read rather than re-rolled.
+    /// </remarks>
+    private async Task OnLanguageChanged()
+    {
+        _loadError = null;
+
+        if (!await LoadDataAsync())
+        {
+            StateHasChanged();
+            return;
+        }
+
+        Regenerate(updateUrl: true);
+        _status = TextTemplate.Format(
+            _text.Settlement.Status.LanguageChanged, ("language", Languages.Current.NativeName));
+
+        StateHasChanged();
     }
 
     /// <summary>
@@ -408,8 +464,8 @@
         _settlement = _generator.Generate(_options);
         _seedText = SeedCodec.Encode(_options.Seed);
 
-        _map = MapGenerator.Generate(_settlement, MapSeed);
-        _mapSvg = SvgMapRenderer.Render(_map, MapSeed);
+        _map = MapGenerator.Generate(_settlement, MapSeed, _text.Grammar);
+        _mapSvg = SvgMapRenderer.Render(_map, MapSeed, _text.Settlement.Map.AriaLabel);
 
         if (updateUrl)
         {
@@ -436,7 +492,7 @@
     {
         _options = _options.WithReroll("map");
         Regenerate(updateUrl: false);
-        _status = "Re-drew the map. The settlement itself is unchanged.";
+        _status = _text.Settlement.Status.MapRedrawn;
     }
 
     private async Task DownloadMap()
@@ -450,12 +506,13 @@
             SettlementSerializer.SuggestFileName(settlement), ".svg");
 
         await Browser.DownloadTextAsync(fileName, "image/svg+xml", _mapSvg);
-        _status = "Map downloaded.";
+        _status = _text.Settlement.Status.MapDownloaded;
     }
 
     /// <summary>
-    /// Keeps the address bar in step with the settings. Only the settings go in the URL; locks and
-    /// hand edits would make it unwieldy, so those live in the autosave and the JSON export.
+    /// Keeps the address bar in step with the settings. Only the settings and the language go in
+    /// the URL; locks and hand edits would make it unwieldy, so those live in the autosave and the
+    /// JSON export.
     /// </summary>
     private void UpdateUrl()
     {
@@ -476,6 +533,12 @@
             query.Append($"&terrain={Uri.EscapeDataString(terrain)}");
         }
 
+        // Carried so a settlement written up in German opens in German for whoever it is sent to.
+        if (!Languages.Current.IsCanonical)
+        {
+            query.Append($"&{LocaleState.QueryParameter}={Languages.Current.Code}");
+        }
+
         _restoring = true;
         Navigation.NavigateTo($"settlement{query}", forceLoad: false, replace: true);
         _restoring = false;
@@ -488,7 +551,9 @@
             return;
         }
 
-        await Browser.WriteStorageAsync(StorageKey, SettlementSerializer.ToJson(_settlement, _options));
+        await Browser.WriteStorageAsync(
+            StorageKey,
+            SettlementSerializer.ToJson(_settlement, _options, locale: Languages.Current.Code));
     }
 
     private void RollNew()
@@ -496,14 +561,19 @@
         // A fresh seed re-rolls everything except the values the user has locked.
         _options = _options with { Seed = SeedCodec.CreateRandom(), Rerolls = new Dictionary<string, int>() };
         Regenerate(updateUrl: true);
-        _status = HasPins ? "Rolled a new settlement, keeping your locked entries." : "";
+        _status = HasPins ? _text.Settlement.Status.RolledNewKeepingLocks : "";
     }
 
     private void RerollUnlocked()
     {
         _options = _options with { Seed = SeedCodec.CreateRandom(), Rerolls = new Dictionary<string, int>() };
         Regenerate(updateUrl: true);
-        _status = $"Re-rolled everything except {_options.Pins.Count} locked entr{(_options.Pins.Count == 1 ? "y" : "ies")}.";
+
+        _status = _options.Pins.Count == 1
+            ? _text.Settlement.Status.RerolledExceptOne
+            : TextTemplate.Format(
+                _text.Settlement.Status.RerolledExceptMany,
+                ("count", _options.Pins.Count.ToString()));
     }
 
     private void OnSeedChanged(ChangeEventArgs args)
@@ -512,7 +582,7 @@
 
         if (!SeedCodec.TryDecode(text, out uint seed))
         {
-            _status = $"'{text}' is not a valid seed.";
+            _status = TextTemplate.Format(_text.Settlement.Status.InvalidSeed, ("seed", text));
             _seedText = SeedCodec.Encode(_options.Seed);
             return;
         }
@@ -557,13 +627,15 @@
         if (_options.IsPinned(path))
         {
             _options = _options.WithoutPin(path);
-            _status = "Unlocked.";
+            _status = _text.Settlement.Status.Unlocked;
         }
         else
         {
-            // Locking freezes the value as it stands, so it survives any later re-roll.
-            _options = _options.WithPin(path, CurrentValueOf(path));
-            _status = "Locked. Re-rolls will leave this alone.";
+            // Locking freezes the value as it stands, so it survives any later re-roll. The
+            // generator records what to store, which for a table entry is its position rather than
+            // its words, so the lock still means the same thing after a change of language.
+            _options = _options.WithPin(path, _settlement?.PinValues.GetValueOrDefault(path) ?? "");
+            _status = _text.Settlement.Status.Locked;
         }
 
         Regenerate(updateUrl: false);
@@ -578,47 +650,18 @@
 
     private void Edit((string Path, string Value) edit)
     {
+        // Stored verbatim: these are the user's own words, and no table row can stand in for them.
         _options = _options.WithPin(edit.Path, edit.Value);
         Regenerate(updateUrl: false);
-        _status = "Edited and locked, so a re-roll will not overwrite it.";
-    }
-
-    /// <summary>
-    /// The value a path currently shows, which is what locking should freeze.
-    /// </summary>
-    /// <remarks>
-    /// Composed display strings such as "Village (150-300 mice)" are reduced to the plain table
-    /// entry, because the generator matches pins against the underlying table rather than the
-    /// decorated text.
-    /// </remarks>
-    private string CurrentValueOf(string path)
-    {
-        if (_settlement is not { } s)
-        {
-            return "";
-        }
-
-        return path switch
-        {
-            "settlement/name" => s.Name,
-            "settlement/size" => s.Size.Name,
-            "settlement/host" => s.Host.Name,
-            "settlement/governance" => s.Governance,
-            "settlement/inhabitants" => s.Inhabitants,
-            "settlement/features" => string.Join('\n', s.NotableFeatures),
-            "settlement/industries" => string.Join('\n', s.Industries),
-            "settlement/event" => s.Event,
-            "tavern/name" => s.Tavern?.Name ?? "",
-            "tavern/meal" => s.Tavern?.SpecialtyMeal ?? "",
-            "tavern/keeper/name" => s.Tavern?.Keeper.FullName ?? "",
-            _ => ""
-        };
+        _status = _text.Settlement.Status.Edited;
     }
 
     private async Task CopyLink()
     {
         bool copied = await Browser.CopyTextAsync(Navigation.Uri);
-        _status = copied ? "Link copied." : "Could not reach the clipboard. Copy the address bar instead.";
+        _status = copied
+            ? _text.Settlement.Status.LinkCopied
+            : _text.Settlement.Status.ClipboardFailed;
     }
 
     private async Task ExportJson()
@@ -631,9 +674,9 @@
         await Browser.DownloadTextAsync(
             SettlementSerializer.SuggestFileName(settlement),
             "application/json",
-            SettlementSerializer.ToJson(settlement, _options));
+            SettlementSerializer.ToJson(settlement, _options, locale: Languages.Current.Code));
 
-        _status = "Exported.";
+        _status = _text.Settlement.Status.Exported;
     }
 
     private async Task ImportJson(InputFileChangeEventArgs args)
@@ -644,17 +687,29 @@
             await using Stream stream = args.File.OpenReadStream(maxAllowedSize: 2 * 1024 * 1024);
             using StreamReader reader = new(stream);
 
-            _options = SettlementSerializer.FromJson(await reader.ReadToEndAsync());
+            SettlementImport imported = SettlementSerializer.Read(await reader.ReadToEndAsync());
+            _options = imported.Options;
+
+            // Shown as its author saw it, which also keeps any locked table entries reading in the
+            // language they were locked in.
+            if (imported.Locale is { Length: > 0 } code)
+            {
+                await Languages.SetAsync(Locale.FromCode(code));
+            }
+
             Regenerate(updateUrl: true);
-            _status = $"Imported {args.File.Name}.";
+            _status = TextTemplate.Format(
+                _text.Settlement.Status.Imported, ("file", args.File.Name));
         }
         catch (SettlementFormatException ex)
         {
-            _status = $"Could not import that file. {ex.Message}";
+            _status = TextTemplate.Format(
+                _text.Settlement.Status.ImportFailed, ("message", ex.Message));
         }
         catch (IOException ex)
         {
-            _status = $"Could not read that file. {ex.Message}";
+            _status = TextTemplate.Format(
+                _text.Settlement.Status.ReadFailed, ("message", ex.Message));
         }
     }
 
@@ -663,5 +718,9 @@
     private static string Capitalise(string value) =>
         value.Length == 0 ? value : char.ToUpperInvariant(value[0]) + value[1..];
 
-    public void Dispose() => Navigation.LocationChanged -= OnLocationChanged;
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+        Languages.Changed -= OnLanguageChanged;
+    }
 }

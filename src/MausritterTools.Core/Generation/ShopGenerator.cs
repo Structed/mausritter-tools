@@ -1,3 +1,4 @@
+using System.Globalization;
 using MausritterTools.Core.Data;
 using MausritterTools.Core.Model;
 using MausritterTools.Core.Randomness;
@@ -98,7 +99,12 @@ public static class ShopGenerator
         }
 
         // Keep a stable, readable order rather than the order they happened to be drawn in.
-        return [.. chosen.OrderBy(s => s.MinSize).ThenBy(s => s.Name, StringComparer.Ordinal)];
+        //
+        // Ordered by id, not by name: a shop's position is its number on the map and part of the
+        // field path its keeper's details are locked under, so it has to be a property of the
+        // settlement rather than of the language it is being read in. Sorting on a translated name
+        // would renumber the map and move every lock the moment the reader switched language.
+        return [.. chosen.OrderBy(s => s.MinSize).ThenBy(s => s.Id, StringComparer.Ordinal)];
     }
 
     private static Shop BuildShop(
@@ -113,19 +119,44 @@ public static class ShopGenerator
 
         MouseNpc keeper = NpcGenerator.Generate(data, context, $"{path}/keeper");
 
-        string sign = context.TryGetPin($"{path}/sign", out string pinnedSign)
-            ? pinnedSign
-            : PickDistinctly(
+        string sign;
+        if (context.TryGetPin($"{path}/sign", out string pinnedSign))
+        {
+            sign = pinnedSign;
+        }
+        else
+        {
+            sign = PickDistinctly(
                 usedSigns,
                 attempt => NameForge.ShopSign(
-                    context.Dice(Attempted($"{path}/sign", attempt)), data.Services, service, keeper.FamilyName),
+                    context.Dice(Attempted($"{path}/sign", attempt)),
+                    data.Services,
+                    service,
+                    keeper.FamilyName,
+                    data.Text.Grammar),
                 // Two signs sharing an adjective ("The Stubborn Quench" beside "The Stubborn
                 // Pestle") is the collision worth avoiding, so compare on the leading words.
                 SignFingerprint);
+        }
 
-        string quirk = context.TryGetPin($"{path}/quirk", out string pinnedQuirk)
-            ? pinnedQuirk
-            : PickUnused(context.Dice($"{path}/quirk"), data.Services.ShopQuirks, usedQuirks);
+        // A sign is assembled from a pattern rather than drawn from a row, so a lock keeps the words.
+        context.Record($"{path}/sign", sign);
+
+        string quirk;
+        if (context.TryGetPin($"{path}/quirk", out string pinnedQuirk))
+        {
+            quirk = PinReference.Resolve(pinnedQuirk, data.Services.ShopQuirks);
+            context.Record($"{path}/quirk", pinnedQuirk);
+        }
+        else
+        {
+            (quirk, int quirkIndex) = PickUnused(
+                context.Dice($"{path}/quirk"), data.Services.ShopQuirks, usedQuirks);
+
+            context.Record(
+                $"{path}/quirk",
+                quirkIndex < 0 ? quirk : PinReference.ForIndex(quirkIndex));
+        }
 
         int adjustment = RollPriceAdjustment(data, context, service, $"{path}/prices");
 
@@ -147,25 +178,40 @@ public static class ShopGenerator
         attempt == 0 ? path : $"{path}/retry{attempt}";
 
     /// <summary>
-    /// Picks an entry that has not been used yet by drawing from the unused entries directly.
+    /// Picks an entry that has not been used yet by drawing from the unused entries directly, and
+    /// reports where it sits in the original table so a lock can point at that row.
     /// </summary>
     /// <remarks>
     /// Preferred over retrying a blind roll, which can exhaust its attempts once most of a small
     /// table is spoken for. Falls back to the whole table when a settlement has more shops than
     /// the table has entries.
     /// </remarks>
-    private static string PickUnused(DiceRoller dice, IReadOnlyList<string> table, HashSet<string> used)
+    private static (string Value, int Index) PickUnused(
+        DiceRoller dice, IReadOnlyList<string> table, HashSet<string> used)
     {
         if (table.Count == 0)
         {
-            return "";
+            return ("", -1);
         }
 
-        List<string> available = [.. table.Where(entry => !used.Contains(entry))];
-        string picked = dice.Pick(available.Count > 0 ? available : table);
+        List<int> available = [];
+        for (int i = 0; i < table.Count; i++)
+        {
+            if (!used.Contains(table[i]))
+            {
+                available.Add(i);
+            }
+        }
 
-        used.Add(picked);
-        return picked;
+        if (available.Count == 0)
+        {
+            available = [.. Enumerable.Range(0, table.Count)];
+        }
+
+        int index = available[dice.NextIndex(available.Count)];
+
+        used.Add(table[index]);
+        return (table[index], index);
     }
 
     /// <summary>
@@ -264,7 +310,13 @@ public static class ShopGenerator
         IReadOnlyList<(GearItem Item, string CategoryId)> items = dice.PickDistinct(pool, wanted);
 
         List<StockEntry> stock = new(items.Count);
-        foreach ((GearItem item, string categoryId) in items.OrderBy(i => i.Item.DisplayName, StringComparer.Ordinal))
+
+        // Sorted for the reader, in their own alphabet: an ordinal sort files "Ärmlich" after
+        // "Wintermantel", which is simply wrong to a German eye. This affects only the order lines
+        // are printed in, never which items were drawn, so it cannot disturb a seed.
+        StringComparer shelfOrder = StringComparer.Create(data.Locale.FormatCulture, ignoreCase: false);
+
+        foreach ((GearItem item, string categoryId) in items.OrderBy(i => i.Item.DisplayName, shelfOrder))
         {
             stock.Add(BuildStockEntry(data, dice, service, item, categoryId, priceAdjustmentPercent));
         }
@@ -297,11 +349,25 @@ public static class ShopGenerator
         int listed = item.Pips!.Value;
         int adjusted = Math.Max(1, (int)Math.Round(listed * (100 + adjustmentPercent) / 100.0, MidpointRounding.AwayFromZero));
 
+        GrammarText grammar = data.Text.Grammar;
+        string pip = data.Gear.Currency.Abbreviation;
+
+        // Even a price is phrased: English writes "20p per night", German "20 P pro Nacht".
         string priceText = item.PerUnit is not null
-            ? $"{adjusted}p per {item.PerUnit}"
+            ? TextTemplate.Format(
+                grammar.PricePerUnit,
+                ("amount", adjusted.ToString(CultureInfo.InvariantCulture)),
+                ("pip", pip),
+                ("unit", item.PerUnit))
             : service.PricesPerHex
-                ? $"{adjusted}p per hex"
-                : $"{adjusted}p";
+                ? TextTemplate.Format(
+                    grammar.PricePerHex,
+                    ("amount", adjusted.ToString(CultureInfo.InvariantCulture)),
+                    ("pip", pip))
+                : TextTemplate.Format(
+                    grammar.PricePlain,
+                    ("amount", adjusted.ToString(CultureInfo.InvariantCulture)),
+                    ("pip", pip));
 
         return new StockEntry
         {

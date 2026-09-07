@@ -520,4 +520,114 @@ Write-DataFile -Name 'spells.json' -Data ([ordered]@{
 
 #endregion
 
+#region Translation checks
+
+<#
+.SYNOPSIS
+    Reports any place a translation overlay no longer lines up with the file it translates.
+
+.DESCRIPTION
+    Every value the generator produces is an index into a table, so a translated table must have
+    exactly as many rows as its original. When the SRD gains or loses a row, the generated file
+    changes underneath the translations and they go quietly stale: a German settlement would start
+    drawing a different row than an English one from the same seed.
+
+    The importer is the only thing that changes the generated files, so it is the right place to
+    notice.
+#>
+function Test-TranslationShape {
+    param(
+        [Parameter(Mandatory)] [AllowNull()] $Canonical,
+        [Parameter(Mandatory)] [AllowNull()] $Translation,
+        [Parameter(Mandatory)] [string] $Path,
+        [Parameter(Mandatory)] [AllowEmptyCollection()] [System.Collections.Generic.List[string]] $Problems
+    )
+
+    # A null in the overlay means "keep what the canonical file says", which is always in shape.
+    if ($null -eq $Translation -or $null -eq $Canonical) { return }
+
+    $canonicalIsArray = $Canonical -is [System.Object[]]
+    $translationIsArray = $Translation -is [System.Object[]]
+
+    if ($canonicalIsArray -or $translationIsArray) {
+        if (-not ($canonicalIsArray -and $translationIsArray)) {
+            $Problems.Add("$Path changed between a list and a value.")
+            return
+        }
+
+        if ($Canonical.Count -ne $Translation.Count) {
+            $Problems.Add(
+                "$Path has $($Translation.Count) entries but the SRD now has $($Canonical.Count). " +
+                'Tables are rolled on by position, so they must line up exactly.')
+            return
+        }
+
+        for ($i = 0; $i -lt $Canonical.Count; $i++) {
+            Test-TranslationShape -Canonical $Canonical[$i] -Translation $Translation[$i] `
+                -Path "$Path[$i]" -Problems $Problems
+        }
+
+        return
+    }
+
+    $canonicalIsObject = $Canonical -is [System.Management.Automation.PSCustomObject]
+    $translationIsObject = $Translation -is [System.Management.Automation.PSCustomObject]
+
+    if ($canonicalIsObject -and $translationIsObject) {
+        foreach ($property in $Translation.PSObject.Properties) {
+            # A translation may add grammatical metadata the SRD has no use for.
+            if ($Canonical.PSObject.Properties.Name -contains $property.Name) {
+                Test-TranslationShape -Canonical $Canonical.$($property.Name) -Translation $property.Value `
+                    -Path "$Path.$($property.Name)" -Problems $Problems
+            }
+        }
+
+        return
+    }
+
+    if ($canonicalIsObject -ne $translationIsObject) {
+        $Problems.Add("$Path changed between an object and a value.")
+    }
+}
+
+$i18nRoot = Join-Path $RepoRoot 'src/MausritterTools.Web/wwwroot/data/i18n'
+
+if (Test-Path $i18nRoot) {
+    Write-Host 'Checking translations against the regenerated tables' -ForegroundColor Cyan
+
+    $problems = [System.Collections.Generic.List[string]]::new()
+
+    foreach ($localeDir in Get-ChildItem -Path $i18nRoot -Directory) {
+        foreach ($generated in Get-ChildItem -Path $OutputDir -Filter '*.json') {
+            $overlayPath = Join-Path $localeDir.FullName "srd/$($generated.Name)"
+
+            if (-not (Test-Path $overlayPath)) {
+                $problems.Add(
+                    "$($localeDir.Name)/srd/$($generated.Name) is missing. " +
+                    'Every generated table needs a translation in every language the app ships.')
+                continue
+            }
+
+            $canonical = Get-Content $generated.FullName -Raw | ConvertFrom-Json
+            $translation = Get-Content $overlayPath -Raw | ConvertFrom-Json
+
+            Test-TranslationShape -Canonical $canonical -Translation $translation `
+                -Path "$($localeDir.Name)/srd/$($generated.Name)" -Problems $problems
+        }
+    }
+
+    if ($problems.Count -gt 0) {
+        Write-Host ''
+        Write-Host 'The SRD has changed shape and the translations no longer match it:' -ForegroundColor Red
+        foreach ($problem in $problems) { Write-Host "  - $problem" -ForegroundColor Red }
+        Write-Host ''
+
+        throw "$($problems.Count) translation(s) are out of step with the regenerated tables."
+    }
+
+    Write-Host '  translations line up' -ForegroundColor DarkGray
+}
+
+#endregion
+
 Write-Host "Done. Output in $OutputDir" -ForegroundColor Green

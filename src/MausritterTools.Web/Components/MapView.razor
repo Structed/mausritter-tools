@@ -1,3 +1,4 @@
+@using MausritterTools.Core.Data
 @using MausritterTools.Core.Mapping
 
 @* Renders a generated settlement map plus its legend. The SVG is produced by the Core renderer
@@ -9,7 +10,7 @@
     </div>
 
     <figcaption class="map-caption">
-        @Map.HostName. Numbered buildings are keyed below.
+        @TextTemplate.Format(Text.Settlement.Map.Caption, ("host", Map.HostName))
     </figcaption>
 
     @if (Map.Legend.Count > 0)
@@ -28,6 +29,9 @@
 </figure>
 
 @code {
+    [CascadingParameter]
+    private UiText Text { get; set; } = new();
+
     [Parameter, EditorRequired]
     public SettlementMap Map { get; set; } = null!;
 

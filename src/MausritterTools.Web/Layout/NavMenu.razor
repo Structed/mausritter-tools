@@ -1,7 +1,11 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+@using MausritterTools.Core.Data
+@using MausritterTools.Web.Services
+@inject LocaleState Languages
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">Mausritter Tools</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+        <a class="navbar-brand" href="">@Text.Nav.Brand</a>
+        <button title="@Text.Nav.MenuTitle" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
@@ -11,24 +15,40 @@
     <nav class="nav flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> @Text.Nav.Home
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="settlement">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Settlement generator
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> @Text.Nav.Settlement
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="about">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> About
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> @Text.Nav.About
             </NavLink>
         </div>
     </nav>
+
+    @* Propagation is stopped so that choosing a language does not also collapse the menu it sits in. *@
+    <div class="nav-language px-3" @onclick:stopPropagation="true">
+        <label for="language">@Text.Nav.LanguageLabel</label>
+        <select id="language" @onchange="OnLanguageChanged">
+            @foreach (Locale option in Locale.All)
+            {
+                <option value="@option.Code" selected="@(option.Code == Languages.Current.Code)">
+                    @option.NativeName
+                </option>
+            }
+        </select>
+    </div>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
+
+    [CascadingParameter]
+    private UiText Text { get; set; } = new();
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -36,4 +56,7 @@
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+    private Task OnLanguageChanged(ChangeEventArgs args) =>
+        Languages.SetAsync(Locale.FromCode(args.Value?.ToString()));
 }

@@ -86,6 +86,60 @@ public sealed class BrowserInterop(IJSRuntime jsRuntime) : IAsyncDisposable
         await module.InvokeVoidAsync("printPage");
     }
 
+    /// <summary>The language the browser asks for, used only as a first guess.</summary>
+    public async Task<string?> GetBrowserLanguageAsync()
+    {
+        try
+        {
+            IJSObjectReference module = await ModuleAsync();
+            return await module.InvokeAsync<string?>("browserLanguage");
+        }
+        catch (JSException)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Reads a query parameter from the address bar.
+    /// </summary>
+    /// <remarks>
+    /// Read through JavaScript rather than Blazor's <c>NavigationManager</c>, which is not
+    /// initialised until the app is running. The language has to be settled before the first render,
+    /// which is earlier than that.
+    /// </remarks>
+    public async Task<string?> GetQueryParameterAsync(string name)
+    {
+        try
+        {
+            IJSObjectReference module = await ModuleAsync();
+            return await module.InvokeAsync<string?>("queryParameter", name);
+        }
+        catch (JSException)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Tells the document which language it is in, and translates the one banner Blazor never
+    /// renders itself.
+    /// </summary>
+    public async Task ApplyLanguageAsync(
+        string code, string description, string errorMessage, string reloadLabel)
+    {
+        try
+        {
+            IJSObjectReference module = await ModuleAsync();
+            await module.InvokeVoidAsync("applyLanguage", code, description, errorMessage, reloadLabel);
+        }
+        catch (JSException)
+        {
+            // Cosmetic; a page that renders in the right language with the wrong `lang` attribute
+            // is far better than one that fails to start.
+        }
+    }
+
     public async ValueTask DisposeAsync()
     {
         if (_module is null)

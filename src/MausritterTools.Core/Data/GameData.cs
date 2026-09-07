@@ -8,6 +8,7 @@ namespace MausritterTools.Core.Data;
 /// </summary>
 public sealed class GameData
 {
+    public const string UiTextPath = "ui.json";
     public const string SettlementPath = "srd/settlement.json";
     public const string NpcPath = "srd/npc.json";
     public const string GearPath = "srd/gear.json";
@@ -18,6 +19,8 @@ public sealed class GameData
     public const string HostsPath = "house/hosts.json";
 
     private GameData(
+        Locale locale,
+        UiText text,
         SettlementTables settlement,
         NpcTables npc,
         GearTables gear,
@@ -27,6 +30,8 @@ public sealed class GameData
         NameTables names,
         HostTables hosts)
     {
+        Locale = locale;
+        Text = text;
         Settlement = settlement;
         Npc = npc;
         Gear = gear;
@@ -36,6 +41,12 @@ public sealed class GameData
         Names = names;
         Hosts = hosts;
     }
+
+    /// <summary>The language this data was loaded in.</summary>
+    public Locale Locale { get; }
+
+    /// <summary>Every string the app shows that is not a table entry.</summary>
+    public UiText Text { get; }
 
     public SettlementTables Settlement { get; }
 
@@ -60,23 +71,54 @@ public sealed class GameData
         Spells.Source, Services.Source, Names.Source, Hosts.Source
     ];
 
-    /// <summary>Loads and validates every data file.</summary>
-    /// <exception cref="GameDataException">The data is missing, malformed or inconsistent.</exception>
-    public static async Task<GameData> LoadAsync(
+    /// <summary>
+    /// Loads just the UI text for a language.
+    /// </summary>
+    /// <remarks>
+    /// Separate from <see cref="LoadAsync"/> because the layout needs words on every page, while
+    /// the tables are only needed by the generator. Loading fifty kilobytes of gear prices to draw
+    /// a navigation bar would be a poor trade.
+    /// </remarks>
+    public static Task<UiText> LoadTextAsync(
         IDataFileReader reader,
+        Locale? locale = null,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(reader);
 
+        IDataFileReader localised = new LocalisingDataFileReader(reader, locale ?? Locale.English);
+
+        return ReadAsync(localised, UiTextPath, GameDataJsonContext.Default.UiText, cancellationToken);
+    }
+
+    /// <summary>Loads and validates every data file, in the given language.</summary>
+    /// <remarks>
+    /// The reader is wrapped so that a non-English language has its translation overlay merged into
+    /// each file before it is deserialised. Everything downstream — validation, generation, the UI —
+    /// therefore sees one ordinary set of tables and needs to know nothing about languages.
+    /// </remarks>
+    /// <exception cref="GameDataException">The data is missing, malformed or inconsistent.</exception>
+    public static async Task<GameData> LoadAsync(
+        IDataFileReader reader,
+        Locale? locale = null,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(reader);
+
+        Locale resolved = locale ?? Locale.English;
+        IDataFileReader localised = new LocalisingDataFileReader(reader, resolved);
+
         GameData data = new(
-            await ReadAsync(reader, SettlementPath, GameDataJsonContext.Default.SettlementTables, cancellationToken),
-            await ReadAsync(reader, NpcPath, GameDataJsonContext.Default.NpcTables, cancellationToken),
-            await ReadAsync(reader, GearPath, GameDataJsonContext.Default.GearTables, cancellationToken),
-            await ReadAsync(reader, HirelingsPath, GameDataJsonContext.Default.HirelingTables, cancellationToken),
-            await ReadAsync(reader, SpellsPath, GameDataJsonContext.Default.SpellTables, cancellationToken),
-            await ReadAsync(reader, ServicesPath, GameDataJsonContext.Default.ServiceTables, cancellationToken),
-            await ReadAsync(reader, NamesPath, GameDataJsonContext.Default.NameTables, cancellationToken),
-            await ReadAsync(reader, HostsPath, GameDataJsonContext.Default.HostTables, cancellationToken));
+            resolved,
+            await ReadAsync(localised, UiTextPath, GameDataJsonContext.Default.UiText, cancellationToken),
+            await ReadAsync(localised, SettlementPath, GameDataJsonContext.Default.SettlementTables, cancellationToken),
+            await ReadAsync(localised, NpcPath, GameDataJsonContext.Default.NpcTables, cancellationToken),
+            await ReadAsync(localised, GearPath, GameDataJsonContext.Default.GearTables, cancellationToken),
+            await ReadAsync(localised, HirelingsPath, GameDataJsonContext.Default.HirelingTables, cancellationToken),
+            await ReadAsync(localised, SpellsPath, GameDataJsonContext.Default.SpellTables, cancellationToken),
+            await ReadAsync(localised, ServicesPath, GameDataJsonContext.Default.ServiceTables, cancellationToken),
+            await ReadAsync(localised, NamesPath, GameDataJsonContext.Default.NameTables, cancellationToken),
+            await ReadAsync(localised, HostsPath, GameDataJsonContext.Default.HostTables, cancellationToken));
 
         data.Validate();
         return data;

@@ -15,7 +15,22 @@ public sealed class RollContext(GenerationOptions options)
     private readonly GenerationOptions _options =
         options ?? throw new ArgumentNullException(nameof(options));
 
+    private readonly Dictionary<string, string> _pinValues = new(StringComparer.Ordinal);
+
     public GenerationOptions Options => _options;
+
+    /// <summary>
+    /// What each field would be pinned to if the user locked it.
+    /// </summary>
+    /// <remarks>
+    /// Recorded as the roll happens, because only the generator knows which row of which table a
+    /// value came from. Locking then stores that position rather than the words, so the lock
+    /// survives a change of language.
+    /// </remarks>
+    public IReadOnlyDictionary<string, string> PinValues => _pinValues;
+
+    /// <summary>Notes what would be stored if <paramref name="path"/> were locked.</summary>
+    public void Record(string path, string pinValue) => _pinValues[path] = pinValue;
 
     /// <summary>Creates the dice for one field.</summary>
     public DiceRoller Dice(string path) =>
@@ -48,10 +63,20 @@ public sealed class RollContext(GenerationOptions options)
     {
         if (TryGetPin(path, out string pinned))
         {
-            return pinned;
+            Record(path, pinned);
+            return PinReference.Resolve(pinned, table);
         }
 
-        return table.Count == 0 ? "" : Dice(path).Pick(table);
+        if (table.Count == 0)
+        {
+            Record(path, "");
+            return "";
+        }
+
+        int index = Dice(path).NextIndex(table.Count);
+        Record(path, PinReference.ForIndex(index));
+
+        return table[index];
     }
 
     /// <summary>
@@ -63,9 +88,19 @@ public sealed class RollContext(GenerationOptions options)
     {
         if (TryGetPin(path, out string pinned))
         {
-            return pinned.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            Record(path, pinned);
+            return PinReference.ResolveMany(pinned, table);
         }
 
-        return table.Count == 0 ? [] : Dice(path).PickDistinct(table, count);
+        if (table.Count == 0)
+        {
+            Record(path, "");
+            return [];
+        }
+
+        IReadOnlyList<int> indices = Dice(path).PickDistinctIndices(table.Count, count);
+        Record(path, PinReference.ForIndices(indices));
+
+        return [.. indices.Select(index => table[index])];
     }
 }

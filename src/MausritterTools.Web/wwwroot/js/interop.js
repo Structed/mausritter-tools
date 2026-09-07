@@ -76,3 +76,45 @@ export function clearStorage(key) {
 export function printPage() {
     window.print();
 }
+
+// The language the visitor's browser asks for, used only to choose a default they can override.
+export function browserLanguage() {
+    return navigator.language || (navigator.languages && navigator.languages[0]) || '';
+}
+
+// Read straight from the address bar rather than through Blazor's NavigationManager, which is not
+// initialised until the app starts running — and the language has to be settled before that, or the
+// first render is in the wrong one.
+export function queryParameter(name) {
+    return new URLSearchParams(window.location.search).get(name) || '';
+}
+
+// Keeps the document in step with the chosen language: `lang` drives hyphenation, spell-checking
+// and how a screen reader pronounces the page, none of which Blazor sets for us.
+export function applyLanguage(code, description, errorMessage, reloadLabel) {
+    document.documentElement.lang = code;
+
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta && description) {
+        meta.setAttribute('content', description);
+    }
+
+    // The error banner is static markup in index.html, so it is the one piece of UI Blazor never
+    // re-renders and the only one that has to be translated by hand.
+    const errorUi = document.getElementById('blazor-error-ui');
+    if (errorUi && errorMessage) {
+        const reload = errorUi.querySelector('.reload');
+        const dismiss = errorUi.querySelector('.dismiss');
+
+        errorUi.textContent = errorMessage + ' ';
+
+        if (reload) {
+            reload.textContent = reloadLabel;
+            errorUi.appendChild(reload);
+        }
+
+        if (dismiss) {
+            errorUi.appendChild(dismiss);
+        }
+    }
+}

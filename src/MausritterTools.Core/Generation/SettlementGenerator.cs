@@ -21,6 +21,7 @@ public sealed class SettlementGenerator(GameData data)
 
         RollContext context = new(options);
         SettlementTables tables = _data.Settlement;
+        GrammarText grammar = _data.Text.Grammar;
 
         SettlementSize size = RollSize(context, options);
         HostObject host = RollHost(context, options);
@@ -35,7 +36,7 @@ public sealed class SettlementGenerator(GameData data)
         return new Settlement
         {
             Seed = options.Seed,
-            Name = RollName(context, tables),
+            Name = RollName(context, tables, grammar),
             Size = size,
             Host = host,
             NearHumanTown = options.NearHumanTown,
@@ -45,15 +46,53 @@ public sealed class SettlementGenerator(GameData data)
             NotableFeatures = context.TextMany("settlement/features", tables.NotableFeatures, size.FeatureCount),
             Industries = context.TextMany("settlement/industries", tables.Industries, size.IndustryCount),
             Event = context.Text("settlement/event", tables.Events),
-            Tavern = size.HasTavern ? RollTavern(context) : null,
-            Shops = shops
+            Tavern = size.HasTavern ? RollTavern(context, grammar) : null,
+            Shops = shops,
+            Summary = Summarise(size, host, grammar),
+            PinValues = context.PinValues
         };
     }
 
-    private string RollName(RollContext context, SettlementTables tables) =>
-        context.TryGetPin("settlement/name", out string pinned)
-            ? pinned
-            : NameForge.SettlementName(context.Dice("settlement/name"), tables.NameSeeds);
+    /// <summary>
+    /// Writes the one-line description at the top of the sheet, e.g. "A village of 150-300 mice,
+    /// inside a hollow tree stump."
+    /// </summary>
+    /// <remarks>
+    /// Every part of this sentence varies by language: whether the article is "A" or "Ein", whether
+    /// the size noun keeps its capital, and where the host phrase sits. All of it therefore comes
+    /// from the loaded text rather than from an interpolated string here.
+    /// </remarks>
+    private static string Summarise(SettlementSize size, HostObject host, GrammarText grammar)
+    {
+        string sizeName = grammar.LowercaseInlineNouns ? size.Name.ToLowerInvariant() : size.Name;
+
+        string pattern = size.Population is null
+            ? grammar.SummaryWithoutPopulation
+            : grammar.SummaryWithPopulation;
+
+        return TextTemplate.Format(
+            pattern,
+            ("article", ArticleTables.For(grammar.Articles.IndefiniteNominative, size.NameGender)),
+            ("size", sizeName),
+            ("population", size.Population),
+            ("host", host.Describe()));
+    }
+
+    private string RollName(RollContext context, SettlementTables tables, GrammarText grammar)
+    {
+        if (context.TryGetPin("settlement/name", out string pinned))
+        {
+            context.Record("settlement/name", pinned);
+            return pinned;
+        }
+
+        // A settlement's name is built rather than drawn from a row, so there is no position to
+        // record: locking one stores the name itself.
+        string name = NameForge.SettlementName(context.Dice("settlement/name"), tables.NameSeeds, grammar);
+        context.Record("settlement/name", name);
+
+        return name;
+    }
 
     /// <summary>
     /// Rolls the settlement size, honouring an explicit override.
@@ -71,22 +110,48 @@ public sealed class SettlementGenerator(GameData data)
             return new SettlementSize();
         }
 
-        int roll;
         if (options.Size is { } forced)
         {
-            roll = Math.Clamp(forced, 1, sizes.Count);
-        }
-        else if (context.TryGetPin("settlement/size", out string pinned) &&
-                 sizes.FirstOrDefault(s => s.Name == pinned) is { } pinnedSize)
-        {
-            return pinnedSize;
-        }
-        else
-        {
-            roll = context.Dice("settlement/size").RollLowestOfTwo(sizes.Count);
+            int index = IndexOfSizeValue(sizes, Math.Clamp(forced, 1, sizes.Count));
+            context.Record("settlement/size", PinReference.ForIndex(index));
+
+            return sizes[index];
         }
 
-        return sizes.FirstOrDefault(s => s.SizeValue == roll) ?? sizes[^1];
+        if (context.TryGetPin("settlement/size", out string pinned))
+        {
+            context.Record("settlement/size", pinned);
+
+            // Older exports pinned the size by name; a position is preferred but both must open.
+            SettlementSize? byPin = PinReference.TryGetIndex(pinned, out int pinnedIndex) && pinnedIndex < sizes.Count
+                ? sizes[pinnedIndex]
+                : sizes.FirstOrDefault(s => s.Name == pinned);
+
+            if (byPin is not null)
+            {
+                return byPin;
+            }
+        }
+
+        int rolled = context.Dice("settlement/size").RollLowestOfTwo(sizes.Count);
+        int rolledIndex = IndexOfSizeValue(sizes, rolled);
+
+        context.Record("settlement/size", PinReference.ForIndex(rolledIndex));
+        return sizes[rolledIndex];
+    }
+
+    /// <summary>Finds the row for a size value, falling back to the largest as the table did.</summary>
+    private static int IndexOfSizeValue(IReadOnlyList<SettlementSize> sizes, int sizeValue)
+    {
+        for (int i = 0; i < sizes.Count; i++)
+        {
+            if (sizes[i].SizeValue == sizeValue)
+            {
+                return i;
+            }
+        }
+
+        return sizes.Count - 1;
     }
 
     private HostObject RollHost(RollContext context, GenerationOptions options)
@@ -97,13 +162,24 @@ public sealed class SettlementGenerator(GameData data)
             return new HostObject();
         }
 
-        if (context.TryGetPin("settlement/host", out string pinned) &&
-            candidates.FirstOrDefault(h => h.Name == pinned) is { } pinnedHost)
+        if (context.TryGetPin("settlement/host", out string pinned))
         {
-            return pinnedHost;
+            context.Record("settlement/host", pinned);
+
+            HostObject? byPin = PinReference.TryGetIndex(pinned, out int index) && index < candidates.Count
+                ? candidates[index]
+                : candidates.FirstOrDefault(h => h.Name == pinned);
+
+            if (byPin is not null)
+            {
+                return byPin;
+            }
         }
 
-        return context.Dice("settlement/host").PickWeighted(candidates, h => h.Weight);
+        int hostIndex = context.Dice("settlement/host").PickWeightedIndex(candidates, h => h.Weight);
+        context.Record("settlement/host", PinReference.ForIndex(hostIndex));
+
+        return candidates[hostIndex];
     }
 
     /// <summary>Governance is rolled as d6 plus the settlement size, so bigger places rank higher.</summary>
@@ -112,22 +188,53 @@ public sealed class SettlementGenerator(GameData data)
 
     private string LookUpGovernance(RollContext context, int roll)
     {
+        IReadOnlyList<GovernanceEntry> entries = _data.Settlement.Governance;
+
         if (context.TryGetPin("settlement/governance", out string pinned))
         {
-            return pinned;
+            context.Record("settlement/governance", pinned);
+
+            return PinReference.TryGetIndex(pinned, out int index) && index < entries.Count
+                ? entries[index].Text
+                : pinned;
         }
 
-        GovernanceEntry? entry = _data.Settlement.Governance.FirstOrDefault(g => g.Contains(roll));
-        return entry?.Text ?? "";
+        int found = -1;
+        for (int i = 0; i < entries.Count; i++)
+        {
+            if (entries[i].Contains(roll))
+            {
+                found = i;
+                break;
+            }
+        }
+
+        if (found < 0)
+        {
+            context.Record("settlement/governance", "");
+            return "";
+        }
+
+        context.Record("settlement/governance", PinReference.ForIndex(found));
+        return entries[found].Text;
     }
 
-    private Tavern RollTavern(RollContext context)
+    private Tavern RollTavern(RollContext context, GrammarText grammar)
     {
         TavernTable taverns = _data.Settlement.Taverns;
 
-        string name = context.TryGetPin("tavern/name", out string pinnedName)
-            ? pinnedName
-            : NameForge.TavernName(context.Dice("tavern/name"), taverns);
+        string name;
+        if (context.TryGetPin("tavern/name", out string pinnedName))
+        {
+            name = pinnedName;
+        }
+        else
+        {
+            name = NameForge.TavernName(context.Dice("tavern/name"), taverns, grammar);
+        }
+
+        // Like a settlement's name, a tavern sign is assembled rather than drawn from one row.
+        context.Record("tavern/name", name);
 
         return new Tavern
         {
@@ -148,6 +255,7 @@ public sealed class SettlementGenerator(GameData data)
             return shops;
         }
 
+        GrammarText grammar = _data.Text.Grammar;
         List<Shop> linked = [.. shops];
 
         for (int i = 0; i < linked.Count; i++)
@@ -170,12 +278,16 @@ public sealed class SettlementGenerator(GameData data)
                 other++;
             }
 
+            string kind = context.Text(path, _data.Npc.Relationship);
+            string relatedTo = linked[other].Keeper.FullName;
+
             linked[i] = linked[i] with
             {
                 Keeper = linked[i].Keeper with
                 {
-                    RelationshipKind = context.Text(path, _data.Npc.Relationship),
-                    RelatedTo = linked[other].Keeper.FullName
+                    RelationshipKind = kind,
+                    RelatedTo = relatedTo,
+                    RelationshipSummary = MouseNpc.DescribeRelationship(kind, relatedTo, grammar)
                 }
             };
         }

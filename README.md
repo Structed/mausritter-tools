@@ -1,6 +1,7 @@
 # mausritter-tools
 
-Browser-based tools for the [Mausritter](https://mausritter.com/) tabletop roleplaying game.
+Browser-based tools for the [Mausritter](https://mausritter.com/) tabletop roleplaying game,
+in English and German.
 
 Built as a [Blazor WebAssembly](https://learn.microsoft.com/aspnet/core/blazor/hosting-models#blazor-webassembly)
 standalone app, so the whole site is static files and runs entirely in the visitor's browser.
@@ -21,9 +22,11 @@ whole place is drawn as a hand-inked map.
 - **Lock and re-roll.** Lock anything worth keeping, hand-edit anything you would rather write
   yourself, or re-roll a single entry without disturbing its neighbours. The map can be re-drawn on
   its own, leaving the settlement untouched.
-- **Share, export, print.** The address bar carries the seed and settings; the JSON export carries
-  the full state including locks and edits; the map downloads as SVG; and the print stylesheet
-  produces a clean settlement sheet and a cut-out card sheet.
+- **Share, export, print.** The address bar carries the seed, the settings and the language; the
+  JSON export carries the full state including locks and edits; the map downloads as SVG; and the
+  print stylesheet produces a clean settlement sheet and a cut-out card sheet.
+- **English or German.** The same seed produces the same settlement in either, so a link shared
+  between a German and an English player shows the same place; only the words differ.
 
 #### The map
 
@@ -41,7 +44,7 @@ the tavern are keyed to numbered buildings and cross-referenced in a legend.
 src/MausritterTools.Core/        Domain logic: tables, generators, mapping, rendering
 src/MausritterTools.Web/         Blazor WebAssembly app
 tests/MausritterTools.Core.Tests/  Unit tests
-tools/Import-SrdTables.ps1       Regenerates the SRD data files
+tools/Import-SrdTables.ps1       Regenerates the SRD data files, and checks the translations
 MausritterTools.slnx             Solution
 global.json                      Pinned .NET SDK band
 ```
@@ -83,6 +86,8 @@ directly rather than restating it by hand.
 | --- | --- | --- |
 | `data/srd/` | Settlement, non-player mice, gear, hireling and spell tables | **Generated.** Change the importer and re-run it. |
 | `data/house/` | Services and shops, mouse names, host objects | Hand-edited. |
+| `data/ui.json` | Every string the app shows that is not a table entry | Hand-edited. |
+| `data/i18n/<locale>/` | Translations of all of the above | Hand-edited, including the translations of generated files. |
 
 ### Regenerating the SRD tables
 
@@ -96,6 +101,8 @@ pwsh ./tools/Import-SrdTables.ps1 -Refresh   # re-download the SRD first
 ```
 
 The importer fails loudly if the SRD layout changes, rather than silently emitting a smaller table.
+It also re-checks every translation against what it has just written, because the generated files
+are the one thing that can change underneath a translation and make it quietly wrong.
 
 ### A note on the shops
 
@@ -112,6 +119,48 @@ field, which the app shows under "where this comes from".
 
 Mouse names are original for the same reason: the SRD has no name tables, and the lists used by the
 official generator are not published under a licence that permits reuse.
+
+## Languages
+
+The tools are published in English and German. A visitor's first arrival follows their browser; a
+picker in the navigation overrides that and the choice is remembered, and a shared link carries
+`?lang=` so a settlement written up in German opens in German for whoever it is sent to.
+
+**Changing language does not change the settlement.** Every table is translated row for row, so the
+same seed lands on the same rows in both languages and a link shared between a German and an English
+player shows the same place — same size, same host, same shops in the same order, same map. Only the
+words differ.
+
+English is canonical. `data/srd/` and `data/house/` are written in it, and a translation is an
+*overlay* under `data/i18n/<locale>/` that mirrors the same structure and is deep-merged onto the
+original before it is deserialised. That keeps the loader, the validator and every generator working
+on one set of tables that know nothing about languages.
+
+Hand-writing `data/i18n/de/srd/` does not contradict the rule that `data/srd/` is generated: the
+generated tree is still generated and still the only thing the importer writes. The overlay is a
+separate, deliberately hand-maintained tree, and the importer re-checks it on every run.
+
+A few things translations must respect, all of them guarded by `TranslationTests`:
+
+- **A translated table has exactly as many rows as its original, in the same order.** Every value in
+  a settlement is an index into a table, so one row fewer would shift every roll after it.
+- **Keys are not prose.** `id`, dice expressions, gear category ids and the `stock.itemNames`
+  allow-lists stay in English. So does a gear item's `name` and a hireling's `name`: those are the
+  values three files join on, and the card rules match slot width and usage dots against them. A
+  gear item shows its `label` instead. Translating a key does not fail loudly — it empties a shop's
+  shelves or blanks an item card, which is why the tests check for it specifically.
+- **Grammar lives in the data, not in code.** German needs an article that agrees with a noun's
+  gender, so hosts carry a whole prepositional phrase (`"in einem hohlen Baumstumpf"`) and sign
+  nouns carry a gender. Sign adjectives ship already declined, which works because the dative
+  singular ending after a definite article is `-en` for every gender: only `Zum` versus `Zur`
+  varies, so no declension code is needed anywhere.
+
+The German text is an **unofficial fan translation by the mausritter-tools contributors**. It is not
+the official German edition of Mausritter, and no official translation was used as a source. CC BY
+4.0 permits translation provided the change is declared, which the data files and the site both do.
+
+To add a language, add it to `Locale.All`, copy `data/ui.json` and the two table directories into
+`data/i18n/<code>/`, and translate. The tests will tell you what you have missed.
 
 ## Implementation notes
 
@@ -131,6 +180,20 @@ A few decisions that are easy to undo by accident:
   multiply together, so bounding each factor separately is guesswork that breaks the next time an
   archetype is tuned. Narrow archetypes also widen with settlement size, or a city inside a
   farmhouse wall ends up smaller than a hamlet inside a tree stump.
+- **A lock stores a table position, not the words on the page.** Storing the words works in one
+  language and falls apart in two: locking a settlement's industry in German and switching to
+  English would leave one German line in the middle of an English sheet. Table-drawn values are
+  pinned as `#12`, which resolves through whichever language is loaded; anything typed by hand is
+  stored verbatim, because no table can reproduce someone's own words. Export format 2 carries this;
+  version 1 files still open, since a pin that is not a position is read as the literal it was.
+- **Shops are ordered by id, not by name.** A shop's position is its number on the map and part of
+  the field path its keeper is locked under, so it has to be a property of the settlement rather
+  than of the language it is read in. Stock *within* a shop is sorted by the name the reader sees,
+  in their own alphabet, which affects only the order lines are printed in.
+- **The ambient `CultureInfo` is never changed.** Blazor refuses a culture change during start-up
+  unless the whole ICU dataset is bundled, which costs well over a megabyte of download. The only
+  thing that needs a culture here is the thousands separator in a shopkeeper's purse, so that one
+  number is formatted explicitly against `Locale.FormatCulture` instead.
 
 ## Deployment
 

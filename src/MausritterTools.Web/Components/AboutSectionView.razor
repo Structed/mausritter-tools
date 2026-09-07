@@ -1,0 +1,20 @@
+@using MausritterTools.Core.Data
+
+@* A heading and its paragraphs. The About page is almost entirely this shape, and the paragraphs
+   carry links and emphasis a translator needs to be able to move around inside the sentence, so
+   they are rendered as markup. They come from this repository's own text files, never from input. *@
+
+@if (Section.Heading is { Length: > 0 } heading)
+{
+    <h2>@heading</h2>
+}
+
+@foreach (string paragraph in Section.ParagraphsHtml)
+{
+    <p>@((MarkupString)paragraph)</p>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public AboutSection Section { get; set; } = new();
+}

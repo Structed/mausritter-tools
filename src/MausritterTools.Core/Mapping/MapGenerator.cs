@@ -1,3 +1,4 @@
+using MausritterTools.Core.Data;
 using MausritterTools.Core.Model;
 using MausritterTools.Core.Randomness;
 
@@ -33,7 +34,13 @@ public static class MapGenerator
     ];
 
     /// <summary>Builds the map for a settlement.</summary>
-    public static SettlementMap Generate(Settlement settlement, uint seed)
+    /// <param name="settlement">The settlement to draw.</param>
+    /// <param name="seed">The map's own seed, so it can be redrawn without re-rolling the place.</param>
+    /// <param name="grammar">
+    /// Supplies the legend's phrasing. Optional so that geometry tests need not load a language;
+    /// the defaults are the English ones.
+    /// </param>
+    public static SettlementMap Generate(Settlement settlement, uint seed, GrammarText? grammar = null)
     {
         ArgumentNullException.ThrowIfNull(settlement);
 
@@ -60,7 +67,8 @@ public static class MapGenerator
             roads,
             settlement.Size.SizeValue);
 
-        (buildings, IReadOnlyList<MapLegendEntry> legend) = AssignKeys(settlement, buildings);
+        (buildings, IReadOnlyList<MapLegendEntry> legend) = AssignKeys(
+            settlement, buildings, grammar ?? new GrammarText());
 
         IReadOnlyList<MapScatter> scatter = PlaceScatter(
             new DiceRoller(SeedDerivation.CreateStream(seed, "map/scatter")),
@@ -612,18 +620,26 @@ public static class MapGenerator
     /// </remarks>
     private static (IReadOnlyList<MapBuilding> Buildings, IReadOnlyList<MapLegendEntry> Legend) AssignKeys(
         Settlement settlement,
-        IReadOnlyList<MapBuilding> buildings)
+        IReadOnlyList<MapBuilding> buildings,
+        GrammarText grammar)
     {
         List<(string Name, string Detail)> subjects = [];
 
         if (settlement.Tavern is { } tavern)
         {
-            subjects.Add((tavern.Name, $"Tavern — {tavern.SpecialtyMeal}"));
+            subjects.Add((
+                tavern.Name,
+                TextTemplate.Format(grammar.TavernLegendDetail, ("meal", tavern.SpecialtyMeal))));
         }
 
         foreach (Shop shop in settlement.Shops)
         {
-            subjects.Add((shop.SignName, $"{shop.Service.Name} — {shop.Keeper.FullName}"));
+            subjects.Add((
+                shop.SignName,
+                TextTemplate.Format(
+                    grammar.ShopLegendDetail,
+                    ("service", shop.Service.Name),
+                    ("keeper", shop.Keeper.FullName))));
         }
 
         if (subjects.Count == 0 || buildings.Count == 0)

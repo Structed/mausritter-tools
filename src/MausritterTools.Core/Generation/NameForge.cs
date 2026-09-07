@@ -19,17 +19,18 @@ public static class NameForge
     /// nice", so the raw join is explicitly only a starting point. <see cref="Join"/> performs the
     /// massaging, which matters because straight concatenation produces "Stumppond" and "Moonnest".
     /// </remarks>
-    public static string SettlementName(DiceRoller dice, NameSeedTable seeds)
+    public static string SettlementName(DiceRoller dice, NameSeedTable seeds, GrammarText grammar)
     {
         ArgumentNullException.ThrowIfNull(dice);
         ArgumentNullException.ThrowIfNull(seeds);
+        ArgumentNullException.ThrowIfNull(grammar);
 
         IReadOnlyList<string> starts = dice.Roll(2) == 1 ? seeds.StartA : seeds.StartB;
         IReadOnlyList<string> ends = dice.Roll(2) == 1 ? seeds.EndA : seeds.EndB;
 
         if (starts.Count == 0 || ends.Count == 0)
         {
-            return "Unnamed";
+            return grammar.UnnamedSettlement;
         }
 
         string start = dice.Pick(starts);
@@ -108,29 +109,54 @@ public static class NameForge
         value.Length == 0 ? value : char.ToUpperInvariant(value[0]) + value[1..];
 
     /// <summary>Rolls a mouse's given and family name.</summary>
-    public static (string Given, string Family) MouseName(DiceRoller dice, NameTables names)
+    public static (string Given, string Family) MouseName(
+        DiceRoller dice, NameTables names, GrammarText grammar)
     {
         ArgumentNullException.ThrowIfNull(dice);
         ArgumentNullException.ThrowIfNull(names);
+        ArgumentNullException.ThrowIfNull(grammar);
 
-        string given = names.GivenNames.Count > 0 ? dice.Pick(names.GivenNames) : "Mouse";
-        string family = names.FamilyNames.Count > 0 ? dice.Pick(names.FamilyNames) : "Of-No-Name";
+        string given = names.GivenNames.Count > 0
+            ? dice.Pick(names.GivenNames)
+            : grammar.DefaultGivenName;
+
+        string family = names.FamilyNames.Count > 0
+            ? dice.Pick(names.FamilyNames)
+            : grammar.DefaultFamilyName;
 
         return (given, family);
     }
 
-    /// <summary>Rolls the tavern's name, e.g. "The Crooked Beetle".</summary>
-    public static string TavernName(DiceRoller dice, TavernTable taverns)
+    /// <summary>
+    /// Rolls the tavern's name, e.g. "The Crooked Beetle" or "Zum krummen Käfer".
+    /// </summary>
+    /// <remarks>
+    /// The noun is drawn by position rather than by value so its gender can be read from the
+    /// parallel column a translation supplies, which is what decides between "Zum" and "Zur".
+    /// </remarks>
+    public static string TavernName(DiceRoller dice, TavernTable taverns, GrammarText grammar)
     {
         ArgumentNullException.ThrowIfNull(dice);
         ArgumentNullException.ThrowIfNull(taverns);
+        ArgumentNullException.ThrowIfNull(grammar);
 
         if (taverns.NameA.Count == 0 || taverns.NameB.Count == 0)
         {
-            return "The Tavern";
+            return grammar.DefaultTavernName;
         }
 
-        return $"The {dice.Pick(taverns.NameA)} {dice.Pick(taverns.NameB)}";
+        string adjective = dice.Pick(taverns.NameA);
+
+        int nounIndex = dice.NextIndex(taverns.NameB.Count);
+        string noun = taverns.NameB[nounIndex];
+
+        return Assemble(
+            grammar.TavernNamePattern,
+            ArticleTables.For(grammar.Articles.DativeDefinite, taverns.GenderAt(nounIndex)),
+            adjective,
+            noun,
+            noun,
+            "");
     }
 
     /// <summary>
@@ -141,20 +167,22 @@ public static class NameForge
         DiceRoller dice,
         ServiceTables services,
         ServiceDefinition service,
-        string familyName)
+        string familyName,
+        GrammarText grammar)
     {
         ArgumentNullException.ThrowIfNull(dice);
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(service);
+        ArgumentNullException.ThrowIfNull(grammar);
 
         if (service.SignNouns.Count == 0)
         {
             return service.Name;
         }
 
-        IReadOnlyList<string> nouns = dice.PickDistinct(service.SignNouns, 2);
-        string noun = nouns[0];
-        string noun2 = nouns.Count > 1 ? nouns[1] : noun;
+        IReadOnlyList<int> nounIndices = dice.PickDistinctIndices(service.SignNouns.Count, 2);
+        int nounIndex = nounIndices[0];
+        int noun2Index = nounIndices.Count > 1 ? nounIndices[1] : nounIndex;
 
         string adjective = services.ShopSignAdjectives.Count > 0
             ? dice.Pick(services.ShopSignAdjectives)
@@ -164,10 +192,31 @@ public static class NameForge
             ? dice.PickWeighted(services.ShopSignPatterns, p => p.Weight)
             : new SignPattern { Template = "The {adjective} {noun}" };
 
-        return pattern.Template
-            .Replace("{adjective}", adjective, StringComparison.Ordinal)
-            .Replace("{noun2}", noun2, StringComparison.Ordinal)
-            .Replace("{noun}", noun, StringComparison.Ordinal)
-            .Replace("{family}", familyName, StringComparison.Ordinal);
+        return Assemble(
+            pattern.Template,
+            ArticleTables.For(grammar.Articles.DativeDefinite, service.SignNounGenderAt(nounIndex)),
+            adjective,
+            service.SignNouns[nounIndex],
+            service.SignNouns[noun2Index],
+            familyName);
     }
+
+    /// <summary>
+    /// Fills a sign template and tidies the seams.
+    /// </summary>
+    /// <remarks>
+    /// English templates never mention <c>{article}</c>, so it resolves to an empty string and
+    /// would otherwise leave a leading space behind.
+    /// </remarks>
+    private static string Assemble(
+        string template, string article, string adjective, string noun, string noun2, string family) =>
+        TextTemplate.Format(
+            template,
+            ("article", article),
+            ("adjective", adjective),
+            ("noun2", noun2),
+            ("noun", noun),
+            ("family", family))
+            .Replace("  ", " ", StringComparison.Ordinal)
+            .Trim();
 }

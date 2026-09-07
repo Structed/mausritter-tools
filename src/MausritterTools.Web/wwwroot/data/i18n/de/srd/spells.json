@@ -1,0 +1,87 @@
+{
+  "_source": {
+    "describes": "Zauber",
+    "attribution": "Dieses Werk basiert auf Mausritter (https://mausritter.com), einem Produkt von Losing Games und Isaac Williams, und ist lizenziert unter der Creative Commons Namensnennung 4.0 International (CC BY 4.0). Der englische Originaltext wurde von den mausritter-tools-Mitwirkenden ins Deutsche übersetzt; dies ist keine offizielle deutsche Ausgabe.",
+    "warning": "Übersetzung von Hand. Die Platzhalter [SUM] und [DICE] sind Rechenanweisungen und bleiben unverändert."
+  },
+
+  "saleValue": "Ein voll aufgeladener Zauber lässt sich in einer Siedlung meist für W6 × 100 P verkaufen. Ein erschöpfter Zauber ist die Hälfte wert.",
+
+  "spells": [
+    {
+      "name": "Feuerball",
+      "effect": "Schleudere einen Feuerball bis zu 24 Zoll weit. Verursache [SUM] + [DICE] Schaden an allen Kreaturen im Umkreis von 6 Zoll.",
+      "recharge": "Lasse ihn drei Tage und Nächte im Herzen eines lodernden Feuers brennen."
+    },
+    {
+      "name": "Heilen",
+      "effect": "Heile [SUM] STÄ-Schaden und entferne den Zustand Verletzt von einer Kreatur.",
+      "recharge": "Schneide dich selbst für W6 STÄ-Schaden und beträufle den Zauber mit dem Blut."
+    },
+    {
+      "name": "Magisches Geschoss",
+      "effect": "Verursache [SUM] + [DICE] Schaden an einer Kreatur in Sichtweite.",
+      "recharge": "Stürze aus mindestens 30 Fuß Höhe. Berühre den Zauber innerhalb einer Runde."
+    },
+    {
+      "name": "Furcht",
+      "effect": "Gib [DICE] Kreaturen den Zustand Verängstigt.",
+      "recharge": "Erhalte den Zustand Verängstigt von einer feindseligen Kreatur, während du den Zauber trägst."
+    },
+    {
+      "name": "Dunkelheit",
+      "effect": "Erschaffe für [DICE] Runden eine Kugel reiner Dunkelheit mit [SUM] × 2 Zoll Durchmesser.",
+      "recharge": "Lasse ihn drei Tage unbedeckt an einem lichtlosen Ort liegen."
+    },
+    {
+      "name": "Wiederherstellen",
+      "effect": "Entferne den Zustand Erschöpft oder Verängstigt von [DICE] + 1 Kreaturen.",
+      "recharge": "Vergrabe ihn drei Tage lang auf einer friedlichen Wiese oder an einem Flussufer."
+    },
+    {
+      "name": "Verstanden werden",
+      "effect": "Mache dich [DICE] Kreaturen einer anderen Art für [DICE] Runden verständlich.",
+      "recharge": "Verschenke ihn bereitwillig an eine Kreatur einer anderen Art."
+    },
+    {
+      "name": "Geisterkäfer",
+      "effect": "Erschaffe für [DICE] × 6 Runden einen Trugbild-Käfer, der 6 Gepäckplätze tragen kann.",
+      "recharge": "Vergrabe ihn drei Nächte lang auf einem Käferfriedhof."
+    },
+    {
+      "name": "Licht",
+      "effect": "Zwinge [DICE] Kreaturen zu einem WIL-Rettungswurf, sonst sind sie betäubt. Wahlweise erzeuge für [SUM] Runden Licht so hell wie eine Fackel.",
+      "recharge": "Fange drei Tage lang das erste Licht des Sonnenaufgangs und das letzte des Sonnenuntergangs darin ein."
+    },
+    {
+      "name": "Unsichtbarer Ring",
+      "effect": "Erschafft einen Kraftring von [DICE] × 6 Zoll. Er ist unsichtbar und unbeweglich. Hält [DICE] Runden.",
+      "recharge": "Schmiede einen Eisenring in der Größe der letzten Anwendung. Führe den Zauber hindurch. Der Ring löst sich auf."
+    },
+    {
+      "name": "Öffnen",
+      "effect": "Öffne eine Tür oder einen Behälter, als wäre ein Rettungswurf mit einem STÄ-Wert von 10 + [DICE] × 4 gelungen.",
+      "recharge": "Lege ihn in eine verschlossene Truhe, in einer verschlossenen Truhe, in einer verschlossenen Truhe. Lasse ihn drei Tage darin."
+    },
+    {
+      "name": "Schmierfett",
+      "effect": "Bedecke eine Fläche von [DICE] × 6 Zoll mit rutschigem, brennbarem Fett. Kreaturen in der Fläche müssen einen GES-Rettungswurf bestehen oder stürzen.",
+      "recharge": "Reibe ihn vollständig mit Tierfett ein. Lasse ihn liegen, bis es verdirbt."
+    },
+    {
+      "name": "Wachsen",
+      "effect": "Lasse eine Kreatur für 1 Runde auf das [DICE] + 1-fache ihrer ursprünglichen Größe wachsen.",
+      "recharge": "Lasse ihn drei Tage lang in den höchsten Ästen eines hohen Baumes liegen."
+    },
+    {
+      "name": "Unsichtbarkeit",
+      "effect": "Mache eine Kreatur für [DICE] Runden unsichtbar. Jede Bewegung verkürzt die Dauer um 1 Runde.",
+      "recharge": "Verbringe einen ganzen Tag, ohne die Augen auch nur einmal zu öffnen, während du den Zauber hältst."
+    },
+    {
+      "name": "Katzenminze",
+      "effect": "Verwandle einen Gegenstand in einen für Katzen unwiderstehlichen Köder. Hält [DICE] Runden.",
+      "recharge": "Schenke einer Katze etwas, das sie sich wirklich wünscht."
+    }
+  ]
+}

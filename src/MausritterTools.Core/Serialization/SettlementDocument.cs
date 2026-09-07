@@ -16,13 +16,28 @@ namespace MausritterTools.Core.Serialization;
 public sealed record SettlementDocument
 {
     public const string FormatId = "mausritter-tools/settlement";
-    public const int CurrentVersion = 1;
+
+    /// <summary>
+    /// Bumped to 2 when locks began recording a table position rather than the words on the page,
+    /// so that a lock survives a change of language. Version 1 files still open: a pin that is not
+    /// a position is treated as literal text, which is exactly what it was.
+    /// </summary>
+    public const int CurrentVersion = 2;
 
     public string Format { get; init; } = FormatId;
 
     public int Version { get; init; } = CurrentVersion;
 
     public string? GeneratedUtc { get; init; }
+
+    /// <summary>
+    /// The language the settlement was read in.
+    /// </summary>
+    /// <remarks>
+    /// Not a generation input — the same seed produces the same settlement in every language — but
+    /// worth carrying so that opening someone else's export shows it as they saw it.
+    /// </remarks>
+    public string? Locale { get; init; }
 
     /// <summary>
     /// Required attribution, restated in every exported file so it travels with the content.

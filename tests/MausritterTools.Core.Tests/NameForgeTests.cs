@@ -38,7 +38,7 @@ public class NameForgeTests
         {
             string name = NameForge.SettlementName(
                 new DiceRoller(SeedDerivation.CreateStream(seed, "settlement/name")),
-                TestData.Game.Settlement.NameSeeds);
+                TestData.Game.Settlement.NameSeeds,                TestData.Grammar);
 
             for (int i = 2; i < name.Length; i++)
             {
@@ -58,7 +58,7 @@ public class NameForgeTests
         {
             string name = NameForge.SettlementName(
                 new DiceRoller(SeedDerivation.CreateStream(seed, "settlement/name")),
-                TestData.Game.Settlement.NameSeeds);
+                TestData.Game.Settlement.NameSeeds,                TestData.Grammar);
 
             Assert.False(string.IsNullOrWhiteSpace(name));
             Assert.True(char.IsUpper(name[0]), $"'{name}' should be capitalised.");
@@ -73,7 +73,7 @@ public class NameForgeTests
         [
             .. Enumerable.Range(1, 300).Select(i => NameForge.SettlementName(
                 new DiceRoller(SeedDerivation.CreateStream((uint)i, "settlement/name")),
-                TestData.Game.Settlement.NameSeeds))
+                TestData.Game.Settlement.NameSeeds,                TestData.Grammar))
         ];
 
         Assert.True(names.Distinct().Count() > 150, $"Only {names.Distinct().Count()} distinct names in 300 rolls.");
@@ -86,7 +86,8 @@ public class NameForgeTests
         {
             string name = NameForge.TavernName(
                 new DiceRoller(SeedDerivation.CreateStream(seed, "tavern")),
-                TestData.Game.Settlement.Taverns);
+                TestData.Game.Settlement.Taverns,
+                TestData.Grammar);
 
             Assert.StartsWith("The ", name, StringComparison.Ordinal);
             Assert.Equal(3, name.Split(' ').Length);
@@ -104,7 +105,7 @@ public class NameForgeTests
                 new DiceRoller(SeedDerivation.CreateStream(seed, "sign")),
                 TestData.Game.Services,
                 service,
-                "Thistledown");
+                "Thistledown",                TestData.Grammar);
 
             Assert.False(string.IsNullOrWhiteSpace(sign));
             Assert.DoesNotContain('{', sign);
@@ -121,7 +122,7 @@ public class NameForgeTests
             new DiceRoller(SeedDerivation.CreateStream((uint)i, "sign")),
             TestData.Game.Services,
             service,
-            "Thistledown").Contains("Thistledown", StringComparison.Ordinal));
+            "Thistledown",            TestData.Grammar).Contains("Thistledown", StringComparison.Ordinal));
 
         Assert.True(sawFamilyName, "Family-name sign patterns should be reachable.");
     }
@@ -131,7 +132,8 @@ public class NameForgeTests
     {
         (string given, string family) = NameForge.MouseName(
             new DiceRoller(SeedDerivation.CreateStream(1, "mouse")),
-            TestData.Game.Names);
+            TestData.Game.Names,
+            TestData.Grammar);
 
         Assert.Contains(given, TestData.Game.Names.GivenNames);
         Assert.Contains(family, TestData.Game.Names.FamilyNames);

@@ -1,3 +1,5 @@
+@using MausritterTools.Core.Data
+
 @* One line of the settlement sheet: a value that can be locked, hand-edited or re-rolled. *@
 
 <div class="field-row @(IsLocked ? "is-locked" : null)">
@@ -31,7 +33,7 @@
     <div class="field-actions no-print">
         <button type="button"
                 class="icon-btn @(IsLocked ? "active" : null)"
-                title="@(IsLocked ? "Unlock so it re-rolls again" : "Lock so re-rolls leave it alone")"
+                title="@(IsLocked ? Text.FieldRow.UnlockTitle : Text.FieldRow.LockTitle)"
                 aria-pressed="@IsLocked"
                 @onclick="() => OnToggleLock.InvokeAsync(Path)">
             @(IsLocked ? "\U0001F512" : "\U0001F513")
@@ -39,14 +41,14 @@
 
         <button type="button"
                 class="icon-btn"
-                title="Edit by hand"
+                title="@Text.FieldRow.EditTitle"
                 @onclick="BeginEdit">
             &#9998;
         </button>
 
         <button type="button"
                 class="icon-btn"
-                title="Re-roll just this"
+                title="@Text.FieldRow.RerollTitle"
                 @onclick="() => OnReroll.InvokeAsync(Path)">
             &#8635;
         </button>
@@ -58,6 +60,9 @@
     private string _draft = "";
     private ElementReference _editor;
     private bool _focusPending;
+
+    [CascadingParameter]
+    private UiText Text { get; set; } = new();
 
     [Parameter, EditorRequired]
     public string Label { get; set; } = "";
