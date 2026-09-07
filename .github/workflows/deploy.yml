@@ -11,9 +11,10 @@ on:
 permissions:
   contents: read
 
-# Serialised per pull request and per branch so two runs never push to the deployment
-# branch at the same time. Nothing is cancelled mid-flight, because a cancelled run can
-# leave the branch holding a half-written site.
+# Serialised per pull request and per branch, so a pull request cannot race its own earlier
+# run. Deploys from different pull requests still overlap, which is safe because they write
+# to separate directories and rebase rather than force-push. Nothing is cancelled mid-flight,
+# because a cancelled run can leave the branch holding a half-written site.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
@@ -133,6 +134,25 @@ jobs:
         with:
           name: site
           path: site
+
+      - name: Prepare the Jekyll marker for the branch root
+        # A preview is written to a subdirectory, so its own .nojekyll never reaches the
+        # branch root. If a preview is what first creates the branch, the root marker would
+        # be missing and Jekyll would strip _framework from every preview, at any depth.
+        run: |
+          mkdir branch-root
+          touch branch-root/.nojekyll
+
+      - name: Ensure Jekyll is disabled at the branch root
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: ${{ env.PAGES_BRANCH }}
+          folder: branch-root
+          # Add the marker beside whatever is already there; a production site must never
+          # be cleaned away by a preview.
+          clean: false
+          force: false
+          commit-message: 'Disable Jekyll on the deployment branch'
 
       - name: Deploy preview
         uses: rossjrw/pr-preview-action@v1

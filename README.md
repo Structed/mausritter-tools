@@ -234,15 +234,17 @@ handles all of them:
   takes over from there. Each preview carries its own copy, so the fallback is present
   wherever it is looked for.
 - **Jekyll** — a `.nojekyll` marker is published so the `_framework` directory is never
-  stripped for starting with an underscore. It is a dotfile, so the build artifact that
-  carries the site between jobs has to be told explicitly to keep hidden files.
+  stripped for starting with an underscore. Jekyll skips underscore-prefixed directories at
+  any depth and the marker only counts at the branch root, so a preview makes sure the root
+  has one before deploying itself. It is a dotfile, so the build artifact that carries the
+  site between jobs also has to be told explicitly to keep hidden files.
 
 ### One-time setup
 
 In **Settings → Pages**, set **Source** to **Deploy from a branch**, then pick the
-`gh-pages` branch and the `/ (root)` folder. The branch is created by the first run of the
-workflow on `main`, so deploy once before changing the setting and the live site never goes
-dark.
+`gh-pages` branch and the `/ (root)` folder. The branch does not exist until the workflow
+first deploys to it, so run the workflow once — merging to `main`, or dispatching it
+manually — before changing the setting, and the live site never goes dark.
 
 ## Licence and attribution
 
