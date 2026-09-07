@@ -62,6 +62,8 @@ public static class SettlementSerializer
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(json);
 
+        json = WithoutByteOrderMark(json);
+
         SettlementDocument? document;
         try
         {
@@ -91,6 +93,47 @@ public static class SettlementSerializer
 
         return new SettlementImport(document.Options.ToGenerationOptions(), document.Locale);
     }
+
+    /// <summary>
+    /// Whether some text is one of this tool's own settlement exports.
+    /// </summary>
+    /// <remarks>
+    /// Used to tell an export of ours from another tool's file when the reader simply picks
+    /// something and expects it to open. Deliberately parses the whole text as one document, so a
+    /// newline-delimited file that happens to carry an embedded export of ours is not mistaken for
+    /// a bare one.
+    /// </remarks>
+    public static bool IsSettlementJson(string? text)
+    {
+        if (text is not { Length: > 0 })
+        {
+            return false;
+        }
+
+        try
+        {
+            using JsonDocument document = JsonDocument.Parse(WithoutByteOrderMark(text));
+
+            return document.RootElement.ValueKind == JsonValueKind.Object &&
+                document.RootElement.TryGetProperty("format", out JsonElement format) &&
+                format.ValueKind == JsonValueKind.String &&
+                string.Equals(format.GetString(), SettlementDocument.FormatId, StringComparison.Ordinal);
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Drops a leading byte-order mark.
+    /// </summary>
+    /// <remarks>
+    /// A mark is not JSON, and an editor that saves one would otherwise turn a perfectly good export
+    /// into an unreadable file. Reading through a <see cref="StreamReader"/> would strip it, but a
+    /// caller holding the text has already passed that point.
+    /// </remarks>
+    private static string WithoutByteOrderMark(string text) => text.TrimStart('\uFEFF');
 
     /// <summary>A filename-safe name for the exported file, e.g. <c>owlmill-c21p6.json</c>.</summary>
     public static string SuggestFileName(Settlement settlement)

@@ -23,8 +23,9 @@ whole place is drawn as a hand-inked map.
   yourself, or re-roll a single entry without disturbing its neighbours. The map can be re-drawn on
   its own, leaving the settlement untouched.
 - **Share, export, print.** The address bar carries the seed, the settings and the language; the
-  JSON export carries the full state including locks and edits; the map downloads as SVG; and the
-  print stylesheet produces a clean settlement sheet and a cut-out card sheet.
+  JSON export carries the full state including locks and edits; the settlement can also be exported
+  for [Fantasia Archive](#fantasia-archive); the map downloads as SVG; and the print stylesheet
+  produces a clean settlement sheet and a cut-out card sheet.
 - **English or German.** The same seed produces the same settlement in either, so a link shared
   between a German and an English player shows the same place; only the words differ.
 
@@ -35,6 +36,54 @@ because a Mausritter settlement is a human-scale object annotated at mouse scale
 farmhouse wall, a cow skull, a boot. Roads are grown first and buildings placed along them, so the
 building count follows from the settlement's size instead of emerging from a subdivision. Shops and
 the tavern are keyed to numbered buildings and cross-referenced in a legend.
+
+#### Fantasia Archive
+
+A settlement can be exported for [Fantasia Archive](https://github.com/vishiri/fantasia-archive), an
+open-source worldbuilding database, and read back again.
+
+A Fantasia Archive project is a *folder* of newline-delimited JSON files, one per document type, and
+a page running in a browser cannot hand a folder over. The export is therefore a ZIP holding that
+folder, which the reader unpacks and merges in through **Project → Advanced → Merge another project
+into the current one**. Instructions ship inside the ZIP, deliberately *beside* the folder rather
+than in it: the merge reads every file in the folder it is given as a database, so a readme sitting
+next to the dumps would break the import.
+
+The settlement becomes a Location, its tavern and shops become Organizations, their keepers become
+Characters and their stock becomes Items, all cross-linked. One piece of gear is one Item however
+many shops sell it, with a price per shop.
+
+The settlement's document also carries the seed, the locks and the hand edits in a field no
+blueprint declares, which the app therefore never renders, edits or discards. That is what makes the
+journey a round trip: save the project back out of Fantasia Archive and import the folder here, and
+the settlement returns intact and still re-rollable. A project this tool did not write cannot be
+imported, and says so — generation is a pure function of a seed, and it does not run backwards.
+
+Some things that are easy to get wrong here, all covered by `FantasiaArchiveExportTests`:
+
+- **This targets Fantasia Archive v1**, the format every released version reads. The rewrite on the
+  project's `master` branch replaces it with a single-file SQLite `.faproject`, whose own
+  documentation still warns that pre-release files must be recreated after a schema change. It is
+  not supported until it settles.
+- **Fantasia Archive validates nothing on import.** No version, no checksum, no schema. Every
+  mistake below imports "successfully" and simply produces a broken project, so the tests stand in
+  for the validator that does not exist.
+- **Every document needs a revision.** The loader writes with `new_edits: false` and will not invent
+  one, so a document without `_rev` and a matching `_revisions` is dropped silently.
+- **Both ends of a relationship must be written.** The app only fills in the far side when a user
+  saves a document in its own UI, never on import.
+- **Its select values are keys, not prose.** `locationType` and `groupType` are fixed English
+  strings in the app's own dropdowns, so they are derived from the settlement's size value and the
+  service id and stay English in a German export. This is the same rule the data files follow, just
+  applied to somebody else's keys.
+- **Document ids are derived from the settlement's whole generation state** — its seed, settings,
+  locks and hand edits — not drawn at random, so re-exporting the same settlement produces the same
+  file and merging it a second time changes nothing instead of duplicating it. Deriving them from
+  the seed alone would be worse than useless: the same seed makes a different place once the size or
+  a lock changes, and the app would then discard the second export in silence rather than import it.
+
+Fantasia Archive is GPL-3.0. Only the identifiers needed to write a file it accepts are re-derived
+here; no blueprint source, tooltip or value list is copied.
 
 ## Repository layout
 

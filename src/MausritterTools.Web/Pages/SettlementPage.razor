@@ -2,6 +2,7 @@
 @using System.Text
 @using MausritterTools.Core.Data
 @using MausritterTools.Core.Generation
+@using MausritterTools.Core.Interop.FantasiaArchive
 @using MausritterTools.Core.Mapping
 @using MausritterTools.Core.Model
 @using MausritterTools.Core.Randomness
@@ -85,9 +86,13 @@
                 </button>
                 <button type="button" class="btn-quiet" @onclick="CopyLink">@_text.Settlement.Controls.CopyLink</button>
                 <button type="button" class="btn-quiet" @onclick="ExportJson">@_text.Settlement.Controls.ExportJson</button>
-                <label class="btn-quiet mb-0" style="cursor:pointer">
+                <button type="button" class="btn-quiet" @onclick="ExportFantasiaArchive"
+                        title="@_text.FantasiaArchive.ExportTitle">
+                    @_text.FantasiaArchive.ExportLabel
+                </button>
+                <label class="btn-quiet mb-0" style="cursor:pointer" title="@_text.Settlement.Controls.ImportJsonTitle">
                     @_text.Settlement.Controls.ImportJson
-                    <InputFile OnChange="ImportJson" accept=".json,application/json" style="display:none" />
+                    <InputFile OnChange="ImportFile" multiple accept=".json,.zip,.txt,application/json,application/zip" style="display:none" />
                 </label>
                 <button type="button" class="btn-quiet" @onclick="Print">@_text.Settlement.Controls.Print</button>
             </div>
@@ -679,15 +684,89 @@
         _status = _text.Settlement.Status.Exported;
     }
 
-    private async Task ImportJson(InputFileChangeEventArgs args)
+    private async Task ExportFantasiaArchive()
     {
+        if (_settlement is not { } settlement)
+        {
+            return;
+        }
+
+        FantasiaArchiveExport export = FantasiaArchiveExporter.Export(
+            settlement, _options, _text, locale: Languages.Current.Code);
+
+        byte[] archive = FantasiaArchivePackage.Create(
+            export, FantasiaArchiveReadMe.Compose(_text, export.FolderName));
+
+        await Browser.DownloadBytesAsync(
+            FantasiaArchivePackage.FileNameFor(export), "application/zip", archive);
+
+        _status = _text.Settlement.Status.ExportedFantasiaArchive;
+    }
+
+    /// <summary>
+    /// Opens whatever the reader picked.
+    /// </summary>
+    /// <remarks>
+    /// One control rather than one per format, because the reader knows they have a settlement and
+    /// should not have to know which of this tool's buttons matches the file in their hand. Several
+    /// files may be chosen at once, since a Fantasia Archive project is a folder of them.
+    /// </remarks>
+    private async Task ImportFile(InputFileChangeEventArgs args)
+    {
+        string names = "";
+
         try
         {
-            // Generous but bounded: an exported settlement is a few tens of kilobytes.
-            await using Stream stream = args.File.OpenReadStream(maxAllowedSize: 2 * 1024 * 1024);
-            using StreamReader reader = new(stream);
+            // A saved Fantasia Archive project is one file per database, and the app ships twenty
+            // blueprints, so a reader who selects the folder's contents arrives with far more files
+            // than a settlement export has.
+            IReadOnlyList<IBrowserFile> files = args.FileCount == 1
+                ? [args.File]
+                : args.GetMultipleFiles(maximumFileCount: 128);
 
-            SettlementImport imported = SettlementSerializer.Read(await reader.ReadToEndAsync());
+            names = string.Join(", ", files.Select(file => file.Name));
+
+            List<string> dumps = [];
+            SettlementImport? imported = null;
+
+            foreach (IBrowserFile file in files)
+            {
+                // Generous but bounded: a settlement is tens of kilobytes, and a whole exported
+                // project folder is not much more.
+                await using Stream stream = file.OpenReadStream(maxAllowedSize: 8 * 1024 * 1024);
+                using MemoryStream buffer = new();
+                await stream.CopyToAsync(buffer);
+
+                byte[] bytes = buffer.ToArray();
+
+                if (IsZip(bytes))
+                {
+                    using MemoryStream zip = new(bytes);
+                    dumps.AddRange(FantasiaArchivePackage.ExtractDumps(zip));
+                    continue;
+                }
+
+                // Trimmed because a byte-order mark is not JSON: leaving it on would make a
+                // perfectly good settlement export fail to parse and be reported as a foreign file.
+                string text = Encoding.UTF8.GetString(bytes).TrimStart('\uFEFF');
+
+                if (imported is null && SettlementSerializer.IsSettlementJson(text))
+                {
+                    imported = SettlementSerializer.Read(text);
+                }
+                else
+                {
+                    dumps.Add(text);
+                }
+            }
+
+            int found = 0;
+            if (imported is null)
+            {
+                imported = FantasiaArchiveImporter.Read(dumps);
+                found = FantasiaArchiveImporter.Count(dumps);
+            }
+
             _options = imported.Options;
 
             // Shown as its author saw it, which also keeps any locked table entries reading in the
@@ -698,11 +777,31 @@
             }
 
             Regenerate(updateUrl: true);
-            _status = TextTemplate.Format(
-                _text.Settlement.Status.Imported, ("file", args.File.Name));
+            _status = found switch
+            {
+                0 => TextTemplate.Format(_text.Settlement.Status.Imported, ("file", names)),
+                1 => TextTemplate.Format(
+                    _text.Settlement.Status.ImportedFantasiaArchive, ("file", names)),
+                _ => TextTemplate.Format(
+                    _text.Settlement.Status.ImportedFantasiaArchiveFirstOfMany,
+                    ("file", names),
+                    ("count", found.ToString(Languages.Current.FormatCulture)))
+            };
         }
         catch (SettlementFormatException ex)
         {
+            _status = TextTemplate.Format(
+                _text.Settlement.Status.ImportFailed, ("message", ex.Message));
+        }
+        catch (InvalidOperationException ex)
+        {
+            // More files than the reader is allowed to hand over at once.
+            _status = TextTemplate.Format(
+                _text.Settlement.Status.ImportFailed, ("message", ex.Message));
+        }
+        catch (InvalidDataException ex)
+        {
+            // A truncated or mislabelled archive.
             _status = TextTemplate.Format(
                 _text.Settlement.Status.ImportFailed, ("message", ex.Message));
         }
@@ -712,6 +811,10 @@
                 _text.Settlement.Status.ReadFailed, ("message", ex.Message));
         }
     }
+
+    /// <summary>Whether these bytes open with the ZIP signature.</summary>
+    private static bool IsZip(byte[] bytes) =>
+        bytes is [0x50, 0x4B, 0x03, 0x04, ..] or [0x50, 0x4B, 0x05, 0x06, ..];
 
     private async Task Print() => await Browser.PrintAsync();
 

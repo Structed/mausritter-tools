@@ -105,6 +105,7 @@
       "copyLink": "Copy link",
       "exportJson": "Export JSON",
       "importJson": "Import JSON",
+      "importJsonTitle": "Opens a settlement JSON file, or a Fantasia Archive project",
       "print": "Print"
     },
 
@@ -162,7 +163,10 @@
       "linkCopied": "Link copied.",
       "clipboardFailed": "Could not reach the clipboard. Copy the address bar instead.",
       "exported": "Exported.",
+      "exportedFantasiaArchive": "Exported for Fantasia Archive. Unzip it, then merge the folder in — the enclosed note says how.",
       "imported": "Imported {file}.",
+      "importedFantasiaArchive": "Imported the settlement from {file}.",
+      "importedFantasiaArchiveFirstOfMany": "{file} holds {count} settlements. Opened the first one.",
       "importFailed": "Could not import that file. {message}",
       "readFailed": "Could not read that file. {message}",
       "languageChanged": "Switched to {language}. The same seed, the same settlement."
@@ -199,6 +203,22 @@
 
   "itemCard": {
     "usageDotsTitle": "{count} usage dots"
+  },
+
+  "fantasiaArchive": {
+    "exportLabel": "Export for Fantasia Archive",
+    "exportTitle": "Download this settlement as a Fantasia Archive project folder, zipped",
+    "readMeTitle": "Importing this settlement into Fantasia Archive",
+    "readMeSteps": [
+      "Unzip this file. Inside is a folder called {folder}.",
+      "Open the Fantasia Archive project you want the settlement added to.",
+      "Save that project first, with Project → Save current project. Merging cannot be undone.",
+      "Choose Project → Advanced → Merge another project into the current one.",
+      "Select the {folder} folder itself, not the files inside it."
+    ],
+    "readMeWarning": "Do not put anything else in the {folder} folder. Fantasia Archive reads every file in it as a database, so a stray note or screenshot will break the import. That is exactly why these instructions are outside the folder rather than in it.",
+    "readMeNote": "The settlement arrives as a Location, its tavern and shops as Organizations, their keepers as Characters and their stock as Items, all linked to each other. The settlement also quietly carries the seed it was generated from, so you can bring it back: save the project out of Fantasia Archive again and import that folder into the settlement generator.",
+    "readMeVersionNote": "Written for Fantasia Archive v1, the format every released version reads."
   },
 
   "licence": {

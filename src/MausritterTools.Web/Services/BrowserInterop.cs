@@ -27,6 +27,13 @@ public sealed class BrowserInterop(IJSRuntime jsRuntime) : IAsyncDisposable
         await module.InvokeVoidAsync("downloadText", fileName, contentType, text);
     }
 
+    /// <summary>Offers a binary file to the user as a download.</summary>
+    public async Task DownloadBytesAsync(string fileName, string contentType, byte[] bytes)
+    {
+        IJSObjectReference module = await ModuleAsync();
+        await module.InvokeVoidAsync("downloadBytes", fileName, contentType, bytes);
+    }
+
     /// <summary>Copies text to the clipboard, reporting whether it worked.</summary>
     public async Task<bool> CopyTextAsync(string text)
     {
