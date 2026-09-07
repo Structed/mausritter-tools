@@ -50,6 +50,8 @@ public sealed record UiText
 
     public LicenceText Licence { get => field ?? new(); init; } = new();
 
+    public FantasiaArchiveText FantasiaArchive { get => field ?? new(); init; } = new();
+
     public ErrorText Error { get => field ?? new(); init; } = new();
 
     public GrammarText Grammar { get => field ?? new(); init; } = new();
@@ -204,7 +206,37 @@ public sealed record GeneratorBarText
 
     public string ImportJson { get => field ?? ""; init; } = "";
 
+    public string ImportJsonTitle { get => field ?? ""; init; } = "";
+
     public string Print { get => field ?? ""; init; } = "";
+}
+
+/// <summary>
+/// Everything said about the Fantasia Archive export.
+/// </summary>
+/// <remarks>
+/// Its own section rather than more entries under the settlement tool, because the instructions the
+/// export ships with are prose in their own right and a translator needs to see them together.
+/// </remarks>
+public sealed record FantasiaArchiveText
+{
+    public string ExportLabel { get => field ?? ""; init; } = "";
+
+    public string ExportTitle { get => field ?? ""; init; } = "";
+
+    public string ReadMeTitle { get => field ?? ""; init; } = "";
+
+    /// <summary>The steps for merging the folder, in order.</summary>
+    public IReadOnlyList<string> ReadMeSteps { get => field ?? []; init; } = [];
+
+    /// <summary>Why nothing else may be put in the folder.</summary>
+    public string ReadMeWarning { get => field ?? ""; init; } = "";
+
+    /// <summary>What arrives, and that it can be brought back here again.</summary>
+    public string ReadMeNote { get => field ?? ""; init; } = "";
+
+    /// <summary>Which generation of Fantasia Archive this was written for.</summary>
+    public string ReadMeVersionNote { get => field ?? ""; init; } = "";
 }
 
 public sealed record SettlementSectionsText
@@ -311,7 +343,14 @@ public sealed record StatusText
 
     public string Exported { get => field ?? ""; init; } = "";
 
+    public string ExportedFantasiaArchive { get => field ?? ""; init; } = "";
+
     public string Imported { get => field ?? ""; init; } = "";
+
+    public string ImportedFantasiaArchive { get => field ?? ""; init; } = "";
+
+    /// <summary>Shown when a project holds more than one settlement and the first was taken.</summary>
+    public string ImportedFantasiaArchiveFirstOfMany { get => field ?? ""; init; } = "";
 
     public string ImportFailed { get => field ?? ""; init; } = "";
 

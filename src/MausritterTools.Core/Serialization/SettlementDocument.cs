@@ -42,10 +42,19 @@ public sealed record SettlementDocument
     /// <summary>
     /// Required attribution, restated in every exported file so it travels with the content.
     /// </summary>
-    public string Attribution { get; init; } =
+    /// <remarks>
+    /// A constant because more than one export format has to carry it. Anything that leaves this
+    /// site takes the CC BY notice with it, whatever shape it leaves in.
+    /// </remarks>
+    public const string AttributionText =
         "Settlement tables from Mausritter (https://mausritter.com), a product of Losing Games " +
         "and Isaac Williams, used under CC BY 4.0. Shops, services and mouse names are unofficial " +
         "house rules original to mausritter-tools.";
+
+    /// <summary>
+    /// Required attribution, restated in every exported file so it travels with the content.
+    /// </summary>
+    public string Attribution { get; init; } = AttributionText;
 
     public SettlementDocumentOptions Options { get; init; } = new();
 

@@ -2,7 +2,15 @@
 // Loaded as a module by BrowserInterop.
 
 export function downloadText(fileName, contentType, text) {
-    const blob = new Blob([text], { type: contentType });
+    download(fileName, new Blob([text], { type: contentType }));
+}
+
+// Blazor hands a byte[] over as a Uint8Array, so the archive never becomes a string on the way.
+export function downloadBytes(fileName, contentType, bytes) {
+    download(fileName, new Blob([bytes], { type: contentType }));
+}
+
+function download(fileName, blob) {
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement('a');

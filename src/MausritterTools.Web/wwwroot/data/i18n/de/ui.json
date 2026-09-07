@@ -105,6 +105,7 @@
       "copyLink": "Link kopieren",
       "exportJson": "JSON exportieren",
       "importJson": "JSON importieren",
+      "importJsonTitle": "Öffnet eine Siedlungs-JSON-Datei oder ein Fantasia-Archive-Projekt",
       "print": "Drucken"
     },
 
@@ -162,7 +163,10 @@
       "linkCopied": "Link kopiert.",
       "clipboardFailed": "Die Zwischenablage war nicht erreichbar. Kopiere stattdessen die Adresszeile.",
       "exported": "Exportiert.",
+      "exportedFantasiaArchive": "Für Fantasia Archive exportiert. Entpacke die Datei und füge den Ordner zusammen — die beiliegende Notiz erklärt, wie.",
       "imported": "{file} importiert.",
+      "importedFantasiaArchive": "Die Siedlung aus {file} wurde importiert.",
+      "importedFantasiaArchiveFirstOfMany": "{file} enthält {count} Siedlungen. Die erste wurde geöffnet.",
       "importFailed": "Diese Datei konnte nicht importiert werden. {message}",
       "readFailed": "Diese Datei konnte nicht gelesen werden. {message}",
       "languageChanged": "Auf {language} umgestellt. Derselbe Startwert, dieselbe Siedlung."
@@ -199,6 +203,22 @@
 
   "itemCard": {
     "usageDotsTitle": "{count} Nutzungspunkte"
+  },
+
+  "fantasiaArchive": {
+    "exportLabel": "Für Fantasia Archive exportieren",
+    "exportTitle": "Lädt diese Siedlung als gezippten Fantasia-Archive-Projektordner herunter",
+    "readMeTitle": "Diese Siedlung in Fantasia Archive importieren",
+    "readMeSteps": [
+      "Entpacke diese Datei. Darin liegt ein Ordner namens {folder}.",
+      "Öffne das Fantasia-Archive-Projekt, dem die Siedlung hinzugefügt werden soll.",
+      "Sichere dieses Projekt zuerst über Project → Save current project. Das Zusammenführen lässt sich nicht rückgängig machen.",
+      "Wähle Project → Advanced → Merge another project into the current one.",
+      "Wähle den Ordner {folder} selbst aus, nicht die Dateien darin."
+    ],
+    "readMeWarning": "Lege nichts anderes in den Ordner {folder}. Fantasia Archive liest jede Datei darin als Datenbank, deshalb zerstört schon eine vergessene Notiz oder ein Screenshot den Import. Genau darum liegt diese Anleitung neben dem Ordner und nicht darin.",
+    "readMeNote": "Die Siedlung kommt als Location an, ihr Wirtshaus und ihre Läden als Gebäude darin, nummeriert wie auf der Karte. Deren Wirte und Händler kommen als Characters an, deren Waren als Items, alle miteinander verknüpft. Die Siedlung trägt außerdem unsichtbar ihren Startwert mit sich, sodass du sie zurückholen kannst: sichere das Projekt erneut aus Fantasia Archive heraus und importiere diesen Ordner in den Siedlungsgenerator.",
+    "readMeVersionNote": "Geschrieben für Fantasia Archive v1, das Format, das alle veröffentlichten Versionen lesen."
   },
 
   "licence": {
