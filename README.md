@@ -13,21 +13,31 @@ standalone app, so the whole site is static files and runs entirely in the visit
 
 Rolls a complete mouse settlement from a seed: its name, size, governance, inhabitants, notable
 features, industry and what is happening as the players arrive, plus the tavern and every shop with
-its keeper, quirks and priced stock. Stock is also rendered as Mausritter-style item cards.
+its keeper, quirks and priced stock. Stock is also rendered as Mausritter-style item cards, and the
+whole place is drawn as a hand-inked map.
 
 - **Deterministic.** A settlement is a pure function of its seed and settings, so the same link
-  always rebuilds the same place.
+  always rebuilds the same place, map included.
 - **Lock and re-roll.** Lock anything worth keeping, hand-edit anything you would rather write
-  yourself, or re-roll a single entry without disturbing its neighbours.
+  yourself, or re-roll a single entry without disturbing its neighbours. The map can be re-drawn on
+  its own, leaving the settlement untouched.
 - **Share, export, print.** The address bar carries the seed and settings; the JSON export carries
-  the full state including locks and edits; the print stylesheet produces a clean settlement sheet
-  and a cut-out card sheet.
+  the full state including locks and edits; the map downloads as SVG; and the print stylesheet
+  produces a clean settlement sheet and a cut-out card sheet.
+
+#### The map
+
+The map is drawn inside the silhouette of the settlement's host object rather than on open ground,
+because a Mausritter settlement is a human-scale object annotated at mouse scale: an oak hollow, a
+farmhouse wall, a cow skull, a boot. Roads are grown first and buildings placed along them, so the
+building count follows from the settlement's size instead of emerging from a subdivision. Shops and
+the tavern are keyed to numbered buildings and cross-referenced in a legend.
 
 ## Repository layout
 
 ```
 .github/workflows/deploy.yml     Build + deploy to GitHub Pages
-src/MausritterTools.Core/        Domain logic: tables, generators, serialisation
+src/MausritterTools.Core/        Domain logic: tables, generators, mapping, rendering
 src/MausritterTools.Web/         Blazor WebAssembly app
 tests/MausritterTools.Core.Tests/  Unit tests
 tools/Import-SrdTables.ps1       Regenerates the SRD data files
@@ -111,6 +121,10 @@ A few decisions that are easy to undo by accident:
   arrives as `null` regardless of any `= ""` or `= []` default, so the data models coerce null in
   their getters. `JsonDefaultsTests` guards this; without it, the first optional field anyone adds
   to a data file becomes a `NullReferenceException` during generation.
+- **The map's host outline is fitted to the canvas after it is generated.** Shape lobes and noise
+  multiply together, so bounding each factor separately is guesswork that breaks the next time an
+  archetype is tuned. Narrow archetypes also widen with settlement size, or a city inside a
+  farmhouse wall ends up smaller than a hamlet inside a tree stump.
 
 ## Deployment
 

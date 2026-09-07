@@ -2,8 +2,10 @@
 @using System.Text
 @using MausritterTools.Core.Data
 @using MausritterTools.Core.Generation
+@using MausritterTools.Core.Mapping
 @using MausritterTools.Core.Model
 @using MausritterTools.Core.Randomness
+@using MausritterTools.Core.Rendering
 @using MausritterTools.Core.Serialization
 @using MausritterTools.Web.Components
 @using MausritterTools.Web.Services
@@ -98,6 +100,19 @@
                     <span class="seed-tag">seed @SeedCodec.Encode(settlement.Seed)</span>
                 </div>
                 <p class="sheet-summary">@settlement.Summary</p>
+
+                @if (_map is { } map)
+                {
+                    <h3 class="section-heading">
+                        The map
+                        <span class="no-print">
+                            <button type="button" class="icon-btn" title="Re-draw the map" @onclick="RerollMap">&#8635;</button>
+                            <button type="button" class="icon-btn" title="Download the map as SVG" @onclick="DownloadMap">&#8615;</button>
+                        </span>
+                    </h3>
+
+                    <MapView Map="map" Svg="@_mapSvg" />
+                }
 
                 <h3 class="section-heading">The settlement</h3>
 
@@ -231,6 +246,8 @@
     private GameData? _data;
     private SettlementGenerator? _generator;
     private Settlement? _settlement;
+    private SettlementMap? _map;
+    private string _mapSvg = "";
     private GenerationOptions _options = new();
     private string _seedText = "";
     private string _status = "";
@@ -266,35 +283,62 @@
     }
 
     /// <summary>
-    /// Restores from the URL when there is a seed in it, and otherwise from the last autosave, so
-    /// a shared link always wins over whatever the visitor was last looking at.
+    /// Restores the last settlement, from the URL or from the autosave.
     /// </summary>
+    /// <remarks>
+    /// The saved state is preferred when it is the same settlement the URL names, because only the
+    /// autosave carries the locks, hand edits and map redraws; the URL holds the seed and settings
+    /// alone. A link to a <em>different</em> settlement still wins, so following a shared link
+    /// shows that settlement rather than whatever was last worked on.
+    /// </remarks>
     private async Task RestoreStateAsync()
     {
-        if (TryReadOptionsFromUrl(out GenerationOptions fromUrl))
+        bool hasUrlOptions = TryReadOptionsFromUrl(out GenerationOptions fromUrl);
+        GenerationOptions? saved = await ReadSavedOptionsAsync();
+
+        if (hasUrlOptions)
         {
-            _options = fromUrl;
+            bool savedIsSameSettlement =
+                saved is not null &&
+                saved.Seed == fromUrl.Seed &&
+                saved.Size == fromUrl.Size &&
+                saved.NearHumanTown == fromUrl.NearHumanTown &&
+                saved.Terrain == fromUrl.Terrain;
+
+            _options = savedIsSameSettlement ? saved! : fromUrl;
             Regenerate(updateUrl: false);
             return;
         }
 
-        string? saved = await Browser.ReadStorageAsync(StorageKey);
-        if (saved is { Length: > 0 })
+        if (saved is not null)
         {
-            try
-            {
-                _options = SettlementSerializer.FromJson(saved);
-                Regenerate(updateUrl: true);
-                return;
-            }
-            catch (SettlementFormatException)
-            {
-                await Browser.ClearStorageAsync(StorageKey);
-            }
+            _options = saved;
+            Regenerate(updateUrl: true);
+            return;
         }
 
         _options = new GenerationOptions { Seed = SeedCodec.CreateRandom() };
         Regenerate(updateUrl: true);
+    }
+
+    private async Task<GenerationOptions?> ReadSavedOptionsAsync()
+    {
+        string? saved = await Browser.ReadStorageAsync(StorageKey);
+        if (saved is not { Length: > 0 })
+        {
+            return null;
+        }
+
+        try
+        {
+            return SettlementSerializer.FromJson(saved);
+        }
+        catch (SettlementFormatException)
+        {
+            // Written by an older or newer build; discard rather than fail to load the page.
+            await Browser.ClearStorageAsync(StorageKey);
+            return null;
+        }
     }
 
     private bool TryReadOptionsFromUrl(out GenerationOptions options)
@@ -364,12 +408,49 @@
         _settlement = _generator.Generate(_options);
         _seedText = SeedCodec.Encode(_options.Seed);
 
+        _map = MapGenerator.Generate(_settlement, MapSeed);
+        _mapSvg = SvgMapRenderer.Render(_map, MapSeed);
+
         if (updateUrl)
         {
             UpdateUrl();
         }
 
         _ = SaveStateAsync();
+    }
+
+    /// <summary>
+    /// The seed the map is drawn from.
+    /// </summary>
+    /// <remarks>
+    /// Derived from the settlement's seed so a shared link reproduces the same map, but shifted by
+    /// how many times the map alone has been re-drawn, so the layout can be changed without
+    /// disturbing a settlement the user is happy with.
+    /// </remarks>
+    private uint MapSeed =>
+        _options.Rerolls.TryGetValue("map", out int redraws) && redraws > 0
+            ? (uint)SeedDerivation.Derive(_options.Seed, $"map#{redraws}")
+            : _options.Seed;
+
+    private void RerollMap()
+    {
+        _options = _options.WithReroll("map");
+        Regenerate(updateUrl: false);
+        _status = "Re-drew the map. The settlement itself is unchanged.";
+    }
+
+    private async Task DownloadMap()
+    {
+        if (_settlement is not { } settlement || _mapSvg.Length == 0)
+        {
+            return;
+        }
+
+        string fileName = System.IO.Path.ChangeExtension(
+            SettlementSerializer.SuggestFileName(settlement), ".svg");
+
+        await Browser.DownloadTextAsync(fileName, "image/svg+xml", _mapSvg);
+        _status = "Map downloaded.";
     }
 
     /// <summary>

@@ -461,6 +461,75 @@
     display: block;
 }
 
+/* ---------- Map ---------- */
+
+.map-figure {
+    margin: 0 0 1rem;
+}
+
+.map-frame {
+    border: 2px solid var(--ink);
+    border-radius: 2px;
+    background: var(--paper);
+    overflow: hidden;
+    line-height: 0;
+}
+
+.settlement-map {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.map-caption {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-top: 0.35rem;
+}
+
+.map-legend {
+    list-style: none;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: 0.3rem 1rem;
+    font-size: 0.85rem;
+}
+
+.map-legend li {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    gap: 0.1rem 0.45rem;
+    align-items: baseline;
+    padding: 0.15rem 0;
+    border-bottom: 1px dotted var(--rule);
+}
+
+.legend-key {
+    grid-row: span 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.legend-name {
+    font-weight: 700;
+}
+
+.legend-detail {
+    grid-column: 2;
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+}
+
 /* ---------- Notices ---------- */
 
 .notice {
@@ -557,6 +626,15 @@
 
     .shop-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Keep the map on the first sheet with the settlement's details. */
+    .map-figure {
+        break-inside: avoid;
+    }
+
+    .map-frame {
+        border-width: 1.5px;
     }
 
     .page-break {

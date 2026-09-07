@@ -1,0 +1,36 @@
+@using MausritterTools.Core.Mapping
+
+@* Renders a generated settlement map plus its legend. The SVG is produced by the Core renderer
+   and injected as markup; every value in it is escaped there. *@
+
+<figure class="map-figure">
+    <div class="map-frame">
+        @((MarkupString)Svg)
+    </div>
+
+    <figcaption class="map-caption">
+        @Map.HostName. Numbered buildings are keyed below.
+    </figcaption>
+
+    @if (Map.Legend.Count > 0)
+    {
+        <ol class="map-legend">
+            @foreach (MapLegendEntry entry in Map.Legend)
+            {
+                <li>
+                    <span class="legend-key">@entry.Key</span>
+                    <span class="legend-name">@entry.Name</span>
+                    <span class="legend-detail">@entry.Detail</span>
+                </li>
+            }
+        </ol>
+    }
+</figure>
+
+@code {
+    [Parameter, EditorRequired]
+    public SettlementMap Map { get; set; } = null!;
+
+    [Parameter, EditorRequired]
+    public string Svg { get; set; } = "";
+}
