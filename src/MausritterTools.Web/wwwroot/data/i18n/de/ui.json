@@ -218,6 +218,8 @@
     ],
     "readMeWarning": "Lege nichts anderes in den Ordner {folder}. Fantasia Archive liest jede Datei darin als Datenbank, deshalb zerstört schon eine vergessene Notiz oder ein Screenshot den Import. Genau darum liegt diese Anleitung neben dem Ordner und nicht darin.",
     "readMeNote": "Die Siedlung kommt als Location an, ihr Wirtshaus und ihre Läden als Gebäude darin, nummeriert wie auf der Karte. Deren Wirte und Händler kommen als Characters an, deren Waren als Items, alle miteinander verknüpft. Die Siedlung trägt außerdem unsichtbar ihren Startwert mit sich, sodass du sie zurückholen kannst: sichere das Projekt erneut aus Fantasia Archive heraus und importiere diesen Ordner in den Siedlungsgenerator.",
+    "readMeMapNote": "Die Karte ist bereits da. Sie steckt in der Beschreibung der Siedlung selbst, oberhalb des Lizenzhinweises, mit der nummerierten Legende darunter. Du musst nichts tun, um sie zu sehen.",
+    "readMeMapFileNote": "Neben dieser Anleitung liegt {map}, dieselbe Karte als Bilddatei. Der PDF-Export von Fantasia Archive kann die eingebettete Fassung nicht mitnehmen; wenn du die Karte in einem exportierten PDF haben willst, bearbeite die Beschreibung der Siedlung, nutze die Bild-Schaltfläche in der Werkzeugleiste, wähle „Local image“ und dann {map} dort, wo du das Archiv entpackt hast. Lass die Datei liegen oder verschiebe sie irgendwohin — nur nicht in den Ordner {folder}.",
     "readMeVersionNote": "Geschrieben für Fantasia Archive v1, das Format, das alle veröffentlichten Versionen lesen."
   },
 

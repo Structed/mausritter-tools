@@ -1,4 +1,5 @@
 using MausritterTools.Core.Data;
+using MausritterTools.Core.Generation;
 using MausritterTools.Core.Model;
 using MausritterTools.Core.Randomness;
 
@@ -23,6 +24,9 @@ namespace MausritterTools.Core.Mapping;
 /// </remarks>
 public static class MapGenerator
 {
+    /// <summary>The reroll key a map redraw is counted under.</summary>
+    public const string RerollKey = "map";
+
     private const double CanvasWidth = 420;
     private const double CanvasHeight = 320;
     private const double EdgeMargin = 26;
@@ -32,6 +36,25 @@ public static class MapGenerator
     [
         "fishermice", "water-wheel", "raft", "riverboat", "dock", "bridge", "pond", "brook", "mill"
     ];
+
+    /// <summary>
+    /// The seed a settlement's map is drawn from.
+    /// </summary>
+    /// <remarks>
+    /// Derived from the settlement's own seed so a shared link reproduces the same map, but shifted
+    /// by how many times the map alone has been re-drawn, so its layout can be changed without
+    /// disturbing a settlement the user is happy with. It lives here rather than at the call site
+    /// because more than one caller needs it and they must agree: an export that derived the seed
+    /// differently would ship a different map from the one on screen.
+    /// </remarks>
+    public static uint SeedFor(GenerationOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+
+        return options.Rerolls.TryGetValue(RerollKey, out int redraws) && redraws > 0
+            ? (uint)SeedDerivation.Derive(options.Seed, $"map#{redraws}")
+            : options.Seed;
+    }
 
     /// <summary>Builds the map for a settlement.</summary>
     /// <param name="settlement">The settlement to draw.</param>

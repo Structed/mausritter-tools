@@ -85,6 +85,58 @@ export function printPage() {
     window.print();
 }
 
+// Draws an SVG to a canvas and hands back PNG bytes.
+//
+// Fantasia Archive's own image picker only lists jpg/png/gif/webp, so the SVG this site downloads
+// cannot be attached to a document there at all. Rasterising is the only way to give the user a map
+// file that application will accept. Nothing else needs this, which is why it lives here rather than
+// in Core: a raster encoder in the WebAssembly payload would be a large price for one button.
+//
+// The SVG arrives with explicit width and height, because an image with no intrinsic size is drawn
+// at the default object size of 300x150 and the map would come out a thumbnail. A data URL keeps the
+// canvas untainted, so toBlob is allowed to read it back.
+export async function rasteriseSvg(svgText, scale) {
+    try {
+        const source = 'data:image/svg+xml;base64,' +
+            btoa(String.fromCharCode(...new TextEncoder().encode(svgText)));
+
+        const image = await new Promise((resolve, reject) => {
+            const element = new Image();
+            element.onload = () => resolve(element);
+            element.onerror = () => reject(new Error('The map could not be decoded.'));
+            element.src = source;
+        });
+
+        // naturalWidth is zero in browsers that decline to size an SVG; fall back rather than
+        // producing an empty canvas.
+        const width = Math.round((image.naturalWidth || 420) * scale);
+        const height = Math.round((image.naturalHeight || 320) * scale);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        const context = canvas.getContext('2d');
+
+        // PNG keeps transparency, and the map's own paper rectangle covers the whole viewBox, so
+        // this only matters where rounding leaves a hairline at the edge.
+        context.fillStyle = '#f6f1e4';
+        context.fillRect(0, 0, width, height);
+        context.drawImage(image, 0, 0, width, height);
+
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+        if (!blob) {
+            return null;
+        }
+
+        return new Uint8Array(await blob.arrayBuffer());
+    } catch {
+        // The export is still complete without it: the map is embedded in the settlement's own
+        // description either way.
+        return null;
+    }
+}
+
 // The language the visitor's browser asks for, used only to choose a default they can override.
 export function browserLanguage() {
     return navigator.language || (navigator.languages && navigator.languages[0]) || '';
