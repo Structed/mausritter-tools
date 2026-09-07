@@ -5,16 +5,31 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+    types: [opened, reopened, synchronize, closed]
   workflow_dispatch:
 
 permissions:
   contents: read
 
+# Serialised per pull request and per branch so two runs never push to the deployment
+# branch at the same time. Nothing is cancelled mid-flight, because a cancelled run can
+# leave the branch holding a half-written site.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
 env:
   PROJECT_PATH: src/MausritterTools.Web/MausritterTools.Web.csproj
+  # GitHub Pages serves exactly one publishing source per repository, so production and
+  # every preview are directories on this single branch rather than separate sites.
+  PAGES_BRANCH: gh-pages
+  PREVIEW_DIR: pr-preview
 
 jobs:
   build:
+    name: Build
+    # A closed pull request has nothing left to publish, only a preview to tear down.
+    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,14 +46,20 @@ jobs:
       - name: Publish
         run: dotnet publish ${{ env.PROJECT_PATH }} --configuration Release --no-restore --output publish
 
-      - name: Rewrite base href for GitHub Pages
+      - name: Rewrite base href
         run: |
-          repo_name='${{ github.repository }}'
-          repo_name="${repo_name#*/}"
+          repo_name='${{ github.event.repository.name }}'
           if [[ "$repo_name" == *.github.io ]]; then
-            base_href='/'
+            site_root='/'
           else
-            base_href="/$repo_name/"
+            site_root="/$repo_name/"
+          fi
+          # A preview is served from a subdirectory, so it needs its own base href;
+          # inheriting the production one would make it fetch _framework from the root.
+          if [[ '${{ github.event_name }}' == 'pull_request' ]]; then
+            base_href="${site_root}${PREVIEW_DIR}/pr-${{ github.event.pull_request.number }}/"
+          else
+            base_href="$site_root"
           fi
           echo "Using base href: $base_href"
           sed -i "s|<base href=\"/\" />|<base href=\"$base_href\" />|g" publish/wwwroot/index.html
@@ -50,28 +71,94 @@ jobs:
           cp publish/wwwroot/index.html publish/wwwroot/404.html
           touch publish/wwwroot/.nojekyll
 
-      - name: Upload Pages artifact
-        if: github.event_name != 'pull_request'
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload site
+        uses: actions/upload-artifact@v4
         with:
+          name: site
           path: publish/wwwroot
+          # .nojekyll is a dotfile, and upload-artifact drops hidden files unless asked
+          # not to. Losing it would let Jekyll strip the _framework directory.
+          include-hidden-files: true
+          retention-days: 1
 
   deploy:
+    name: Deploy production site
     needs: build
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      pages: write
-      id-token: write
-    # Allow one concurrent deployment, but never cancel one that is mid-flight.
-    concurrency:
-      group: pages
-      cancel-in-progress: false
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      contents: write
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download site
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: site
+
+      - name: Publish to ${{ env.PAGES_BRANCH }}
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: ${{ env.PAGES_BRANCH }}
+          folder: site
+          # Previews live on the same branch, so a production deploy must not mistake them
+          # for stale files and delete every open pull request's preview.
+          clean-exclude: ${{ env.PREVIEW_DIR }}
+          commit-message: 'Deploy ${{ github.sha }}'
+          # Rebase onto the deployment branch rather than force-pushing over it, so a
+          # preview published at the same moment is not overwritten.
+          force: false
+
+  preview:
+    name: Deploy pull request preview
+    needs: build
+    # A pull request from a fork is given a read-only token, so it can be built and checked
+    # but cannot publish anything. Skipping keeps that case green instead of failing.
+    if: >-
+      github.event_name == 'pull_request'
+      && github.event.action != 'closed'
+      && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download site
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: site
+
+      - name: Deploy preview
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: site
+          preview-branch: ${{ env.PAGES_BRANCH }}
+          umbrella-dir: ${{ env.PREVIEW_DIR }}
+          action: deploy
+
+  preview-cleanup:
+    name: Remove pull request preview
+    if: >-
+      github.event_name == 'pull_request'
+      && github.event.action == 'closed'
+      && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Remove preview
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          preview-branch: ${{ env.PAGES_BRANCH }}
+          umbrella-dir: ${{ env.PREVIEW_DIR }}
+          action: remove
