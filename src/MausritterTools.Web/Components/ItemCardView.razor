@@ -5,7 +5,7 @@
    Mausritter Third Party Licence. *@
 
 <div class="item-card @(Shape == CardShape.Wide ? "wide" : null)">
-    <div class="item-name">@Entry.Item.Name</div>
+    <div class="item-name">@Entry.Item.DisplayLabel</div>
 
     @if (Entry.Item.Qualifier is { Length: > 0 } qualifier)
     {

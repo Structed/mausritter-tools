@@ -1,0 +1,117 @@
+{
+  "_source": {
+    "describes": "Tabellen für Nichtspielermäuse",
+    "attribution": "Dieses Werk basiert auf Mausritter (https://mausritter.com), einem Produkt von Losing Games und Isaac Williams, und ist lizenziert unter der Creative Commons Namensnennung 4.0 International (CC BY 4.0). Der englische Originaltext wurde von den mausritter-tools-Mitwirkenden ins Deutsche übersetzt; dies ist keine offizielle deutsche Ausgabe.",
+    "warning": "Übersetzung von Hand. Die Würfelausdrücke in 'payment' sind Rechenanweisungen, keine Anzeigetexte, und bleiben unübersetzt."
+  },
+
+  "socialPositions": [
+    { "name": "Arm" },
+    { "name": "Einfach" },
+    { "name": "Einfach" },
+    { "name": "Bürgermaus" },
+    { "name": "Gildenmaus" },
+    { "name": "Adelsmaus" }
+  ],
+
+  "birthsigns": [
+    { "name": "Stern", "disposition": "Tapfer / Waghalsig", "virtue": "Tapfer", "vice": "Waghalsig" },
+    { "name": "Rad", "disposition": "Fleißig / Fantasielos", "virtue": "Fleißig", "vice": "Fantasielos" },
+    { "name": "Eichel", "disposition": "Wissbegierig / Starrköpfig", "virtue": "Wissbegierig", "vice": "Starrköpfig" },
+    { "name": "Sturm", "disposition": "Großzügig / Jähzornig", "virtue": "Großzügig", "vice": "Jähzornig" },
+    { "name": "Mond", "disposition": "Weise / Rätselhaft", "virtue": "Weise", "vice": "Rätselhaft" },
+    { "name": "Mutter", "disposition": "Fürsorglich / Besorgt", "virtue": "Fürsorglich", "vice": "Besorgt" }
+  ],
+
+  "appearance": [
+    "Seelenvolle Augen",
+    "Bunte, geflickte Kleidung",
+    "Kranz aus Gänseblümchen",
+    "Schmuddelige Kleidung",
+    "Großer Schlapphut",
+    "Taschen voller Körner",
+    "Krummer Wanderstock aus einem Zweig",
+    "Trägt ein rostiges Nadelschwert",
+    "Langes, wildes Fell",
+    "Sehr, sehr alt",
+    "Verbundener Schwanz",
+    "Schwanz mit einer Schleife gebunden",
+    "Ein Ohr fehlt",
+    "Lange Schnurrhaare",
+    "Funkelnde Augen",
+    "Riesiger, schwerer schwarzer Umhang",
+    "Alte Kampfnarben",
+    "Sehr jung",
+    "Rasiertes Fell",
+    "Geflochtenes Fell"
+  ],
+
+  "quirk": [
+    "Putzt sich ununterbrochen",
+    "Besessen vom Wetter",
+    "Sprüht vor Energie",
+    "Weit gereist und kenntnisreich",
+    "Von einem Zauberer verflucht",
+    "Schnell zu erschrecken",
+    "Schämt sich früherer Verbrechen",
+    "Sehr ehrgeizig",
+    "Auffälliger Trunkenbold",
+    "Ausgesucht höflich",
+    "Schonungslos ehrlich",
+    "Spricht langsam und bedacht",
+    "Spricht schnell und sprunghaft",
+    "Heimlicher Diener einer Katze",
+    "Von Ratten aufgezogen",
+    "Aus der Heimat verstoßen",
+    "Hält viele Insekten als Haustiere",
+    "Hasst es, draußen zu sein",
+    "Held des Ortes",
+    "Sehr zuckende Schnurrhaare"
+  ],
+
+  "wants": [
+    "Freiheit",
+    "Sicherheit",
+    "Flucht",
+    "Aufregung",
+    "Macht",
+    "Sinn",
+    "Gesundheit",
+    "Reichtum",
+    "Schutz",
+    "Liebe",
+    "Zu beschützen",
+    "Essen",
+    "Freundschaft",
+    "Ruhe",
+    "Wissen",
+    "Wildheit",
+    "Schönheit",
+    "Rache",
+    "Zu dienen",
+    "Spaß"
+  ],
+
+  "relationship": [
+    "Elternteil",
+    "Geschwister",
+    "Cousin",
+    "Cousin zweiten Grades",
+    "Großelternteil",
+    "Verwandt, ohne es zu wissen",
+    "Verheiratet",
+    "Ehemals ein Paar",
+    "Unerwidert verliebt",
+    "Trinkkumpane",
+    "Schulden offen",
+    "Lang und stürmisch",
+    "Erzfeinde",
+    "Gildenbrüder",
+    "Jugendfreunde",
+    "Einer bestahl den anderen",
+    "Haben zusammengearbeitet",
+    "Zusammen aufgewachsen",
+    "Dienen demselben Herrn",
+    "Sind sich nie begegnet"
+  ]
+}

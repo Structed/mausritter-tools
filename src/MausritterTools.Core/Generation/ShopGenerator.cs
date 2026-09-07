@@ -1,3 +1,4 @@
+using System.Globalization;
 using MausritterTools.Core.Data;
 using MausritterTools.Core.Model;
 using MausritterTools.Core.Randomness;
@@ -98,7 +99,12 @@ public static class ShopGenerator
         }
 
         // Keep a stable, readable order rather than the order they happened to be drawn in.
-        return [.. chosen.OrderBy(s => s.MinSize).ThenBy(s => s.Name, StringComparer.Ordinal)];
+        //
+        // Ordered by id, not by name: a shop's position is its number on the map and part of the
+        // field path its keeper's details are locked under, so it has to be a property of the
+        // settlement rather than of the language it is being read in. Sorting on a translated name
+        // would renumber the map and move every lock the moment the reader switched language.
+        return [.. chosen.OrderBy(s => s.MinSize).ThenBy(s => s.Id, StringComparer.Ordinal)];
     }
 
     private static Shop BuildShop(
@@ -304,7 +310,13 @@ public static class ShopGenerator
         IReadOnlyList<(GearItem Item, string CategoryId)> items = dice.PickDistinct(pool, wanted);
 
         List<StockEntry> stock = new(items.Count);
-        foreach ((GearItem item, string categoryId) in items.OrderBy(i => i.Item.DisplayName, StringComparer.Ordinal))
+
+        // Sorted for the reader, in their own alphabet: an ordinal sort files "Ärmlich" after
+        // "Wintermantel", which is simply wrong to a German eye. This affects only the order lines
+        // are printed in, never which items were drawn, so it cannot disturb a seed.
+        StringComparer shelfOrder = StringComparer.Create(data.Locale.FormatCulture, ignoreCase: false);
+
+        foreach ((GearItem item, string categoryId) in items.OrderBy(i => i.Item.DisplayName, shelfOrder))
         {
             stock.Add(BuildStockEntry(data, dice, service, item, categoryId, priceAdjustmentPercent));
         }
@@ -337,11 +349,25 @@ public static class ShopGenerator
         int listed = item.Pips!.Value;
         int adjusted = Math.Max(1, (int)Math.Round(listed * (100 + adjustmentPercent) / 100.0, MidpointRounding.AwayFromZero));
 
+        GrammarText grammar = data.Text.Grammar;
+        string pip = data.Gear.Currency.Abbreviation;
+
+        // Even a price is phrased: English writes "20p per night", German "20 P pro Nacht".
         string priceText = item.PerUnit is not null
-            ? $"{adjusted}p per {item.PerUnit}"
+            ? TextTemplate.Format(
+                grammar.PricePerUnit,
+                ("amount", adjusted.ToString(CultureInfo.InvariantCulture)),
+                ("pip", pip),
+                ("unit", item.PerUnit))
             : service.PricesPerHex
-                ? $"{adjusted}p per hex"
-                : $"{adjusted}p";
+                ? TextTemplate.Format(
+                    grammar.PricePerHex,
+                    ("amount", adjusted.ToString(CultureInfo.InvariantCulture)),
+                    ("pip", pip))
+                : TextTemplate.Format(
+                    grammar.PricePlain,
+                    ("amount", adjusted.ToString(CultureInfo.InvariantCulture)),
+                    ("pip", pip));
 
         return new StockEntry
         {

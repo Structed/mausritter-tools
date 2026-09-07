@@ -101,6 +101,27 @@ public sealed class BrowserInterop(IJSRuntime jsRuntime) : IAsyncDisposable
     }
 
     /// <summary>
+    /// Reads a query parameter from the address bar.
+    /// </summary>
+    /// <remarks>
+    /// Read through JavaScript rather than Blazor's <c>NavigationManager</c>, which is not
+    /// initialised until the app is running. The language has to be settled before the first render,
+    /// which is earlier than that.
+    /// </remarks>
+    public async Task<string?> GetQueryParameterAsync(string name)
+    {
+        try
+        {
+            IJSObjectReference module = await ModuleAsync();
+            return await module.InvokeAsync<string?>("queryParameter", name);
+        }
+        catch (JSException)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
     /// Tells the document which language it is in, and translates the one banner Blazor never
     /// renders itself.
     /// </summary>

@@ -1,0 +1,42 @@
+{
+  "_source": {
+    "describes": "Mäusenamen",
+    "status": "Hausregel. Eigener Inhalt, nicht aus Mausritter.",
+    "rationale": "Das Mausritter-SRD enthält überhaupt keine Namenstabellen; es sagt lediglich, man solle „einen Namen wählen, der zu einer tapferen Maus passt“. Im Generator der offiziellen Website gibt es zwar Namenslisten, doch jenes Repository trägt keine Lizenz und ist damit vollständig urheberrechtlich geschützt, weshalb hier nichts davon übernommen wurde. Diese Listen wurden für dieses Projekt neu geschrieben, im selben weiten Sinnfeld aus Kräutern, Pflanzen, Mineralien und Speisen — das ist ein Stil, keine schützbare Ausdrucksform. Die deutschen Namen stehen Zeile für Zeile an derselben Stelle wie die englischen, damit derselbe Startwert in beiden Sprachen dieselbe Maus ergibt.",
+    "licence": "Eigenes Werk der mausritter-tools-Mitwirkenden, veröffentlicht mit dem Repository.",
+    "warning": "Von Hand bearbeitbar. Reihenfolge und Anzahl müssen mit ../../house/names.json übereinstimmen."
+  },
+
+  "givenNames": [
+    "Erle", "Mandel", "Bernstein", "Engelwurz", "Anis", "Aprikose", "Esche", "Espe",
+    "Gerste", "Basilikum", "Buchecker", "Heidelbeere", "Borretsch", "Brombeer", "Dornbusch",
+    "Zaunrübe", "Klette", "Butterblume", "Lichtnelke", "Kümmel", "Kardamom", "Zeder",
+    "Kerbel", "Kastanie", "Wegwarte", "Aschenglut", "Zimt", "Zitronat", "Nelke",
+    "Klee", "Spinnwebe", "Beinwell", "Koriander", "Schlüsselblume", "Kresse", "Krokus",
+    "Kreuzkümmel", "Zwetschge", "Löwenzahn", "Dill", "Holunder", "Glut", "Fenchel", "Farn",
+    "Feige", "Flachs", "Feuerstein", "Fingerhut", "Enzian", "Ingwer", "Stechginster", "Reneklode",
+    "Weißdorn", "Hasel", "Heidekraut", "Stockrose", "Ysop", "Schwertlilie", "Wacholder",
+    "Grünkohl", "Lärche", "Lorbeer", "Lavendel", "Lauch", "Flechte", "Linde", "Liebstöckel",
+    "Krapp", "Malve", "Ringelblume", "Majoran", "Markkürbis", "Mispel", "Hirse",
+    "Minze", "Senf", "Myrte", "Nessel", "Muskat", "Hafer", "Olive", "Veilchenwurz",
+    "Petersilie", "Pfeffer", "Immergrün", "Pimpernell", "Pflaume", "Mohn", "Primel",
+    "Quitte", "Rettich", "Rapunzel", "Rhabarber", "Spitzwegerich", "Raute", "Binse", "Roggen",
+    "Safran", "Salbei", "Meerfenchel", "Bohnenkraut", "Segge", "Sesam", "Zuckerwurz", "Schlehe",
+    "Ehrenpreis", "Dinkel", "Sumach", "Bergahorn", "Rainfarn", "Karde", "Distel",
+    "Thymian", "Trüffel", "Wicke", "Veilchen", "Walnuss", "Weizen", "Ginster", "Weide",
+    "Waid", "Eibe"
+  ],
+
+  "familyNames": [
+    "Eschengrund", "Gerstenkorn", "Leithammel", "Adlerfarn", "Brombeerfurt", "Bauquell",
+    "Kerzendocht", "Buchfink", "Aschenhang", "Kupferkessel", "Krümelau",
+    "Taufall", "Grabenwasser", "Fallrohr", "Karrenkate", "Ulmenhain", "Farnmulde",
+    "Feuersteinschloss", "Ginstermoor", "Kornwerker", "Hohlbach", "Kesseldorf",
+    "Laternenwald", "Rittersporn", "Lehmfeld", "Wiesentor", "Mühlgraben", "Moosbank",
+    "Nesselbett", "Nussbach", "Eichenhain", "Pfennigpfeife", "Kielfeder",
+    "Regenhügel", "Binsensee", "Salzmarsch", "Schieferkreuz", "Spatzenhügel",
+    "Sternmiere", "Strohburg", "Distelflaum", "Bröckelfall", "Unterhecke",
+    "Wagenbauer", "Pfeifenwind", "Weidenlichtung", "Weidensee", "Windhalm",
+    "Wannendorf", "Zaunkönigsfeld"
+  ]
+}

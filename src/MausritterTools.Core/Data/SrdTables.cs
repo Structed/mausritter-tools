@@ -226,7 +226,19 @@ public sealed record GearCategory
 /// </remarks>
 public sealed record GearItem
 {
+    /// <summary>
+    /// The item's identity, and a key rather than a caption.
+    /// </summary>
+    /// <remarks>
+    /// Cross-referenced from three directions: a service's <c>stock.itemNames</c> allow-list, the
+    /// hireling table's join onto the hired-help category, and the card rules, which decide slot
+    /// width and usage dots by name. It therefore stays in the canonical language in every
+    /// translation; <see cref="Label"/> is what the reader actually sees.
+    /// </remarks>
     public string Name { get => field ?? ""; init; } = "";
+
+    /// <summary>The item's name as displayed, when a translation gives it one.</summary>
+    public string? Label { get; init; }
 
     /// <summary>Distinguishes variants, e.g. "blank" and "reading" for a book.</summary>
     public string? Qualifier { get; init; }
@@ -241,8 +253,11 @@ public sealed record GearItem
     /// <summary>Set when the price is a rate, e.g. "per night".</summary>
     public string? PerUnit { get; init; }
 
+    /// <summary>What to call the item on screen, which is its key unless a translation renamed it.</summary>
+    public string DisplayLabel => Label is { Length: > 0 } label ? label : Name;
+
     /// <summary>The item name with its qualifier, e.g. "Book, blank".</summary>
-    public string DisplayName => Qualifier is null ? Name : $"{Name}, {Qualifier}";
+    public string DisplayName => Qualifier is null ? DisplayLabel : $"{DisplayLabel}, {Qualifier}";
 
     /// <summary><c>true</c> when the price is a plain number of pips that can be adjusted.</summary>
     public bool HasNumericPrice => Pips is > 0;
@@ -264,6 +279,10 @@ public sealed record HirelingTables
 /// <summary>A type of hireling, how many are looking for work, and their daily wage.</summary>
 public sealed record Hireling
 {
+    /// <summary>
+    /// The hireling's kind, which is a key: it joins this table to the hired-help gear category by
+    /// name, so it stays in the canonical language in every translation.
+    /// </summary>
     public string Name { get => field ?? ""; init; } = "";
 
     /// <summary>

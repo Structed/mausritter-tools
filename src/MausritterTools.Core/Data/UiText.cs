@@ -458,6 +458,23 @@ public sealed record GrammarText
 
     public string DefaultFamilyName { get => field ?? ""; init; } = "";
 
+    /// <summary>A plain price, e.g. "{amount}{pip}" — "20p" in English, "20 P" in German.</summary>
+    public string PricePlain { get => field ?? "{amount}{pip}"; init; } = "{amount}{pip}";
+
+    /// <summary>A rate, e.g. "{amount}{pip} per {unit}".</summary>
+    public string PricePerUnit
+    {
+        get => field ?? "{amount}{pip} per {unit}";
+        init;
+    } = "{amount}{pip} per {unit}";
+
+    /// <summary>Travel, which the SRD prices by the hex.</summary>
+    public string PricePerHex
+    {
+        get => field ?? "{amount}{pip} per hex";
+        init;
+    } = "{amount}{pip} per hex";
+
     public ArticleTables Articles { get => field ?? new(); init; } = new();
 }
 

@@ -82,6 +82,13 @@ export function browserLanguage() {
     return navigator.language || (navigator.languages && navigator.languages[0]) || '';
 }
 
+// Read straight from the address bar rather than through Blazor's NavigationManager, which is not
+// initialised until the app starts running — and the language has to be settled before that, or the
+// first render is in the wrong one.
+export function queryParameter(name) {
+    return new URLSearchParams(window.location.search).get(name) || '';
+}
+
 // Keeps the document in step with the chosen language: `lang` drives hyphenation, spell-checking
 // and how a screen reader pronounces the page, none of which Blazor sets for us.
 export function applyLanguage(code, description, errorMessage, reloadLabel) {

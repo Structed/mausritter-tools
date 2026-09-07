@@ -1,3 +1,4 @@
+@using System.Globalization
 @using MausritterTools.Core.Data
 @using MausritterTools.Core.Model
 
@@ -103,14 +104,24 @@
     [Parameter]
     public string PipAbbreviation { get; set; } = "p";
 
+    /// <summary>
+    /// The language the purse is formatted for: "1,000p" in English, "1.000 P" in German.
+    /// </summary>
+    /// <remarks>
+    /// Passed in and applied explicitly rather than read from the ambient culture, which this app
+    /// deliberately never changes. See <c>LocaleState</c> for why.
+    /// </remarks>
+    [Parameter]
+    public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
+
     private string KeeperMeta => TextTemplate.Format(
         Text.Shop.KeeperMeta,
         ("position", Shop.Keeper.Position.Name),
-        ("purse", $"{Shop.Keeper.Purse:N0}{PipAbbreviation}"),
+        ("purse", Shop.Keeper.Purse.ToString("N0", Culture) + PipAbbreviation),
         ("birthsign", Shop.Keeper.Birthsign.Name),
         ("disposition", Shop.Keeper.Disposition));
 
     private string PriceNote => TextTemplate.Format(
         Shop.PriceAdjustmentPercent > 0 ? Text.Shop.PriceAbove : Text.Shop.PriceBelow,
-        ("percent", Math.Abs(Shop.PriceAdjustmentPercent).ToString()));
+        ("percent", Math.Abs(Shop.PriceAdjustmentPercent).ToString(CultureInfo.InvariantCulture)));
 }

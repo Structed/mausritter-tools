@@ -1,0 +1,46 @@
+{
+  "_source": {
+    "describes": "Wirtsobjekte, in, auf oder um die eine Siedlung gebaut ist",
+    "status": "Hausregel, zusammengestellt aus SRD-Material.",
+    "rationale": "Das SRD sagt, Mäusesiedlungen seien „nicht mehr als eine Handvoll Familien in einer Eichenhöhle oder in einer alten Bauernhauswand“, und seine Landmarken-Tabellen liefern die Objekte in Menschengröße, die eine Siedlung besetzen kann. Diese Landmarkennamen sind SRD-Text (CC BY 4.0); Form, Grundriss und Layout-Angaben dazu sind eine Erfindung dieses Projekts für die Kartenerzeugung.",
+    "licence": "Landmarkennamen aus dem Mausritter-SRD (CC BY 4.0). Die Zusatzangaben sind eigenes Werk der mausritter-tools-Mitwirkenden.",
+    "attribution": "Dieses Werk basiert auf Mausritter (https://mausritter.com), einem Produkt von Losing Games und Isaac Williams, und ist lizenziert unter der Creative Commons Namensnennung 4.0 International (CC BY 4.0). Der englische Originaltext wurde von den mausritter-tools-Mitwirkenden ins Deutsche übersetzt; dies ist keine offizielle deutsche Ausgabe.",
+    "warning": "Übersetzung von Hand. 'phrase' trägt die vollständige Ortsangabe im Dativ, weil sich Artikel und Adjektiv im Deutschen nach dem Geschlecht richten und deshalb nicht aus Einzelteilen zusammengesetzt werden können."
+  },
+
+  "designNote": "Eine Mausritter-Siedlung soll wie ein einzelnes Objekt in Menschengröße wirken, das in Mausgröße beschriftet wurde, nicht wie ein Dorf auf freiem Feld. Die Third Party Licence rät selbst dazu, es „klein und dicht“ zu halten. Jedes Wirtsobjekt hier beschreibt deshalb einen begrenzten Behälter, in den die Karte gezeichnet wird.",
+
+  "shapes": {
+    "hollow": "Runder, organischer Innenraum. Die Wege winden sich nach innen.",
+    "linear": "Lang und schmal. Ein Hauptweg, Gebäude an beiden Seiten gestapelt.",
+    "vessel": "Runder Körper mit enger Öffnung oder Tülle. Ein Eingang, dichtes Inneres.",
+    "boxy": "Geradliniges Menschenerzeugnis. Rasterartige Wege, harte Außenkante.",
+    "warren": "Verzweigtes unterirdisches Netz. Gänge statt Gassen.",
+    "sprawl": "Offener Grund um eine mittige Besonderheit. Lose, weitläufige Wege."
+  },
+
+  "hosts": [
+    { "name": "Hohler Baumstumpf", "phrase": "in einem hohlen Baumstumpf", "description": "Ein Kranz von Kammern, in das morsche Kernholz geschnitten, darüber ein Schacht voll Tageslicht." },
+    { "name": "Alte Bauernhauswand", "phrase": "in einer alten Bauernhauswand", "description": "Generationen von Mäusen leben im Hohlraum zwischen Lattung und Putz." },
+    { "name": "Alte knorrige Eiche", "phrase": "in und unter einer alten knorrigen Eiche", "description": "Hallen im Stamm, Vorratskammern in den Wurzeln, Ausguck in der Krone." },
+    { "name": "Kuhskelett", "phrase": "in einem Kuhskelett", "description": "Rippen als Dachsparren, der Schädel umgebaut zum prächtigsten Gebäude weit und breit." },
+    { "name": "Trockenmauer", "phrase": "in einer Trockenmauer", "description": "Eine Siedlung, eingefädelt in die Lücken zwischen aufgeschichteten Steinen." },
+    { "name": "Mächtiger umgestürzter Baum", "phrase": "in einem mächtigen umgestürzten Baum", "description": "Ein einziger langer Gang über die ganze Länge des Stammes, der sich in die Äste verzweigt." },
+    { "name": "Verlassener Kaninchenbau", "phrase": "in einem verlassenen Kaninchenbau", "description": "Verbreiterte und abgestützte Gänge, die alten Bewohner längst fort oder höflich umgesiedelt." },
+    { "name": "Regenrohrmündung", "phrase": "rund um eine Regenrohrmündung", "description": "Im Sommer trocken, im Herbst geräumt. Jede Maus kennt den Ablauf." },
+    { "name": "Verlassenes Auto", "phrase": "in einem verlassenen Auto", "description": "Sitzschaum als Bettzeug, der Motorraum als Schmiede, der Kofferraum als Kornspeicher." },
+    { "name": "Holzschuppen", "phrase": "in einem Holzschuppen", "description": "Eine gestapelte Stadt aus Scheiten, jeden Winter von Riesen neu geordnet." },
+    { "name": "Müllhaufen", "phrase": "in einem Müllhaufen", "description": "Endlos erneuert, endlos durchsucht und reicher, als er aussieht." },
+    { "name": "Weggeworfene Möbel", "phrase": "in weggeworfenen Möbeln", "description": "Eine Anrichte auf den Rücken gekippt, die Schubladen werden zu Stockwerken." },
+    { "name": "Einkaufswagen", "phrase": "in einem Einkaufswagen", "description": "Halb im Schlick versunken, der Korb mit geflochtenem Gras überspannt." },
+    { "name": "Umgestülpter Stiefel", "phrase": "in einem umgestülpten Stiefel", "description": "Die Sohle als Dach, die Schnürlöcher als Fenster, dazu ein Geruch, den niemand erwähnt." },
+    { "name": "Gesprungene Teekanne", "phrase": "in einer gesprungenen Teekanne", "description": "Die Tülle ist das Haupttor. Der Deckel ist die Ratskammer." },
+    { "name": "Steinbrücke", "phrase": "unter einer Steinbrücke", "description": "In den Bogen gebaut, über der Wasserlinie. Meistens." },
+    { "name": "Gesunkener Lastkahn", "phrase": "an Bord eines gesunkenen Lastkahns", "description": "Schräg liegend, halb geflutet und erbittert verteidigt von denen, die in der trockenen Hälfte wohnen." },
+    { "name": "Termitenzerfressener Baum", "phrase": "in einem termitenzerfressenen Baum", "description": "Die Gänge von jemand anderem, geerbt und hastig verstärkt." },
+    { "name": "Riesiger flacher Fels", "phrase": "unter einem riesigen flachen Felsen", "description": "Ein Dach aus Stein über einem weiten, trockenen, ewig dämmrigen Platz." },
+    { "name": "Gewächshaus", "phrase": "in einem Gewächshaus", "description": "Warm, feucht und überwuchert. Nahrung wächst das ganze Jahr, und alles andere auch." },
+    { "name": "Brombeerhecke", "phrase": "in einer Brombeerhecke", "description": "Dornenwände, durch die sich kein Raubtier drängt, und eine Ernte, die von selbst kommt." },
+    { "name": "Vollgestopfter Müllcontainer", "phrase": "in einem vollgestopften Müllcontainer", "description": "Stahlwände, keine Raubtiere und die ständige Angst, geleert zu werden." }
+  ]
+}

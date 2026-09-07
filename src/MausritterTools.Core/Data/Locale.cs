@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace MausritterTools.Core.Data;
 
 /// <summary>
@@ -73,6 +75,30 @@ public sealed record Locale
 
     /// <summary>The data root a locale's overlay files live under, e.g. <c>i18n/de</c>.</summary>
     public string OverlayRoot => $"i18n/{Code}";
+
+    /// <summary>
+    /// How to format numbers for a reader of this language.
+    /// </summary>
+    /// <remarks>
+    /// Resolved once and used explicitly, rather than by setting the ambient culture: Blazor
+    /// WebAssembly will not allow the app culture to change unless the entire ICU dataset is
+    /// bundled, and a megabyte of globalization data is a poor trade for a thousands separator.
+    /// Falls back to the invariant culture, because a purse printed with the wrong separator is a
+    /// far smaller problem than a page that will not render.
+    /// </remarks>
+    public CultureInfo FormatCulture => field ??= Resolve(Code);
+
+    private static CultureInfo Resolve(string code)
+    {
+        try
+        {
+            return CultureInfo.GetCultureInfo(code);
+        }
+        catch (CultureNotFoundException)
+        {
+            return CultureInfo.InvariantCulture;
+        }
+    }
 
     public override string ToString() => Code;
 }

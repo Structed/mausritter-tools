@@ -199,7 +199,9 @@
                     <div class="shop-grid">
                         @foreach (Shop shop in settlement.Shops)
                         {
-                            <ShopView Shop="shop" PipAbbreviation="@_data!.Gear.Currency.Abbreviation" />
+                            <ShopView Shop="shop"
+                                      PipAbbreviation="@_data!.Gear.Currency.Abbreviation"
+                                      Culture="_data!.Locale.FormatCulture" />
                         }
                     </div>
 

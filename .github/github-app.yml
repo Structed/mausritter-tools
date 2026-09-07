@@ -13,12 +13,20 @@ instructions: |
   - data/srd/ is GENERATED from the Mausritter SRD. Never hand-edit it. Change
     tools/Import-SrdTables.ps1 and re-run the importer instead.
   - data/house/ is hand-written original content and is safe to edit directly.
+  - data/ui.json is every string the app shows that is not a table entry.
+  - data/i18n/<locale>/ mirrors all of the above and is hand-written, including the
+    translations of the generated files. That is not a contradiction: the generated tree is
+    still the only thing the importer writes, and the importer re-checks the overlays.
 
-  Three things are easy to break by accident:
+  The app ships in English and German. English is canonical; a translation is an overlay
+  deep-merged onto the canonical JSON before it is deserialised, so generators never know
+  about languages. Five things are easy to break by accident:
 
   - Mausritter has no shops or services table, so that whole layer is an unofficial house
     rule. Keep it labelled as such in the UI, and keep each service's srdBasis honest about
-    which SRD rule it was extrapolated from.
+    which SRD rule it was extrapolated from. The German text is likewise an unofficial fan
+    translation and must stay labelled as one, because CC BY 4.0 requires a modification to
+    be declared.
   - Never use System.Random for anything reachable from a seed. Its seeded output is not
     stable across .NET versions, which would silently invalidate every shared seed URL. Use
     the Pcg32 generator in Core/Randomness.
@@ -26,6 +34,15 @@ instructions: |
     absent from a data file arrives as null whatever default is written on it. Non-nullable
     properties on the data models coerce null in their getters; keep it that way when adding
     new ones. JsonDefaultsTests guards this.
+  - A translated table must have exactly as many rows as its original, in the same order,
+    because every value is an index into a table. Keys are never translated: ids, dice
+    expressions, gear category ids, stock.itemNames, and a gear item's or hireling's `name`,
+    which three files join on and the card rules match against. A gear item displays `label`
+    instead. Translating a key does not fail loudly; it empties a shop or blanks a card.
+    TranslationTests guards all of this.
+  - Anything whose order or numbering the player can see must be keyed off ids, not names:
+    a shop's position is its map number and part of its lock's field path, so sorting it by
+    a translated name would renumber the map and move every lock on a language switch.
 
   The CC BY 4.0 attribution and the Mausritter Third Party Licence notice must stay visible
   on the site itself, not only in the repository. Do not use the Mausritter or Losing Games
@@ -45,8 +62,9 @@ scripts:
   - name: Test
     command: dotnet test MausritterTools.slnx
 
-  # Re-imports the SRD tables into wwwroot/data/srd/. Run after changing the importer, or to
-  # pick up a newer SRD release, then commit the regenerated JSON.
+  # Re-imports the SRD tables into wwwroot/data/srd/, then checks every translation overlay
+  # still lines up with them. Run after changing the importer, or to pick up a newer SRD
+  # release, then commit the regenerated JSON.
   - name: Import SRD tables
     command: pwsh ./tools/Import-SrdTables.ps1 -Refresh
 

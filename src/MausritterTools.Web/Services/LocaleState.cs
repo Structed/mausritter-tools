@@ -1,4 +1,3 @@
-using System.Globalization;
 using MausritterTools.Core.Data;
 
 namespace MausritterTools.Web.Services;
@@ -16,6 +15,14 @@ namespace MausritterTools.Web.Services;
 /// <para>
 /// Changing language does not change the settlement. Every table is translated row for row, so the
 /// seed still resolves to the same rows; only the words on them differ.
+/// </para>
+/// <para>
+/// Note that the ambient <see cref="System.Globalization.CultureInfo"/> is deliberately left alone.
+/// Blazor refuses a culture change during start-up unless the whole ICU dataset is bundled, which
+/// costs well over a megabyte of download, and the only thing this app needs a culture for is the
+/// thousands separator in a shopkeeper's purse. That one number is formatted explicitly against
+/// <see cref="Locale.FormatCulture"/> instead. Do not swap this for setting the ambient culture
+/// without weighing that download against a single comma.
 /// </para>
 /// </remarks>
 public sealed class LocaleState(BrowserInterop browser)
@@ -37,19 +44,19 @@ public sealed class LocaleState(BrowserInterop browser)
     /// <summary>
     /// Chooses the starting language: an explicit link, then a remembered choice, then the browser.
     /// </summary>
-    public async Task InitialiseAsync(string? fromQuery)
+    /// <remarks>
+    /// Runs before the app renders, so it reads the address bar through JavaScript rather than
+    /// through Blazor's <c>NavigationManager</c>, which is not initialised until the host is
+    /// running. Settling the language any later would draw the first screen in the wrong one.
+    /// </remarks>
+    public async Task InitialiseAsync()
     {
-        Locale? chosen = Match(fromQuery);
+        Locale? chosen = Match(await _browser.GetQueryParameterAsync(QueryParameter));
 
-        if (chosen is null)
-        {
-            chosen = Match(await _browser.ReadStorageAsync(StorageKey));
-        }
+        chosen ??= Match(await _browser.ReadStorageAsync(StorageKey));
+        chosen ??= Match(await _browser.GetBrowserLanguageAsync());
 
-        chosen ??= Match(await _browser.GetBrowserLanguageAsync()) ?? Locale.English;
-
-        Current = chosen;
-        ApplyCulture(Current);
+        Current = chosen ?? Locale.English;
     }
 
     /// <summary>Switches language, remembering the choice.</summary>
@@ -63,7 +70,6 @@ public sealed class LocaleState(BrowserInterop browser)
         }
 
         Current = locale;
-        ApplyCulture(locale);
 
         await _browser.WriteStorageAsync(StorageKey, locale.Code);
 
@@ -82,20 +88,6 @@ public sealed class LocaleState(BrowserInterop browser)
 
         return _browser.ApplyLanguageAsync(
             Current.Code, text.App.Description, text.Error.Unhandled, text.Error.Reload);
-    }
-
-    /// <summary>
-    /// Sets the thread culture, which is what makes a purse of 1000 pips read as "1,000" in English
-    /// and "1.000" in German.
-    /// </summary>
-    private static void ApplyCulture(Locale locale)
-    {
-        CultureInfo culture = CultureInfo.GetCultureInfo(locale.Code);
-
-        CultureInfo.DefaultThreadCurrentCulture = culture;
-        CultureInfo.DefaultThreadCurrentUICulture = culture;
-        CultureInfo.CurrentCulture = culture;
-        CultureInfo.CurrentUICulture = culture;
     }
 
     /// <summary>Resolves a code we actually ship, or nothing.</summary>

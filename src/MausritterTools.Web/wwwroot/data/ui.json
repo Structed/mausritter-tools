@@ -227,6 +227,9 @@
     "unnamedSettlement": "Unnamed",
     "defaultGivenName": "Mouse",
     "defaultFamilyName": "Of-No-Name",
+    "pricePlain": "{amount}{pip}",
+    "pricePerUnit": "{amount}{pip} per {unit}",
+    "pricePerHex": "{amount}{pip} per hex",
     "articles": {
       "indefiniteNominative": {},
       "dativeDefinite": {}

@@ -1,0 +1,172 @@
+{
+  "_source": {
+    "describes": "Tabellen für Mäusesiedlungen",
+    "attribution": "Dieses Werk basiert auf Mausritter (https://mausritter.com), einem Produkt von Losing Games und Isaac Williams, und ist lizenziert unter der Creative Commons Namensnennung 4.0 International (CC BY 4.0). Der englische Originaltext wurde von den mausritter-tools-Mitwirkenden ins Deutsche übersetzt; dies ist keine offizielle deutsche Ausgabe.",
+    "warning": "Übersetzung von Hand. Nur Anzeigetexte; Würfe, Kennungen und Zahlen bleiben in ../../srd/settlement.json und werden nie übersetzt. Zeilenzahl und Reihenfolge müssen mit dem Original übereinstimmen."
+  },
+
+  "sizeRoll": "2W6, den niedrigeren Wert nehmen",
+
+  "sizes": [
+    { "name": "Gehöft", "nameGender": "n", "population": "1–3 Familien" },
+    { "name": "Wegkreuzung", "nameGender": "f", "population": "3–5 Familien" },
+    { "name": "Weiler", "nameGender": "m", "population": "50–150 Mäuse" },
+    { "name": "Dorf", "nameGender": "n", "population": "150–300 Mäuse" },
+    { "name": "Stadt", "nameGender": "f", "population": "300–1000 Mäuse" },
+    { "name": "Großstadt", "nameGender": "f", "population": "1000+ Mäuse" }
+  ],
+
+  "governanceRoll": "W6 + Siedlungsgröße",
+
+  "governance": [
+    { "text": "Geleitet von den Dorfältesten" },
+    { "text": "Verwaltet von einem Ritter oder einem Herrn niederen Standes" },
+    { "text": "Organisiert von einem Gildenausschuss" },
+    { "text": "Freie Siedlung, regiert von einem Rat der Bürgermäuse" },
+    { "text": "Haus einer hochgeborenen Adelsmaus" },
+    { "text": "Sitz baronialer Macht" }
+  ],
+
+  "inhabitants": [
+    "Rasieren kunstvolle Muster in ihr Fell",
+    "Berauscht von seltsamen Pflanzen",
+    "Misstrauisch gegenüber Geschäften mit Fremden",
+    "Neugierig auf Neuigkeiten aus der Ferne",
+    "Halten Fellpflege für Unglück bringend",
+    "Tragen fein bestickte Kleidung",
+    "Brauen Honigmet, gewürzt mit strengen Kräutern",
+    "Verhüllen ihre Gesichter mit langen Kapuzen",
+    "Verarmt durch den Zehnten eines Katzenfürsten",
+    "Kürzen ihre Schwänze in einer feierlichen Zeremonie",
+    "Kühne Jäger großer Bestien",
+    "Alle von einer einzigen Urmutter abstammend",
+    "Backen köstliche Beerenkuchen",
+    "Aus einem Labor entkommen, weltfremd",
+    "Verbringen ihre Tage faul am Bach",
+    "Alte Blutfehde mit einer anderen Siedlung",
+    "Graben prächtige Tunnel unter Aufsicht der Gilde",
+    "Tragen große, breitkrempige Hüte",
+    "Haben Gesetze und Bräuche, die Fremde verwirren",
+    "Auf gutem Fuß mit einem Raubtier"
+  ],
+
+  "notableFeatures": [
+    "Labyrinth aus wehrhaften, fallenreichen Gängen",
+    "Überaus behagliches, gut ausgestattetes Gasthaus",
+    "Schrein, geschnitzt aus schwarzem Holz",
+    "Besinnlicher Pilzgarten",
+    "Kuhschädel, umgebaut zum Gildehaus",
+    "Wirrwarr dicht gedrängter Hütten",
+    "Saubere Reihen hängender Holzhäuser",
+    "Prunkvolles Tor, von Statuen bewacht",
+    "Geheimer Tempel eines Fledermauskults",
+    "Bahn für Käferrennen",
+    "Speicher, gefüllt mit Eingemachtem",
+    "Versteckter Anleger für Flussboote",
+    "Zerfallender Marmorpalast, erbaut von alten Mäusen",
+    "Erbeutete Menschenmaschine, noch in Betrieb",
+    "Eine Holzbrücke verbindet die Siedlung",
+    "Beunruhigend hoher, gewundener Turm",
+    "Wunderschöner Blumengarten",
+    "Nistplatz der Taubenreiter",
+    "Überwucherte Statue eines alten Helden",
+    "Wendeltreppe, die tief unter die Erde führt"
+  ],
+
+  "industries": [
+    "Bauern, die turmhohe Feldfrüchte pflegen",
+    "Holzfäller mit Sägen und Gurtzeug",
+    "Raue, vernarbte Fischermäuse mit Netzen und Flößen",
+    "Dunkle, muffige Pilzzucht",
+    "Getreide trocknet auf jeder ebenen Fläche",
+    "Strenger Käse, jahrelang gereift",
+    "Gärten mit seltenen Kräutern. Die Trockengestelle werden bewacht",
+    "Bienenstock und seine verschleierten Imker",
+    "Händler und Kaufleute, oft auf der Suche nach Wachen",
+    "Steinmetze, die einen nahen Steinbruch bearbeiten",
+    "Mühle, angetrieben von einem großen Wasserrad",
+    "Tiefes Bergwerk für Eisen, Silber oder Zinn",
+    "Halten Seidenraupen und weben feinen Stoff",
+    "Meisterhafte Erforscher von Höhlen und Gängen",
+    "Ofengebrannte Töpferware, fröhlich bunt glasiert",
+    "Wollmühle, behängt mit leuchtendem Tuch",
+    "Vorzügliche Schule, ungebärdige Schüler",
+    "Belebter, gut bestückter Markt",
+    "Stinkender Abfallhaufen, sorgfältig durchsucht",
+    "Schöne Möbel aus geschnitztem, poliertem Holz"
+  ],
+
+  "events": [
+    "Unglück, alle packen zum Aufbruch",
+    "Hochzeit, die Gassen sind blumengeschmückt",
+    "Vorbereitungen für das große Jahresfest",
+    "Eine Krankheit ist ausgebrochen",
+    "Insekten haben den Speicher geplündert",
+    "Markttag, die Bauern strömen in die Siedlung",
+    "Die Mäuse gehen einander an die Gurgel",
+    "Eine Kriegsbande sammelt sich gegen eine Bestie",
+    "Mehrere Kinder werden vermisst",
+    "Eine Adelsmaus stellt eine leichtfertige Forderung",
+    "Eine fahrende Theatertruppe trifft ein",
+    "Begräbnis, die Gassen voller Rauch",
+    "Ein Betrüger wirbt für ein unsinniges Vorhaben",
+    "Ein Hauskäfer ist durchgedreht und greift Mäuse an",
+    "Ein Feenbote mit einer unmöglichen Bitte",
+    "Eine unheimlich schnell wachsende Pflanze in der Nähe",
+    "Ein wertvolles Erbstück wurde gestohlen",
+    "Ein Katzenfürst fordert einen schweren Zehnten",
+    "Zeremonie zur Mündigkeit der jungen Mäuse",
+    "Ein Zaubererturm trifft auf einem Schildkrötenrücken ein"
+  ],
+
+  "nameSeeds": {
+    "note": "Würfle zweimal W12. Wähle einen Anfang und ein Ende. Feile daran, bis es gut klingt.",
+    "startA": [
+      "Eichen", "Beeren", "Weiden", "Stumpf", "Kiefern", "Mond",
+      "Grün", "Schwarz", "Stein", "Hügel", "Feigen", "Apfel"
+    ],
+    "startB": [
+      "Sumpf", "Eulen", "Fuchs", "Eichel", "Kupfer", "Räuber",
+      "Kümmel", "Rinnen", "Rosen", "Kupfer", "Freund", "Stamm"
+    ],
+    "endA": [
+      "dorf", "heim", "mühle", "tal", "hain", "stadt",
+      "au", "korn", "esche", "busch", "stich", "schein"
+    ],
+    "endB": [
+      "stand", "hügel", "turm", "hof", "brück", "tor",
+      "bach", "teich", "nest", "furt", "grab", "brand"
+    ]
+  },
+
+  "taverns": {
+    "note": "Weiler und größere Siedlungen halten eine freundliche Taverne oder ein Gasthaus bereit.",
+
+    "nameA": [
+      "Weißen", "Grünen", "Schwarzen", "Roten", "Silbernen", "Krummen",
+      "Freundlichen", "Verborgenen", "Schlauen", "Gläsernen", "Dornigen", "Zerbrochenen"
+    ],
+
+    "nameB": [
+      "Käfer", "Fuchs", "Keil", "Korn", "Ratte", "Käse",
+      "Adler", "Wurm", "Biene", "Laterne", "Rose", "Ritter"
+    ],
+
+    "nameBGenders": ["m", "m", "m", "n", "f", "m", "m", "m", "f", "f", "f", "m"],
+
+    "specialtyMeals": [
+      "Gewürzte Ofenmöhre",
+      "Gekochte Wurmbrühe",
+      "Brombeerkuchen",
+      "Strenger, lange gereifter Käse",
+      "Gerstenbrei",
+      "Dickes Flussfischsteak",
+      "Bratapfel",
+      "Panierte, ausgebackene Insektenbeine",
+      "Frisches Butterbrot",
+      "Erbeutetes Bonbon",
+      "Honiggeröstete Körner",
+      "Pilzeintopf"
+    ]
+  }
+}
