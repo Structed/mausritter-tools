@@ -36,6 +36,7 @@ the tavern are keyed to numbered buildings and cross-referenced in a legend.
 ## Repository layout
 
 ```
+.github/github-app.yml           GitHub Copilot app scripts and project instructions
 .github/workflows/deploy.yml     Build + deploy to GitHub Pages
 src/MausritterTools.Core/        Domain logic: tables, generators, mapping, rendering
 src/MausritterTools.Web/         Blazor WebAssembly app
@@ -47,6 +48,11 @@ global.json                      Pinned .NET SDK band
 
 `MausritterTools.Core` holds everything that is not UI, so the generators can be tested without a
 browser. `MausritterTools.Web` is a thin Blazor layer over it.
+
+`.github/github-app.yml` surfaces the commands below as buttons in the
+[GitHub Copilot app](https://docs.github.com/copilot/reference/github-copilot-app-reference/repository-configuration),
+so the app can be run, tested and re-imported without typing them. The app asks you to review the
+file before it will run anything from it.
 
 ## Running locally
 

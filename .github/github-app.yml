@@ -1,0 +1,55 @@
+# Configuration for the GitHub Copilot app.
+# Reference: https://docs.github.com/copilot/reference/github-copilot-app-reference/repository-configuration
+
+instructions: |
+  A Blazor WebAssembly standalone app: the whole site is static files that run in the
+  visitor's browser. There is no server and nothing is uploaded.
+
+  MausritterTools.Core holds all domain logic so the generators can be tested without a
+  browser; MausritterTools.Web is a thin UI over it. Put logic in Core, not in a .razor file.
+
+  Table data lives in src/MausritterTools.Web/wwwroot/data/ and is split by provenance:
+
+  - data/srd/ is GENERATED from the Mausritter SRD. Never hand-edit it. Change
+    tools/Import-SrdTables.ps1 and re-run the importer instead.
+  - data/house/ is hand-written original content and is safe to edit directly.
+
+  Three things are easy to break by accident:
+
+  - Mausritter has no shops or services table, so that whole layer is an unofficial house
+    rule. Keep it labelled as such in the UI, and keep each service's srdBasis honest about
+    which SRD rule it was extrapolated from.
+  - Never use System.Random for anything reachable from a seed. Its seeded output is not
+    stable across .NET versions, which would silently invalidate every shared seed URL. Use
+    the Pcg32 generator in Core/Randomness.
+  - The System.Text.Json source generator discards property initialisers, so a property
+    absent from a data file arrives as null whatever default is written on it. Non-nullable
+    properties on the data models coerce null in their getters; keep it that way when adding
+    new ones. JsonDefaultsTests guards this.
+
+  The CC BY 4.0 attribution and the Mausritter Third Party Licence notice must stay visible
+  on the site itself, not only in the repository. Do not use the Mausritter or Losing Games
+  logos anywhere.
+
+scripts:
+  - name: Setup
+    command: dotnet restore MausritterTools.slnx
+    triggers:
+      - session.create
+
+  # The http profile is explicit so the port is predictable and no HTTPS development
+  # certificate has to be trusted first.
+  - name: Run
+    command: dotnet run --project src/MausritterTools.Web --launch-profile http
+
+  - name: Test
+    command: dotnet test MausritterTools.slnx
+
+  # Re-imports the SRD tables into wwwroot/data/srd/. Run after changing the importer, or to
+  # pick up a newer SRD release, then commit the regenerated JSON.
+  - name: Import SRD tables
+    command: pwsh ./tools/Import-SrdTables.ps1 -Refresh
+
+# ASP.NET logs "Now listening on: http://localhost:5023" once the app is serving.
+server_ready_pattern: '(?i)Now listening on:\s+(https?://\S+)'
+auto_open_in_browser: true
