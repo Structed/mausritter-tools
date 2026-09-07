@@ -6,9 +6,9 @@
   },
 
   "currency": {
-    "name": "Pip",
-    "abbreviation": "P",
-    "note": "Pips sind die einzige Währung in Mausritter. Ein Pip-Beutel fasst 250 Pips; das ist eine Tragegrenze, keine Stückelung."
+    "name": "Kern",
+    "abbreviation": "K",
+    "note": "Kerne sind die einzige Währung in Mausritter. Ein Kernbeutel fasst 250 Kerne; das ist eine Tragegrenze, keine Stückelung."
   },
 
   "categories": [
@@ -81,7 +81,7 @@
         { "label": "Steine", "qualifier": "Beutel" },
         { "label": "Leichte Rüstung" },
         { "label": "Schwere Rüstung" },
-        { "label": "Versilberte Waffen", "priceText": "×10 P", "note": "nach jedem Kampf einen Nutzungspunkt streichen" },
+        { "label": "Versilberte Waffen", "priceText": "×10 K", "note": "nach jedem Kampf einen Nutzungspunkt streichen" },
         { "label": "Reparaturen", "qualifier": "je Punkt", "priceText": "10 %" }
       ]
     },

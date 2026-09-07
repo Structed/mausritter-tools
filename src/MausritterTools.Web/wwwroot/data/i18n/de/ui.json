@@ -187,7 +187,7 @@
     "repairs": "Reparaturen",
     "repairsText": "Tilgt einen Nutzungspunkt für 10 % des ursprünglichen Preises.",
     "spells": "Zauber",
-    "spellsText": "Kauft einen voll aufgeladenen Zauber für W6 × 100 P. Ein erschöpfter ist die Hälfte wert.",
+    "spellsText": "Kauft einen voll aufgeladenen Zauber für W6 × 100 K. Ein erschöpfter ist die Hälfte wert.",
     "keeperMeta": "{position} · {purse} in der Pfote · geboren im Zeichen {birthsign} ({disposition})",
     "wants": "Will: {wants}.",
     "inStock": "Vorrätig",

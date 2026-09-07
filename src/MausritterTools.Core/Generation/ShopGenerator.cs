@@ -352,7 +352,7 @@ public static class ShopGenerator
         GrammarText grammar = data.Text.Grammar;
         string pip = data.Gear.Currency.Abbreviation;
 
-        // Even a price is phrased: English writes "20p per night", German "20 P pro Nacht".
+        // Even a price is phrased: English writes "20p per night", German "20 K pro Nacht".
         string priceText = item.PerUnit is not null
             ? TextTemplate.Format(
                 grammar.PricePerUnit,

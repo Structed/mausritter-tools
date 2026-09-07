@@ -1,4 +1,6 @@
+using System.Globalization;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using MausritterTools.Core.Data;
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Model;
@@ -346,6 +348,103 @@ public class TranslationTests
         }
     }
 
+    /// <summary>
+    /// Every price a generated shop quotes is written in that language's own currency.
+    /// </summary>
+    [Theory]
+    [MemberData(nameof(TranslatedLocales))]
+    public void PricesAreQuotedInTheLocalCurrency(string code)
+    {
+        GameData data = TestData.In(Locale.FromCode(code));
+        SettlementGenerator generator = new(data);
+
+        string abbreviation = data.Gear.Currency.Abbreviation;
+        Assert.False(string.IsNullOrWhiteSpace(abbreviation), "The currency has no abbreviation.");
+
+        int priced = 0;
+
+        for (uint seed = 1; seed <= 40; seed++)
+        {
+            Settlement settlement = generator.Generate(
+                new GenerationOptions { Seed = seed, Size = 6, NearHumanTown = true });
+
+            foreach (StockEntry entry in settlement.Shops.SelectMany(s => s.Stock))
+            {
+                if (entry.Pips is not { } pips)
+                {
+                    continue;
+                }
+
+                string opening = TextTemplate.Format(
+                    data.Text.Grammar.PricePlain,
+                    ("amount", pips.ToString(CultureInfo.InvariantCulture)),
+                    ("pip", abbreviation));
+
+                Assert.StartsWith(opening, entry.PriceText, StringComparison.Ordinal);
+                priced++;
+            }
+        }
+
+        Assert.True(priced > 0, "No priced stock was generated, so nothing was actually checked.");
+    }
+
+    /// <summary>
+    /// A language's inline prices agree with the abbreviation it declares.
+    /// </summary>
+    /// <remarks>
+    /// The abbreviation is a single character, which <see cref="NeedsTranslating"/> deliberately
+    /// waves through: a lone symbol usually does read the same in every language. Currency is the
+    /// exception — a pip is a Kern in German, abbreviated "K". No test can know that much
+    /// vocabulary, but it can catch the drift that follows: prices are prose here as much as they
+    /// are data, quoted mid-sentence in SRD citations, shop blurbs and rules of thumb, so changing
+    /// <c>currency.abbreviation</c> and missing those leaves a language contradicting itself with
+    /// nothing breaking.
+    /// </remarks>
+    [Theory]
+    [MemberData(nameof(TranslatedLocales))]
+    public void InlinePricesUseTheAbbreviationTheLanguageDeclares(string code)
+    {
+        Locale locale = Locale.FromCode(code);
+        GameData data = TestData.In(locale);
+
+        string canonical = TestData.Game.Gear.Currency.Abbreviation;
+        string translated = data.Gear.Currency.Abbreviation;
+
+        // An amount followed by the canonical abbreviation as a word of its own: "100 P", "20p".
+        // A language that keeps that abbreviation is not in breach, hence the exemption below.
+        Regex quoted = new(
+            $@"\d\s*(?<abbreviation>{Regex.Escape(canonical)})\b",
+            RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+        List<string> leftovers = [];
+
+        foreach (string path in DataFiles)
+        {
+            JsonNode overlay = Read(Path.Combine(
+                TestData.DataRoot, Native(locale.OverlayRoot), Native(path)));
+
+            VisitStrings(overlay, $"{path}:$", (where, text) =>
+            {
+                foreach (Match match in quoted.Matches(text))
+                {
+                    if (!string.Equals(
+                            match.Groups["abbreviation"].Value, translated, StringComparison.Ordinal))
+                    {
+                        leftovers.Add($"{where} (\"{Shorten(text)}\")");
+                        break;
+                    }
+                }
+            });
+        }
+
+        Assert.True(
+            leftovers.Count == 0,
+            $"{locale.EnglishName} abbreviates the currency '{translated}' but still quotes " +
+            $"{leftovers.Count} amount(s) the old way:" +
+            Environment.NewLine +
+            string.Join(Environment.NewLine, leftovers));
+    }
+
     private static readonly string[] DataFiles =
     [
         GameData.UiTextPath,
@@ -360,6 +459,33 @@ public class TranslationTests
     ];
 
     private static string Native(string path) => path.Replace('/', Path.DirectorySeparatorChar);
+
+    /// <summary>Hands every string in a tree to <paramref name="visit"/>, with where it was found.</summary>
+    private static void VisitStrings(JsonNode? node, string path, Action<string, string> visit)
+    {
+        switch (node)
+        {
+            case JsonObject o:
+                foreach (KeyValuePair<string, JsonNode?> property in o)
+                {
+                    VisitStrings(property.Value, $"{path}.{property.Key}", visit);
+                }
+
+                break;
+
+            case JsonArray a:
+                for (int i = 0; i < a.Count; i++)
+                {
+                    VisitStrings(a[i], $"{path}[{i}]", visit);
+                }
+
+                break;
+
+            case JsonValue v when v.TryGetValue(out string? text):
+                visit(path, text);
+                break;
+        }
+    }
 
     /// <summary>Strips array positions, so one rule can describe every row of a table.</summary>
     private static string Shape(string path)

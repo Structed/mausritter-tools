@@ -5,6 +5,6 @@
     "warning": "Übersetzung von Hand. 'name' bleibt unübersetzt: er verbindet diese Tabelle über den Namen mit der Ausrüstungskategorie 'hired-help'. Angezeigt werden die Namen aus gear.json."
   },
 
-  "recruiting": "Verbringe einen Tag mit Herumfragen. Bestehe einen WIL-Rettungswurf oder zahle 20 P. Bei Erfolg würfle die Anzahl für diese Art von Mietling.",
+  "recruiting": "Verbringe einen Tag mit Herumfragen. Bestehe einen WIL-Rettungswurf oder zahle 20 K. Bei Erfolg würfle die Anzahl für diese Art von Mietling.",
   "note": "Das SRD sagt, dass die Siedlungsgröße bestimmt, welche Mietlinge verfügbar sind, nennt aber nie die Zuordnung. Die hier verwendete Staffelung ist eine Hausregel."
 }

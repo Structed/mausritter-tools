@@ -1,3 +1,4 @@
+using System.Globalization;
 using MausritterTools.Core.Data;
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Model;
@@ -269,8 +270,16 @@ public class SettlementGeneratorTests
                         Assert.True(entry.Pips >= 1, "Adjusted prices must stay at least 1 pip.");
 
                         // Prices may carry a rate suffix, e.g. "5p per hex" for transport hire or
-                        // "1p per night" for a bunkhouse bed.
-                        Assert.StartsWith($"{entry.Pips}p", entry.PriceText, StringComparison.Ordinal);
+                        // "1p per night" for a bunkhouse bed. The expected opening is composed from
+                        // the data's own plain-price pattern rather than a hardcoded "p", so the
+                        // rule being checked is "a price opens with its amount and the currency",
+                        // not "the currency is English".
+                        string opening = TextTemplate.Format(
+                            TestData.Grammar.PricePlain,
+                            ("amount", entry.Pips!.Value.ToString(CultureInfo.InvariantCulture)),
+                            ("pip", TestData.Game.Gear.Currency.Abbreviation));
+
+                        Assert.StartsWith(opening, entry.PriceText, StringComparison.Ordinal);
                     }
                     else
                     {

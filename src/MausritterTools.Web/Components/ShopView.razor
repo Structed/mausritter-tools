@@ -100,12 +100,12 @@
     [Parameter, EditorRequired]
     public Shop Shop { get; set; } = new();
 
-    /// <summary>The pip abbreviation, so a purse reads "340p" in any language.</summary>
+    /// <summary>The pip abbreviation, so a purse reads "340p" or "340 K" in its own language.</summary>
     [Parameter]
     public string PipAbbreviation { get; set; } = "p";
 
     /// <summary>
-    /// The language the purse is formatted for: "1,000p" in English, "1.000 P" in German.
+    /// The language the purse is formatted for: "1,000p" in English, "1.000 K" in German.
     /// </summary>
     /// <remarks>
     /// Passed in and applied explicitly rather than read from the ambient culture, which this app
@@ -114,10 +114,21 @@
     [Parameter]
     public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
 
+    /// <summary>What the keeper has on paw, written the way that language writes a price.</summary>
+    /// <remarks>
+    /// Composed from the same pattern the shelves use rather than glued together, so a purse and a
+    /// price tag agree on spacing: English closes it up as "1,000p", German separates it as
+    /// "1.000 K".
+    /// </remarks>
+    private string Purse => TextTemplate.Format(
+        Text.Grammar.PricePlain,
+        ("amount", Shop.Keeper.Purse.ToString("N0", Culture)),
+        ("pip", PipAbbreviation));
+
     private string KeeperMeta => TextTemplate.Format(
         Text.Shop.KeeperMeta,
         ("position", Shop.Keeper.Position.Name),
-        ("purse", Shop.Keeper.Purse.ToString("N0", Culture) + PipAbbreviation),
+        ("purse", Purse),
         ("birthsign", Shop.Keeper.Birthsign.Name),
         ("disposition", Shop.Keeper.Disposition));
 
