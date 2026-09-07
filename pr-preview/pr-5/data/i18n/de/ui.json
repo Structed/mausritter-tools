@@ -1,0 +1,238 @@
+{
+  "locale": "de",
+
+  "app": {
+    "title": "Mausritter-Werkzeuge",
+    "description": "Browser-Werkzeuge für das Tischrollenspiel Mausritter.",
+    "pageTitlePattern": "{page} — Mausritter-Werkzeuge"
+  },
+
+  "nav": {
+    "brand": "Mausritter-Werkzeuge",
+    "menuTitle": "Navigationsmenü",
+    "home": "Start",
+    "settlement": "Siedlungsgenerator",
+    "about": "Über",
+    "languageLabel": "Sprache"
+  },
+
+  "home": {
+    "heading": "Mausritter-Werkzeuge",
+    "leadHtml": "Eine Sammlung von Browser-Werkzeugen zum Leiten und Spielen von <a href=\"https://mausritter.com/\" target=\"_blank\" rel=\"noopener\">Mausritter</a>.",
+    "noServerHtml": "Alles läuft vollständig in deinem Browser — es gibt keinen Server, und nichts wird hochgeladen.",
+    "toolsHeading": "Werkzeuge",
+    "settlementItemHtml": "<a href=\"settlement\"><strong>Siedlungsgenerator</strong></a> — würfelt eine ganze Mäusesiedlung aus: wer sie regiert, womit sie handelt, was gerade geschieht, wenn die Spielenden eintreffen, dazu jeden Laden mit Inhaberin, Eigenheiten und Preisen. Sperre, was dir gefällt, würfle den Rest neu, und teile das Ergebnis als Link oder drucke es aus.",
+    "aboutLinkText": "Wie das funktioniert, und was offiziell ist"
+  },
+
+  "about": {
+    "heading": "Über",
+    "leadHtml": "Mausritter-Werkzeuge ist eine kleine Sammlung von Browser-Helfern für <a href=\"https://mausritter.com/\" target=\"_blank\" rel=\"noopener\">Mausritter</a>, das Tischrollenspiel über tapfere Mäuse von Isaac Williams.",
+
+    "howItWorks": {
+      "heading": "Wie es funktioniert",
+      "paragraphsHtml": [
+        "Die ganze Anwendung ist eine statische Seite, die in deinem Browser läuft. Es gibt keinen Server, kein Konto und keine Statistik, und nichts, was du erzeugst, wird irgendwohin übertragen. Eine Siedlung entsteht allein aus ihrem Startwert, deshalb baut derselbe Link immer wieder dieselbe Siedlung auf.",
+        "Ein gesperrter Wert bleibt stehen, während alles andere neu gewürfelt wird. Ein selbst geschriebener Wert wird ebenfalls gesperrt. Weil Sperren und eigene Texte einen Link unhandlich machen würden, trägt die Adresszeile nur den Startwert und die Einstellungen; der vollständige Zustand reist im JSON-Export und bleibt zwischen zwei Besuchen im lokalen Speicher deines Browsers."
+      ]
+    },
+
+    "official": {
+      "heading": "Was offiziell ist und was nicht",
+      "paragraphsHtml": [
+        "Die Siedlungstabellen, die Tavernentabelle, die Tabellen für Nichtspielermäuse, die Ausrüstungspreise, die Mietlinge und die Zauber stammen alle aus dem Mausritter-SRD, das unter CC BY 4.0 veröffentlicht ist. Sie werden direkt aus der Quelle eingelesen statt abgetippt, sodass der Wortlaut der des Autors bleibt.",
+        "<strong>Mausritter hat keine Tabelle für Läden oder Dienstleistungen.</strong> Das SRD sagt nur, dass es ab dem Weiler eine Taverne gibt, dass Kriegsbanden in einer Stadt angeworben werden, dass von Menschen gefertigte Waren in der Nähe menschlicher Siedlungen zu finden sind, dass eine Bank 1 % für die Herausgabe des Verwahrten verlangt, dass Reparaturen 10 % des Gegenstandswertes je Nutzungspunkt kosten, und dass „die Größe der Siedlung bestimmt, welche Arten von Mietlingen verfügbar sind“ — ohne je zu sagen, wie. Alles Weitere über Läden in diesem Werkzeug — welche Dienste es gibt, wie die Größe sie freischaltet, ihr Warenbestand, ihre Eigenheiten und ihre Namen — ist <strong>eine inoffizielle Hausregel dieses Projekts</strong>. Jeder Laden nennt die SRD-Regel, aus der er hergeleitet wurde, damit sichtbar bleibt, wo die Grenze verläuft.",
+        "Auch die Mäusenamen sind eigene Erfindung. Das SRD enthält keine Namenstabellen, und die Listen des offiziellen Generators stehen unter keiner Lizenz, die eine Weiterverwendung erlaubt."
+      ]
+    },
+
+    "translation": {
+      "heading": "Über die deutsche Fassung",
+      "paragraphsHtml": [
+        "Die deutsche Fassung dieses Werkzeugs ist <strong>eine inoffizielle Fanübersetzung der mausritter-tools-Mitwirkenden</strong>. Sie ist nicht die offizielle deutsche Ausgabe von Mausritter, sie ist nicht von Losing Games autorisiert, und es wurde keine offizielle deutsche Übersetzung als Vorlage verwendet. CC BY 4.0 erlaubt eine Übersetzung, solange die Änderung angegeben wird — genau das tut dieser Hinweis.",
+        "Eine Siedlung ändert sich nicht, wenn du die Sprache wechselst. Jede Tabelle ist Zeile für Zeile übersetzt, deshalb erzeugt derselbe Startwert in beiden Sprachen denselben Ort, und ein Link, den eine deutsche und eine englische Spielerin teilen, zeigt dieselbe Siedlung — nur die Wörter unterscheiden sich."
+      ]
+    },
+
+    "dataSources": {
+      "heading": "Datenquellen",
+      "contentColumn": "Inhalt",
+      "sourceColumn": "Quelle",
+      "licenceColumn": "Lizenz",
+      "originalSource": "Eigenes Werk dieses Projekts",
+      "originalLicence": "Eigenes Werk"
+    },
+
+    "source": {
+      "heading": "Quellcode",
+      "paragraphsHtml": [
+        "Der Code, die eingelesenen Tabellen und das Importskript liegen auf <a href=\"https://github.com/Structed/mausritter-tools\" target=\"_blank\" rel=\"noopener\">GitHub</a>."
+      ]
+    },
+
+    "support": {
+      "heading": "Mausritter unterstützen",
+      "paragraphsHtml": [
+        "Dieses Werkzeug ersetzt das Spiel nicht. Mausritter ist als digitale Ausgabe zahle-was-du-willst und lohnt sich: <a href=\"https://mausritter.com/\" target=\"_blank\" rel=\"noopener\">mausritter.com</a>."
+      ]
+    }
+  },
+
+  "notFound": {
+    "heading": "Nicht gefunden",
+    "message": "Diese Seite gibt es leider nicht.",
+    "backLink": "Zurück zu den Werkzeugen"
+  },
+
+  "settlement": {
+    "pageTitle": "Siedlungsgenerator",
+    "heading": "Siedlungsgenerator",
+    "leadHtml": "Würfelt eine ganze Mäusesiedlung aus: wer sie führt, womit sie handelt, was heute geschieht, und jeden Laden mit Inhaberin und Warenbestand. Sperre, was dir gefällt, würfle den Rest neu.",
+    "loadErrorHeading": "Die Mausritter-Tabellen konnten nicht geladen werden.",
+    "loading": "Die Mausritter-Tabellen werden geladen …",
+
+    "controls": {
+      "seedLabel": "Startwert",
+      "sizeLabel": "Größe",
+      "sizeRollOption": "Auswürfeln (2W6, den niedrigeren nehmen)",
+      "terrainLabel": "Gelände",
+      "terrainAnyOption": "Überall",
+      "terrainOptions": ["Feld und Flur", "Wald", "Fluss", "Menschensiedlung"],
+      "nearHumanLabel": "Nahe einer Menschensiedlung",
+      "nearHumanTitle": "Das SRD knüpft von Menschen gefertigte Waren an die Lage, nicht an die Größe",
+      "rollNew": "Neue Siedlung auswürfeln",
+      "rerollUnlocked": "Ungesperrtes neu würfeln",
+      "copyLink": "Link kopieren",
+      "exportJson": "JSON exportieren",
+      "importJson": "JSON importieren",
+      "print": "Drucken"
+    },
+
+    "sections": {
+      "seedTag": "Startwert {seed}",
+      "settlement": "Die Siedlung",
+      "tavern": "Taverne",
+      "shops": "Läden und Dienste",
+      "houseRuleTag": "Hausregel",
+      "houseRuleTitle": "Mausritter hat keine Tabelle für Dienstleistungen in Siedlungen",
+      "noShops": "Hier gibt es nichts zu kaufen. Eine so kleine Siedlung handelt mit Gefälligkeiten und Schuldscheinen, nicht mit Ladentheken.",
+      "itemCards": "Gegenstandskarten",
+      "itemCardsNote": "Alles Verkäufliche als Karten zum Ausschneiden. Die Punkte sind Nutzungspunkte; breite Karten belegen zwei Plätze im Gepäck.",
+      "officialNoticeHeading": "Was offiziell ist und was nicht.",
+      "officialNoticeHtml": "Die Tabellen für Siedlung, Taverne und Nichtspielermäuse stammen aus dem Mausritter-SRD. Mausritter hat keine Tabelle für Läden oder Dienstleistungen, deshalb ist diese ganze Ebene — welche Dienste es gibt, wie die Siedlungsgröße sie freischaltet, und die Mäusenamen — eine Erfindung dieses Werkzeugs. Jeder Laden nennt unter „Woher das kommt“ die SRD-Regel, aus der er hergeleitet wurde."
+    },
+
+    "labels": {
+      "name": "Name",
+      "size": "Größe",
+      "built": "Gebaut",
+      "governance": "Führung",
+      "inhabitants": "Bewohner",
+      "feature": "Besonderheit",
+      "features": "Besonderheiten",
+      "industry": "Gewerbe",
+      "industries": "Gewerbe",
+      "rightNow": "Gerade jetzt",
+      "sign": "Schild",
+      "specialty": "Spezialität",
+      "landlord": "Wirt",
+      "builtValue": "{host} — {description}",
+      "governanceValue": "{governance} (W6 + Größe = {roll})",
+      "keeperValue": "{name} — {appearance}. {quirk}. Will: {wants}."
+    },
+
+    "map": {
+      "heading": "Die Karte",
+      "redrawTitle": "Karte neu zeichnen",
+      "downloadTitle": "Karte als SVG herunterladen",
+      "caption": "{host}. Die nummerierten Gebäude sind unten aufgeschlüsselt.",
+      "ariaLabel": "Karte der Siedlung, {host}"
+    },
+
+    "status": {
+      "mapRedrawn": "Karte neu gezeichnet. Die Siedlung selbst ist unverändert.",
+      "mapDownloaded": "Karte heruntergeladen.",
+      "rolledNewKeepingLocks": "Neue Siedlung ausgewürfelt, deine gesperrten Einträge bleiben erhalten.",
+      "rerolledExceptOne": "Alles neu gewürfelt außer 1 gesperrtem Eintrag.",
+      "rerolledExceptMany": "Alles neu gewürfelt außer {count} gesperrten Einträgen.",
+      "invalidSeed": "„{seed}“ ist kein gültiger Startwert.",
+      "unlocked": "Entsperrt.",
+      "locked": "Gesperrt. Neue Würfe lassen das jetzt in Ruhe.",
+      "edited": "Geändert und gesperrt, ein neuer Wurf überschreibt das nicht.",
+      "linkCopied": "Link kopiert.",
+      "clipboardFailed": "Die Zwischenablage war nicht erreichbar. Kopiere stattdessen die Adresszeile.",
+      "exported": "Exportiert.",
+      "imported": "{file} importiert.",
+      "importFailed": "Diese Datei konnte nicht importiert werden. {message}",
+      "readFailed": "Diese Datei konnte nicht gelesen werden. {message}",
+      "languageChanged": "Auf {language} umgestellt. Derselbe Startwert, dieselbe Siedlung."
+    }
+  },
+
+  "fieldRow": {
+    "lockTitle": "Sperren, damit neue Würfe das in Ruhe lassen",
+    "unlockTitle": "Entsperren, damit es wieder neu gewürfelt wird",
+    "editTitle": "Von Hand ändern",
+    "rerollTitle": "Nur das hier neu würfeln"
+  },
+
+  "shop": {
+    "mapKeyTitle": "Kartennummer {index}",
+    "quirk": "Eigenheit",
+    "terms": "Konditionen",
+    "repairs": "Reparaturen",
+    "repairsText": "Tilgt einen Nutzungspunkt für 10 % des ursprünglichen Preises.",
+    "spells": "Zauber",
+    "spellsText": "Kauft einen voll aufgeladenen Zauber für W6 × 100 P. Ein erschöpfter ist die Hälfte wert.",
+    "keeperMeta": "{position} · {purse} in der Pfote · geboren im Zeichen {birthsign} ({disposition})",
+    "wants": "Will: {wants}.",
+    "inStock": "Vorrätig",
+    "quantity": "Anz.",
+    "price": "Preis",
+    "lookingForWork": "Sucht Arbeit",
+    "number": "Anz.",
+    "perDay": "Pro Tag",
+    "priceAbove": "Die Preise liegen hier {percent} % über dem Listenpreis.",
+    "priceBelow": "Die Preise liegen hier {percent} % unter dem Listenpreis.",
+    "whereThisComesFrom": "Woher das kommt"
+  },
+
+  "itemCard": {
+    "usageDotsTitle": "{count} Nutzungspunkte"
+  },
+
+  "licence": {
+    "basedOnHtml": "Dieses Werk basiert auf <a href=\"https://mausritter.com\" target=\"_blank\" rel=\"noopener\">Mausritter</a>, einem Produkt von Losing Games und Isaac Williams, und ist lizenziert unter der <a href=\"https://creativecommons.org/licenses/by/4.0/\" target=\"_blank\" rel=\"noopener\">Creative Commons Namensnennung 4.0 International (CC BY 4.0)</a>-Lizenz.",
+    "independentHtml": "Mausritter-Werkzeuge ist eine unabhängige Produktion der mausritter-tools-Mitwirkenden und steht in keiner Verbindung zu Losing Games. Es erscheint unter der Mausritter Third Party Licence.",
+    "copyrightHtml": "Mausritter ist urheberrechtlich geschützt durch Losing Games.",
+    "houseRuleNote": "Läden, Dienste und Mäusenamen sind inoffizielle Hausregeln dieses Werkzeugs. Mausritter selbst hat keine Tabelle für Dienstleistungen in Siedlungen.",
+    "translationNote": "Die deutsche Fassung ist eine inoffizielle Fanübersetzung der mausritter-tools-Mitwirkenden und nicht die offizielle deutsche Ausgabe von Mausritter."
+  },
+
+  "error": {
+    "unhandled": "Es ist ein unbehandelter Fehler aufgetreten.",
+    "reload": "Neu laden"
+  },
+
+  "grammar": {
+    "summaryWithPopulation": "{article} {size} ({population}), {host}.",
+    "summaryWithoutPopulation": "{article} {size}, {host}.",
+    "sizeWithPopulation": "{name} ({population})",
+    "relationshipSummary": "{other}: {kind}",
+    "lowercaseInlineNouns": false,
+    "tavernLegendDetail": "Taverne — {meal}",
+    "shopLegendDetail": "{service} — {keeper}",
+    "tavernNamePattern": "{article} {adjective} {noun}",
+    "defaultTavernName": "Zur Taverne",
+    "unnamedSettlement": "Namenlos",
+    "defaultGivenName": "Maus",
+    "defaultFamilyName": "Ohne-Namen",
+    "pricePlain": "{amount} {pip}",
+    "pricePerUnit": "{amount} {pip} pro {unit}",
+    "pricePerHex": "{amount} {pip} pro Hexfeld",
+    "articles": {
+      "indefiniteNominative": { "m": "Ein", "f": "Eine", "n": "Ein" },
+      "dativeDefinite": { "m": "Zum", "f": "Zur", "n": "Zum" }
+    }
+  }
+}

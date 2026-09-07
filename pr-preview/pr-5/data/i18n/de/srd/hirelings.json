@@ -1,0 +1,10 @@
+{
+  "_source": {
+    "describes": "Mietlinge",
+    "attribution": "Dieses Werk basiert auf Mausritter (https://mausritter.com), einem Produkt von Losing Games und Isaac Williams, und ist lizenziert unter der Creative Commons Namensnennung 4.0 International (CC BY 4.0). Der englische Originaltext wurde von den mausritter-tools-Mitwirkenden ins Deutsche übersetzt; dies ist keine offizielle deutsche Ausgabe.",
+    "warning": "Übersetzung von Hand. 'name' bleibt unübersetzt: er verbindet diese Tabelle über den Namen mit der Ausrüstungskategorie 'hired-help'. Angezeigt werden die Namen aus gear.json."
+  },
+
+  "recruiting": "Verbringe einen Tag mit Herumfragen. Bestehe einen WIL-Rettungswurf oder zahle 20 P. Bei Erfolg würfle die Anzahl für diese Art von Mietling.",
+  "note": "Das SRD sagt, dass die Siedlungsgröße bestimmt, welche Mietlinge verfügbar sind, nennt aber nie die Zuordnung. Die hier verwendete Staffelung ist eine Hausregel."
+}

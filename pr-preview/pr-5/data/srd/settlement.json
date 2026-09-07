@@ -1,0 +1,298 @@
+{
+  "_source": {
+    "describes": "Mouse settlement tables",
+    "work": "Mausritter System Reference Document",
+    "version": "2.3.1",
+    "url": "https://mausritter.com/srd/",
+    "sourceFiles": [
+      "22-hexcrawl-toolbox.md"
+    ],
+    "licence": "CC BY 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "This work is based on Mausritter (https://mausritter.com), a product of Losing Games and Isaac Williams, and is licensed for use under the Creative Commons Attribution 4.0 International (CC BY 4.0) licence.",
+    "generatedBy": "tools/Import-SrdTables.ps1",
+    "warning": "Generated file. Do not edit by hand; re-run the importer instead."
+  },
+  "sizeRoll": "2d6, use the lowest value",
+  "sizes": [
+    {
+      "roll": 1,
+      "sizeValue": 1,
+      "name": "Farm/manor",
+      "population": "1-3 families",
+      "hasTavern": false,
+      "featureCount": 1,
+      "industryCount": 1
+    },
+    {
+      "roll": 2,
+      "sizeValue": 2,
+      "name": "Crossroads",
+      "population": "3-5 families",
+      "hasTavern": false,
+      "featureCount": 1,
+      "industryCount": 1
+    },
+    {
+      "roll": 3,
+      "sizeValue": 3,
+      "name": "Hamlet",
+      "population": "50-150 mice",
+      "hasTavern": true,
+      "featureCount": 1,
+      "industryCount": 1
+    },
+    {
+      "roll": 4,
+      "sizeValue": 4,
+      "name": "Village",
+      "population": "150-300 mice",
+      "hasTavern": true,
+      "featureCount": 1,
+      "industryCount": 1
+    },
+    {
+      "roll": 5,
+      "sizeValue": 5,
+      "name": "Town",
+      "population": "300-1000 mice",
+      "hasTavern": true,
+      "featureCount": 1,
+      "industryCount": 2
+    },
+    {
+      "roll": 6,
+      "sizeValue": 6,
+      "name": "City",
+      "population": "1000+ mice",
+      "hasTavern": true,
+      "featureCount": 2,
+      "industryCount": 2
+    }
+  ],
+  "governanceRoll": "d6 + settlement size",
+  "governance": [
+    {
+      "rollMin": 2,
+      "rollMax": 3,
+      "text": "Guided by village elders"
+    },
+    {
+      "rollMin": 4,
+      "rollMax": 5,
+      "text": "Administered by a knight or lower-caste lord"
+    },
+    {
+      "rollMin": 6,
+      "rollMax": 7,
+      "text": "Organised by a guild committee"
+    },
+    {
+      "rollMin": 8,
+      "rollMax": 9,
+      "text": "Free settlement, governed by council of burghermice"
+    },
+    {
+      "rollMin": 10,
+      "rollMax": 11,
+      "text": "House of an upper caste noblemouse"
+    },
+    {
+      "rollMin": 12,
+      "rollMax": 12,
+      "text": "Seat of baronial power"
+    }
+  ],
+  "inhabitants": [
+    "Shave elaborate patterns in their fur",
+    "Intoxicated by strange plants",
+    "Wary of doing business with outsiders",
+    "Curious for news from afar",
+    "Believe grooming their fur is bad luck",
+    "Wear finely embroidered clothes",
+    "Brew honey-mead, flavoured with pungent herbs",
+    "Cover their faces with long hoods",
+    "Impoverished by a cat lord’s tithes",
+    "Ceremonially crop their tails",
+    "Brave hunters of large beasts",
+    "All descended from single matriarch",
+    "Bake delicious berry pies",
+    "Lab escapees, naive about the world",
+    "Spend their days lazing by a stream",
+    "Long-standing blood feud with another settlement",
+    "Dig grand tunnels, overseen by the guild",
+    "Wear large, wide-brimmed hats",
+    "Have laws and customs confusing to outsiders",
+    "On friendly terms with a predator"
+  ],
+  "notableFeatures": [
+    "Maze of defensive, trap-filled tunnels",
+    "Exceedingly comfortable, well-appointed inn",
+    "Shrine carved of black wood",
+    "Meditative mushroom garden",
+    "Cow skull, repurposed as a guildhouse",
+    "Mess of closely packed shanties",
+    "Neat rows of hanging wooden houses",
+    "Ornate gate, guarded by statues",
+    "Secret bat cult temple",
+    "Beetle racing rink",
+    "Storehouse, stocked with preserves",
+    "Hidden riverboat dock",
+    "Crumbling marble palace, built by ancient mice",
+    "Scavenged human machine, working",
+    "Wooden bridge connects the settlement",
+    "Unnervingly tall, twisting tower",
+    "Beautiful flower garden",
+    "Pigeon rider’s roost",
+    "Overgrown statue of an ancient hero",
+    "Spiral stairwell, leading deep underground"
+  ],
+  "industries": [
+    "Farmers, tending to towering crops",
+    "Woodcutters, with saws and harnesses",
+    "Rough and scarred fishermice, with nets and rafts",
+    "Dark and musty mushroom farm",
+    "Grains drying on every flat surface",
+    "Pungent cheese, cured for years",
+    "Gardens of rare herbs. Drying racks are guarded",
+    "Hive of bees and their veiled keepers",
+    "Merchants and traders, often in need of guards",
+    "Stonemasons, working a nearby quarry",
+    "Flour mill, driven by a large water-wheel",
+    "Deep mine for iron, silver or tin",
+    "Keep silkworms and weave fine cloth",
+    "Expert explorers of caves and tunnels",
+    "Kiln-fired pottery, glazed in cheerful colours",
+    "Wool mill, draped in bright cloth",
+    "Excellent school, rowdy pupils",
+    "Bustling, well-stocked market",
+    "Smelly scavenged trash pile, carefully picked over",
+    "Beautiful furniture of carved and polished wood"
+  ],
+  "events": [
+    "Disaster, everyone packing to leave",
+    "Wedding, streets decked in flowers",
+    "Preparing for grand seasonal feast",
+    "An illness has struck",
+    "Storehouse has been plundered by insects",
+    "Market day, farmers flock to the settlement",
+    "Mice are at each other’s throats",
+    "Warband forming to defeat a beast",
+    "Several children have gone missing",
+    "Noblemouse makes a frivolous demand",
+    "Traveling theatre troupe arrives",
+    "Funeral, streets thick with smoke",
+    "Conman whips up an irrational scheme",
+    "Pet beetle gone mad, attacking mice",
+    "Faerie emissary with an impossible request",
+    "Strangely quick-growing plant nearby",
+    "Valuable heirloom has a been stolen",
+    "Cat lord demands a heavy tithe",
+    "Coming of age ceremony for the young mice",
+    "Wizard tower arrives on tortoise-back"
+  ],
+  "nameSeeds": {
+    "note": "Roll d12 twice. Choose a start and an end. Massage until it sounds nice.",
+    "startA": [
+      "Oaks",
+      "Berry",
+      "Willow",
+      "Stump",
+      "Pine",
+      "Moon",
+      "Green",
+      "Black",
+      "Stone",
+      "Hill",
+      "Fig",
+      "Apple"
+    ],
+    "startB": [
+      "Swamp",
+      "Owl",
+      "Fox",
+      "Acorn",
+      "Copper",
+      "Robber",
+      "Colby",
+      "Drain",
+      "Rose",
+      "Copper",
+      "Friend",
+      "Trunk"
+    ],
+    "endA": [
+      "thorpe",
+      "ville",
+      "mill",
+      "dale",
+      "grove",
+      "town",
+      "vale",
+      "seed",
+      "ashe",
+      "bush",
+      "stitch",
+      "shine"
+    ],
+    "endB": [
+      "stand",
+      "hill",
+      "tower",
+      "farm",
+      "bridge",
+      "gate",
+      "creek",
+      "pond",
+      "nest",
+      "ford",
+      "grave",
+      "burn"
+    ]
+  },
+  "taverns": {
+    "note": "Hamlets and larger settlements will furnish a friendly tavern or inn.",
+    "nameA": [
+      "White",
+      "Green",
+      "Black",
+      "Red",
+      "Silver",
+      "Crooked",
+      "Friendly",
+      "Hidden",
+      "Wiley",
+      "Glass",
+      "Thorny",
+      "Broken"
+    ],
+    "nameB": [
+      "Beetle",
+      "Fox",
+      "Wedge",
+      "Kernel",
+      "Rat",
+      "Cheese",
+      "Eagle",
+      "Worm",
+      "Bee",
+      "Lantern",
+      "Rose",
+      "Knight"
+    ],
+    "specialtyMeals": [
+      "Spiced baked carrot",
+      "Boiled worm broth",
+      "Blackberry pie",
+      "Pungent aged cheese",
+      "Barley porridge",
+      "Thick river-fish steak",
+      "Baked apple",
+      "Fried, crumbed insect legs",
+      "Fresh buttered bread",
+      "Scavenged candy",
+      "Honey-roasted seeds",
+      "Mushroom stew"
+    ]
+  }
+}

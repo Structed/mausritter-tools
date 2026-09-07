@@ -1,0 +1,167 @@
+{
+  "_source": {
+    "describes": "Dienste und Läden in Siedlungen",
+    "status": "Hausregel. Eigener Inhalt, nicht aus Mausritter.",
+    "rationale": "Mausritter hat weder eine Tabelle für Läden und Dienste noch eine Aufstellung, was in welcher Siedlungsgröße verfügbar ist. Das SRD gibt nur verstreute Anhaltspunkte, die im Feld 'srdBasis' jedes Eintrags zitiert werden. Alles darüber hinaus ist eine Erfindung dieses Projekts und kein offizieller Mausritter-Inhalt.",
+    "licence": "Eigenes Werk der mausritter-tools-Mitwirkenden, veröffentlicht mit dem Repository.",
+    "warning": "Übersetzung von Hand. 'stock' wird nie übersetzt: Kategorien und Gegenstandsnamen darin sind Schlüssel, die auf gear.json verweisen."
+  },
+
+  "priceVarianceNote": "Jeder Laden verschiebt seine Preise um bis zu diesen Wert in beide Richtungen, sodass derselbe Gegenstand in einer Siedlung etwas mehr kostet als in der nächsten. Mäuse handeln ohnehin meist mit Tauschware und Schuldscheinen.",
+
+  "shopCountBySize": [
+    { "name": "Gehöft" },
+    { "name": "Wegkreuzung" },
+    { "name": "Weiler" },
+    { "name": "Dorf" },
+    { "name": "Stadt" },
+    { "name": "Großstadt" }
+  ],
+
+  "services": [
+    {
+      "name": "Gemischtwarenladen",
+      "keeperTitle": "Ladenbesitzer",
+      "signNouns": ["Krimskrams", "Karren", "Korb", "Scheffel", "Speisekammer", "Lagerhaus", "Vorratskammer"],
+      "signNounGenders": ["m", "m", "m", "m", "f", "n", "f"],
+      "srdBasis": "Von Mäusen gefertigtes Werkzeug ist „in den meisten Mäusesiedlungen erhältlich“.",
+      "blurb": "Seil, Schlafrollen, Eimer und Kreide, gestapelt bis unter das Dach."
+    },
+    {
+      "name": "Proviantmeister",
+      "keeperTitle": "Proviantmeister",
+      "signNouns": ["Tisch", "Schöpfkelle", "Laib", "Krume", "Platte", "Butterfass", "Bratblech"],
+      "signNounGenders": ["m", "f", "m", "f", "f", "n", "n"],
+      "srdBasis": "Das SRD nennt Preise für Mahlzeiten, Festmahle und Reisevorräte und setzt eine Woche Kost und Logis mit 20 P an.",
+      "blurb": "In Wachsblätter gewickelte Vorräte und ein Topf mit etwas Warmem."
+    },
+    {
+      "name": "Schmiede und Rüstmeisterei",
+      "keeperTitle": "Schmiedin",
+      "signNouns": ["Esse", "Amboss", "Hammer", "Nadel", "Löschtrog", "Blasebalg", "Glut"],
+      "signNounGenders": ["f", "m", "m", "f", "m", "m", "f"],
+      "srdBasis": "Der Mietling Waffen- und Grobschmied hat eine Anzahl von W2, und das SRD setzt Reparaturen mit 10 % des Gegenstandswertes je Nutzungspunkt an.",
+      "blurb": "Funken, geschärfte Nadeln und Nutzungspunkte, für 10 % je Punkt wieder herausgeschliffen."
+    },
+    {
+      "name": "Kerzenzieherei",
+      "keeperTitle": "Kerzenzieher",
+      "signNouns": ["Docht", "Kerze", "Laterne", "Flamme", "Talg", "Funke"],
+      "signNounGenders": ["m", "f", "f", "f", "m", "m"],
+      "srdBasis": "Das SRD führt Fackeln, Laternen, Öl, elektrische Laternen und Batterien als käufliche Lichtquellen.",
+      "blurb": "Fackeln im Bündel und eine Laterne, die schon bessere Tunnel gesehen hat."
+    },
+    {
+      "name": "Heuerhalle",
+      "keeperTitle": "Anwerberin",
+      "signNouns": ["Musterung", "Dienstliste", "Handschlag", "Bank", "Tor", "Hof"],
+      "signNounGenders": ["f", "f", "m", "f", "n", "m"],
+      "srdBasis": "„In einer Mäusesiedlung kannst du einen Tag damit verbringen, nach Mäusen zu fragen, die Arbeit suchen. Die Größe der Siedlung bestimmt, welche Arten von Mietlingen verfügbar sind.“ Das SRD nennt die Zuordnung nie; die hier verwendete Staffelung ist erfunden.",
+      "blurb": "Mäuse, die hoffnungsvoll herumstehen und darauf warten, gefragt zu werden. WIL-Rettungswurf oder 20 P zum Anwerben."
+    },
+    {
+      "name": "Sammlerstand",
+      "keeperTitle": "Sammlerin",
+      "signNouns": ["Bergung", "Beute", "Ausbeute", "Fund", "Schrott", "Glücksfund"],
+      "signNounGenders": ["f", "f", "f", "m", "m", "m"],
+      "srdBasis": "Von Menschen gefertigtes Werkzeug ist „in Mäusesiedlungen nahe menschlicher Siedlungen erhältlich“. Dies ist der einzige Dienst, der an die Lage statt an die Größe geknüpft ist.",
+      "blurb": "Was die Menschen liegen ließen, heimgeschleppt und optimistisch bepreist."
+    },
+    {
+      "name": "Tuchhandlung",
+      "keeperTitle": "Tuchhändlerin",
+      "signNouns": ["Fingerhut", "Ballen", "Spindel", "Stich", "Umhang", "Schere"],
+      "signNounGenders": ["m", "m", "f", "m", "m", "f"],
+      "srdBasis": "Das SRD nennt Preise für ärmliche, gewöhnliche und adelige Kleidung sowie für Winter- und Regenmäntel.",
+      "blurb": "Gewachste Mäntel für die Straße und ein Adelsgewand, das sich hier niemand leisten kann."
+    },
+    {
+      "name": "Bank und Schließfach",
+      "keeperTitle": "Bankier",
+      "signNouns": ["Geldkassette", "Gewölbe", "Riegel", "Truhe", "Schlüsselbund"],
+      "signNounGenders": ["f", "n", "m", "f", "m"],
+      "srdBasis": "„In einer Mäusesiedlung können Pips und Gegenstände in einer Bank oder einem Schließfach verwahrt werden. Deine Maus muss beim Abholen eine Gebühr von 1 % des Wertes zahlen.“",
+      "blurb": "Pips und Erbstücke sicher verwahrt. Das Abholen kostet 1 % des Wertes.",
+      "serviceTerms": "Die Verwahrung ist kostenlos. Das Abholen kostet 1 % des verwahrten Wertes."
+    },
+    {
+      "name": "Stall und Transport",
+      "keeperTitle": "Fuhrmann",
+      "signNouns": ["Geschirr", "Zügel", "Rad", "Sattel", "Halfter", "Strang"],
+      "signNounGenders": ["n", "m", "n", "m", "n", "m"],
+      "srdBasis": "Das SRD setzt Kaninchenkarren, Flussflöße und Taubenflüge je Maus und je Hexfeld an.",
+      "blurb": "Ein übellauniges Kaninchen, ein Floß und Preise, die je Hexfeld genannt werden."
+    },
+    {
+      "name": "Apotheke",
+      "keeperTitle": "Apothekerin",
+      "signNouns": ["Mörser", "Stößel", "Wickel", "Tinktur", "Zweiglein", "Heilkraut"],
+      "signNounGenders": ["m", "m", "m", "f", "n", "n"],
+      "srdBasis": "Hergeleitet aus dem Gewerbe-Eintrag „Gärten mit seltenen Kräutern. Die Trockengestelle werden bewacht“ sowie aus den Einträgen für Parfüm und Seife. Mausritter hat keine Apothekenregeln; der Warenbestand ist reine Würze.",
+      "blurb": "Bündel trocknender Kräuter und Ratschläge, um die niemand gebeten hat."
+    },
+    {
+      "name": "Skriptorium der Gelehrten",
+      "keeperTitle": "Gelehrte",
+      "signNouns": ["Feder", "Folio", "Hauptbuch", "Rand", "Tintenfass", "Kodex"],
+      "signNounGenders": ["f", "n", "n", "m", "n", "m"],
+      "srdBasis": "Der Mietling Gelehrter hat eine Anzahl von W2, und das SRD setzt ein leeres Buch mit 300 P und ein Lesebuch mit 600 P an.",
+      "blurb": "Bücher für 300 P leer und 600 P beschrieben, und eine Gelehrte, die sie dir vorliest."
+    },
+    {
+      "name": "Juwelier",
+      "keeperTitle": "Juwelierin",
+      "signNouns": ["Facette", "Fassung", "Glanz", "Schließe", "Filigran"],
+      "signNounGenders": ["f", "f", "m", "f", "n"],
+      "srdBasis": "Hergeleitet aus den Schatzwerten des SRD: Goldring 500 P, Anhänger mit Edelstein 400 P, geschliffener Diamant 1000 P, Perlenkette 1500 P.",
+      "blurb": "Kauft Schätze zu einem harten Preis und verkauft sie zu einem härteren zurück.",
+      "serviceTerms": "Kauft geborgene Schätze, üblicherweise für etwa die Hälfte ihres Listenwertes."
+    },
+    {
+      "name": "Raritätenhändler",
+      "keeperTitle": "Händler",
+      "signNouns": ["Kuriosum", "Wunder", "Reliquie", "Rarität", "Trödel"],
+      "signNounGenders": ["n", "n", "f", "f", "m"],
+      "srdBasis": "„Wird er nicht gebraucht, lässt sich ein voll aufgeladener Zauber in einer Siedlung meist für W6 × 100 P verkaufen. Der Wert eines erschöpften Zaubers halbiert sich.“ Man beachte: Das SRD regelt nur den Verkauf von Zaubern, nie den Ankauf — ein Händler, der Zauber verkauft, ist also vollständig Hausregel. Der Warenbestand beschränkt sich auf von Mäusen gefertigte Merkwürdigkeiten, weil von Menschen gefertigte Waren an die Nähe zu einer Menschensiedlung geknüpft sind.",
+      "blurb": "Kauft dir einen Zauber für W6 × 100 P ab. Einen zurückzukaufen ist eine andere Sache."
+    }
+  ],
+
+  "shopSignPatterns": [
+    { "template": "{article} {adjective} {noun}" },
+    { "template": "{family}s {noun}" },
+    { "template": "{noun} & {noun2}" },
+    { "template": "{article} {noun}" },
+    { "template": "{family} & Töchter" }
+  ],
+
+  "shopSignAdjectives": [
+    "Krummen", "Kupfernen", "Gebogenen", "Vergoldeten", "Bescheidenen", "Dornigen", "Fröhlichen", "Stillen",
+    "Stämmigen", "Geflickten", "Hellen", "Kleinen", "Großen", "Verborgenen", "Wandernden",
+    "Ehrlichen", "Sturen", "Pfeifenden", "Gesprenkelten", "Rostigen", "Gütigen", "Verwitterten",
+    "Glücklichen", "Schiefen", "Feuchten", "Gemütlichen", "Messingnen", "Welken", "Treuen", "Zugigen"
+  ],
+
+  "shopQuirks": [
+    "Feilscht aus Prinzip nicht",
+    "Feilscht erbittert und genießt es",
+    "Alles ist mit Mehl bestäubt",
+    "Hält neben der Tür einen Käfer an der Leine",
+    "Tauscht nur, nimmt niemals Pips",
+    "Die Preise werden stündlich angeschrieben und wieder weggewischt",
+    "Besteht darauf, dir die Geschichte jedes Stücks zu erzählen",
+    "Zutiefst misstrauisch gegenüber Fremden",
+    "Bietet vor jedem Geschäft erst einmal Tee an",
+    "Die halbe Ware ist bereits versprochen",
+    "Verkauft mit Verlust und kann nicht erklären, warum",
+    "Hält die gute Ware unter dem Tresen versteckt",
+    "Schuldet jemandem Furchteinflößendem Geld",
+    "Führt den Laden aus einer Hängematte heraus",
+    "Zählt die Pips dreimal, laut",
+    "Gewährt jedem Kredit, der eine traurige Geschichte hat",
+    "Blitzsauber, und riecht nach Bienenwachs",
+    "Schläft im Hinterzimmer und nimmt es übel, geweckt zu werden",
+    "Rabatt für alle, die das Schild aus Käferpanzer bewundern",
+    "Fest überzeugt, dass ein Rivale sie bestiehlt"
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "_source": {
+    "describes": "Ausrüstung und Preise",
+    "attribution": "Dieses Werk basiert auf Mausritter (https://mausritter.com), einem Produkt von Losing Games und Isaac Williams, und ist lizenziert unter der Creative Commons Namensnennung 4.0 International (CC BY 4.0). Der englische Originaltext wurde von den mausritter-tools-Mitwirkenden ins Deutsche übersetzt; dies ist keine offizielle deutsche Ausgabe.",
+    "warning": "Übersetzung von Hand. Übersetzt wird 'label', nie 'name': der Name ist der Schlüssel, über den die Warenlisten der Läden, die Mietlingstabelle und die Kartenregeln auf einen Gegenstand verweisen."
+  },
+
+  "currency": {
+    "name": "Pip",
+    "abbreviation": "P",
+    "note": "Pips sind die einzige Währung in Mausritter. Ein Pip-Beutel fasst 250 Pips; das ist eine Tragegrenze, keine Stückelung."
+  },
+
+  "categories": [
+    {
+      "name": "Werkzeug, von Mäusen gefertigt",
+      "availability": "In den meisten Mäusesiedlungen erhältlich. Diese Gegenstände haben Mausgröße.",
+      "items": [
+        { "label": "Schlafrolle" },
+        { "label": "Blasebalg" },
+        { "label": "Buch", "qualifier": "leer" },
+        { "label": "Buch", "qualifier": "zum Lesen" },
+        { "label": "Flasche" },
+        { "label": "Eimer" },
+        { "label": "Krähenfüße", "qualifier": "Beutel" },
+        { "label": "Kreide" },
+        { "label": "Meißel" },
+        { "label": "Kochtöpfe" },
+        { "label": "Brecheisen" },
+        { "label": "Bohrer" },
+        { "label": "Leim" },
+        { "label": "Schmierfett" },
+        { "label": "Hammer" },
+        { "label": "Horn" },
+        { "label": "Sanduhr" },
+        { "label": "Dietriche" },
+        { "label": "Metallfeile" },
+        { "label": "Spiegel" },
+        { "label": "Musikinstrument" },
+        { "label": "Netz" },
+        { "label": "Vorhängeschloss mit Schlüssel", "qualifier": "klein" },
+        { "label": "Parfüm" },
+        { "label": "Spitzhacke" },
+        { "label": "Satz gezinkter Würfel" },
+        { "label": "Schaufel" },
+        { "label": "Zelt" },
+        { "label": "Wasserschlauch" },
+        { "label": "Trillerpfeife" },
+        { "label": "Holzstange", "qualifier": "15 cm" },
+        { "label": "Holzpfähle" }
+      ]
+    },
+    {
+      "name": "Werkzeug, von Menschen gefertigt",
+      "availability": "In Mäusesiedlungen nahe menschlicher Siedlungen erhältlich.",
+      "items": [
+        { "label": "Angelhaken" },
+        { "label": "Räucherstäbchen" },
+        { "label": "Linse" },
+        { "label": "Halskette" },
+        { "label": "Nähnadel" },
+        { "label": "Streichhölzer", "qualifier": "Schachtel" },
+        { "label": "Vorhängeschloss mit Schlüssel", "qualifier": "groß" },
+        { "label": "Bindfaden", "qualifier": "Rolle" },
+        { "label": "Seife", "qualifier": "kleines Stück" },
+        { "label": "Garn", "qualifier": "Spule" },
+        { "label": "Mausefalle" },
+        { "label": "Gift" }
+      ]
+    },
+    {
+      "name": "Waffen und Rüstung",
+      "items": [
+        { "label": "Behelfsmäßig", "note": "Zweig, Stein usw." },
+        { "label": "Leicht", "note": "Dolch, Nadel usw." },
+        { "label": "Mittel", "note": "Schwert, Axt usw." },
+        { "label": "Schwer", "note": "Speer, Hakenlanze usw." },
+        { "label": "Leichte Fernwaffe", "note": "Schleuder, Handarmbrust usw." },
+        { "label": "Schwere Fernwaffe", "note": "Bogen, Armbrust usw." },
+        { "label": "Pfeile", "qualifier": "Köcher" },
+        { "label": "Steine", "qualifier": "Beutel" },
+        { "label": "Leichte Rüstung" },
+        { "label": "Schwere Rüstung" },
+        { "label": "Versilberte Waffen", "priceText": "×10 P", "note": "nach jedem Kampf einen Nutzungspunkt streichen" },
+        { "label": "Reparaturen", "qualifier": "je Punkt", "priceText": "10 %" }
+      ]
+    },
+    {
+      "name": "Lichtquellen",
+      "items": [
+        { "label": "Fackeln" },
+        { "label": "Laterne" },
+        { "label": "Öl", "qualifier": "für die Laterne" },
+        { "label": "Elektrische Laterne", "note": "hat sechs Nutzungspunkte" },
+        { "label": "Batterien", "qualifier": "für die elektrische Laterne" }
+      ]
+    },
+    {
+      "name": "Kleidung",
+      "items": [
+        { "label": "Ärmlich" },
+        { "label": "Gewöhnlich" },
+        { "label": "Adelig" },
+        { "label": "Wintermantel" },
+        { "label": "Regenmantel" }
+      ]
+    },
+    {
+      "name": "Unterkunft und Verpflegung",
+      "items": [
+        { "label": "Bett im Schlafsaal", "perUnit": "Nacht" },
+        { "label": "Eigenes Zimmer", "perUnit": "Nacht" },
+        { "label": "Heißes Bad" },
+        { "label": "Reisevorräte" },
+        { "label": "Mahlzeit" },
+        { "label": "Festmahl" },
+        { "label": "Abend auf der Piste" }
+      ]
+    },
+    {
+      "name": "Transport zu mieten",
+      "availability": "Die Preise gelten je Maus und je Hexfeld.",
+      "items": [
+        { "label": "Kaninchenkarren" },
+        { "label": "Flussfloß" },
+        { "label": "Taubenflug" }
+      ]
+    },
+    {
+      "name": "Hilfskräfte",
+      "availability": "Die Preise gelten pro Tag und schließen Kost und Logis nicht ein.",
+      "items": [
+        { "label": "Fackelträger" },
+        { "label": "Tagelöhner" },
+        { "label": "Tunnelgräber" },
+        { "label": "Waffen- und Grobschmied" },
+        { "label": "Ortskundiger Führer" },
+        { "label": "Waffenmaus" },
+        { "label": "Gelehrter" },
+        { "label": "Ritter" },
+        { "label": "Dolmetscher" }
+      ]
+    }
+  ]
+}
