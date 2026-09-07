@@ -1,0 +1,120 @@
+@page "/about"
+@using MausritterTools.Core.Data
+@using MausritterTools.Web.Components
+@using MausritterTools.Web.Services
+@inject GameDataProvider DataProvider
+
+<PageTitle>About — Mausritter Tools</PageTitle>
+
+<div class="settlement-tool">
+    <h1>About</h1>
+
+    <p class="lead">
+        Mausritter Tools is a small set of browser-based helpers for
+        <a href="https://mausritter.com/" target="_blank" rel="noopener">Mausritter</a>, the
+        tabletop roleplaying game of brave mice by Isaac Williams.
+    </p>
+
+    <h2>How it works</h2>
+    <p>
+        The whole app is a static site that runs in your browser. There is no server, no account and
+        no analytics, and nothing you generate is uploaded anywhere. A settlement is produced purely
+        from its seed, so the same link always rebuilds the same settlement.
+    </p>
+    <p>
+        Locking a value freezes it in place so that re-rolling everything else leaves it alone.
+        Editing a value locks it too. Because locks and hand edits would make a link unwieldy, the
+        address bar carries only the seed and the generator settings; the full state travels through
+        the JSON export, and is kept in your browser's local storage between visits.
+    </p>
+
+    <h2>What is official, and what is not</h2>
+    <p>
+        The settlement tables, the tavern table, the non-player mice tables, gear prices, hirelings
+        and spells are all taken from the Mausritter SRD, which is published under CC BY 4.0. They
+        are imported directly from the SRD source rather than retyped, so the wording is the
+        author's own.
+    </p>
+    <p>
+        <strong>Mausritter has no shops or services table.</strong> The SRD says only that taverns
+        appear in hamlets and larger, that warbands can be recruited in a town or city, that
+        human-made goods are found near human populations, that a bank charges 1% to retrieve what
+        it holds, that repairs cost 10% of an item's price per usage dot, and that
+        &ldquo;the size of the settlement determines what types of hireling are available&rdquo;
+        without ever saying how. Everything else about shops in this tool &mdash; which services
+        exist, how size gates them, their stock, quirks and names &mdash; is
+        <strong>an unofficial house rule original to this project</strong>. Each shop shows the SRD
+        rule it was extrapolated from, so you can see where the line falls.
+    </p>
+    <p>
+        Mouse names are also original. The SRD contains no name tables, and the lists used by the
+        official generator are not published under a licence that permits reuse.
+    </p>
+
+    @if (_provenance is { Count: > 0 })
+    {
+        <h2>Data sources</h2>
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Content</th>
+                    <th>Source</th>
+                    <th>Licence</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DataProvenance source in _provenance)
+                {
+                    <tr>
+                        <td>@source.Describes</td>
+                        <td>
+                            @if (source.IsSrdDerived)
+                            {
+                                <a href="@source.Url" target="_blank" rel="noopener">@source.Work</a>
+                                @(source.Version is { Length: > 0 } v ? $" v{v}" : "")
+                            }
+                            else
+                            {
+                                <text>Original to this project</text>
+                            }
+                        </td>
+                        <td>@(source.Licence ?? "Original work")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <h2>Source</h2>
+    <p>
+        The code, the imported tables and the importer script are on
+        <a href="https://github.com/Structed/mausritter-tools" target="_blank" rel="noopener">GitHub</a>.
+    </p>
+
+    <h2>Support Mausritter</h2>
+    <p>
+        This tool is no substitute for the game. Mausritter is pay-what-you-want in digital form and
+        well worth owning: <a href="https://mausritter.com/" target="_blank" rel="noopener">mausritter.com</a>.
+    </p>
+
+    <LicenceFooter />
+</div>
+
+@code {
+    private IReadOnlyList<DataProvenance>? _provenance;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            GameData data = await DataProvider.GetDataAsync();
+            _provenance = data.Provenance;
+        }
+        catch (GameDataException)
+        {
+            // The attribution above is static, so the page is still worth showing without the
+            // per-file table.
+            _provenance = null;
+        }
+    }
+}

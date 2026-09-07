@@ -1,0 +1,30 @@
+@using MausritterTools.Core.Data
+
+@* Both licence notices. The Mausritter Third Party Licence requires its text to appear on the
+   website where the work is promoted, not only inside the repository. *@
+
+<footer class="site-footer">
+    <p>
+        This work is based on <a href="https://mausritter.com" target="_blank" rel="noopener">Mausritter</a>,
+        a product of Losing Games and Isaac Williams, and is licensed for use under the
+        <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">Creative
+        Commons Attribution 4.0 International (CC BY 4.0)</a> licence.
+    </p>
+    <p>
+        Mausritter Tools is an independent production by the mausritter-tools contributors and is not
+        affiliated with Losing Games. It is published under the Mausritter Third Party Licence.
+    </p>
+    <p>Mausritter is copyright Losing Games.</p>
+    @if (ShowHouseRuleNote)
+    {
+        <p>
+            Shops, services and mouse names are unofficial house rules original to this tool.
+            Mausritter itself has no settlement services table.
+        </p>
+    }
+</footer>
+
+@code {
+    [Parameter]
+    public bool ShowHouseRuleNote { get; set; } = true;
+}

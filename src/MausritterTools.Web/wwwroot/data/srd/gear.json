@@ -1,0 +1,523 @@
+{
+  "_source": {
+    "describes": "Gear and prices",
+    "work": "Mausritter System Reference Document",
+    "version": "2.3.1",
+    "url": "https://mausritter.com/srd/",
+    "sourceFiles": [
+      "16-gear-and-prices.md"
+    ],
+    "licence": "CC BY 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "This work is based on Mausritter (https://mausritter.com), a product of Losing Games and Isaac Williams, and is licensed for use under the Creative Commons Attribution 4.0 International (CC BY 4.0) licence.",
+    "generatedBy": "tools/Import-SrdTables.ps1",
+    "warning": "Generated file. Do not edit by hand; re-run the importer instead."
+  },
+  "currency": {
+    "name": "pip",
+    "abbreviation": "p",
+    "note": "Pips are the only currency in Mausritter. A pip purse holds 250 pips; that is a carrying limit, not a denomination."
+  },
+  "categories": [
+    {
+      "id": "tools-mouse-made",
+      "name": "Tools, mouse made",
+      "items": [
+        {
+          "name": "Bedroll",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Bellows",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Book",
+          "qualifier": "blank",
+          "priceText": "300p",
+          "pips": 300
+        },
+        {
+          "name": "Book",
+          "qualifier": "reading",
+          "priceText": "600p",
+          "pips": 600
+        },
+        {
+          "name": "Bottle",
+          "priceText": "1p",
+          "pips": 1
+        },
+        {
+          "name": "Bucket",
+          "priceText": "5p",
+          "pips": 5
+        },
+        {
+          "name": "Caltrops",
+          "qualifier": "bag",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Chalk",
+          "priceText": "1p",
+          "pips": 1
+        },
+        {
+          "name": "Chisel",
+          "priceText": "5p",
+          "pips": 5
+        },
+        {
+          "name": "Cookpots",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Crowbar",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Drill",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Glue",
+          "priceText": "5p",
+          "pips": 5
+        },
+        {
+          "name": "Grease",
+          "priceText": "5p",
+          "pips": 5
+        },
+        {
+          "name": "Hammer",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Horn",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Hourglass",
+          "priceText": "300p",
+          "pips": 300
+        },
+        {
+          "name": "Lockpicks",
+          "priceText": "100p",
+          "pips": 100
+        },
+        {
+          "name": "Metal file",
+          "priceText": "5p",
+          "pips": 5
+        },
+        {
+          "name": "Mirror",
+          "priceText": "200p",
+          "pips": 200
+        },
+        {
+          "name": "Musical instrument",
+          "priceText": "200p",
+          "pips": 200
+        },
+        {
+          "name": "Net",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Padlock and key",
+          "qualifier": "small",
+          "priceText": "20p",
+          "pips": 20
+        },
+        {
+          "name": "Perfume",
+          "priceText": "50p",
+          "pips": 50
+        },
+        {
+          "name": "Pick",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Set of loaded dice",
+          "priceText": "5p",
+          "pips": 5
+        },
+        {
+          "name": "Shovel",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Tent",
+          "priceText": "80p",
+          "pips": 80
+        },
+        {
+          "name": "Waterskin",
+          "priceText": "5p",
+          "pips": 5
+        },
+        {
+          "name": "Whistle",
+          "priceText": "5p",
+          "pips": 5
+        },
+        {
+          "name": "Wooden pole",
+          "qualifier": "6\"",
+          "priceText": "1p",
+          "pips": 1
+        },
+        {
+          "name": "Wooden spikes",
+          "priceText": "1p",
+          "pips": 1
+        }
+      ],
+      "availability": "Available in most mouse settlements. These items are mouse-sized."
+    },
+    {
+      "id": "tools-human-made",
+      "name": "Tools, human made",
+      "items": [
+        {
+          "name": "Fishing hook",
+          "priceText": "20p",
+          "pips": 20
+        },
+        {
+          "name": "Incense stick",
+          "priceText": "20p",
+          "pips": 20
+        },
+        {
+          "name": "Lens",
+          "priceText": "200p",
+          "pips": 200
+        },
+        {
+          "name": "Necklace chain",
+          "priceText": "40p",
+          "pips": 40
+        },
+        {
+          "name": "Needle",
+          "priceText": "20p",
+          "pips": 20
+        },
+        {
+          "name": "Matches",
+          "qualifier": "packet",
+          "priceText": "80p",
+          "pips": 80
+        },
+        {
+          "name": "Padlock and key",
+          "qualifier": "large",
+          "priceText": "100p",
+          "pips": 100
+        },
+        {
+          "name": "Twine",
+          "qualifier": "roll",
+          "priceText": "40p",
+          "pips": 40
+        },
+        {
+          "name": "Soap",
+          "qualifier": "small block",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Thread",
+          "qualifier": "spool",
+          "priceText": "20p",
+          "pips": 20
+        },
+        {
+          "name": "Mouse trap",
+          "priceText": "100p",
+          "pips": 100
+        },
+        {
+          "name": "Poison",
+          "priceText": "100p",
+          "pips": 100
+        }
+      ],
+      "availability": "Available in mouse settlements near human populations."
+    },
+    {
+      "id": "weapons-and-armour",
+      "name": "Weapons and armour",
+      "items": [
+        {
+          "name": "Improvised",
+          "note": "twig, rock, etc.",
+          "priceText": "1p",
+          "pips": 1
+        },
+        {
+          "name": "Light",
+          "note": "dagger, needle, etc.",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Medium",
+          "note": "sword, axe, etc.",
+          "priceText": "20p",
+          "pips": 20
+        },
+        {
+          "name": "Heavy",
+          "note": "spear, hooklance, etc.",
+          "priceText": "40p",
+          "pips": 40
+        },
+        {
+          "name": "Light ranged",
+          "note": "sling, hand crossbow, etc.",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Heavy ranged",
+          "note": "bow, crossbow, etc.",
+          "priceText": "40p",
+          "pips": 40
+        },
+        {
+          "name": "Arrows",
+          "qualifier": "quiver",
+          "priceText": "5p",
+          "pips": 5
+        },
+        {
+          "name": "Stones",
+          "qualifier": "pouch",
+          "priceText": "1p",
+          "pips": 1
+        },
+        {
+          "name": "Light armour",
+          "priceText": "150p",
+          "pips": 150
+        },
+        {
+          "name": "Heavy armour",
+          "priceText": "500p",
+          "pips": 500
+        },
+        {
+          "name": "Silvered weapons",
+          "note": "always mark usage after fight",
+          "priceText": "x10p"
+        },
+        {
+          "name": "Repairs",
+          "qualifier": "per dot",
+          "priceText": "10%"
+        }
+      ]
+    },
+    {
+      "id": "light-sources",
+      "name": "Light sources",
+      "items": [
+        {
+          "name": "Torches",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Lantern",
+          "priceText": "50p",
+          "pips": 50
+        },
+        {
+          "name": "Oil",
+          "qualifier": "for lantern",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Electric lantern",
+          "note": "has six usage dots",
+          "priceText": "200p",
+          "pips": 200
+        },
+        {
+          "name": "Batteries",
+          "qualifier": "for electric lantern",
+          "priceText": "50p",
+          "pips": 50
+        }
+      ]
+    },
+    {
+      "id": "clothing",
+      "name": "Clothing",
+      "items": [
+        {
+          "name": "Poor",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Standard",
+          "priceText": "50p",
+          "pips": 50
+        },
+        {
+          "name": "Noble",
+          "priceText": "1000p",
+          "pips": 1000
+        },
+        {
+          "name": "Winter cloak",
+          "priceText": "150p",
+          "pips": 150
+        },
+        {
+          "name": "Waterproof cloak",
+          "priceText": "100p",
+          "pips": 100
+        }
+      ]
+    },
+    {
+      "id": "lodging-and-food",
+      "name": "Lodging and food",
+      "items": [
+        {
+          "name": "Bunkhouse bed",
+          "priceText": "1p",
+          "pips": 1,
+          "perUnit": "night"
+        },
+        {
+          "name": "Private room",
+          "priceText": "5p",
+          "pips": 5,
+          "perUnit": "night"
+        },
+        {
+          "name": "Hot bath",
+          "priceText": "2p",
+          "pips": 2
+        },
+        {
+          "name": "Travel rations",
+          "priceText": "5p",
+          "pips": 5
+        },
+        {
+          "name": "Meal",
+          "priceText": "2p",
+          "pips": 2
+        },
+        {
+          "name": "Grand meal",
+          "priceText": "50p",
+          "pips": 50
+        },
+        {
+          "name": "Night out on the town",
+          "priceText": "100p",
+          "pips": 100
+        }
+      ]
+    },
+    {
+      "id": "transport-hire",
+      "name": "Transport hire",
+      "items": [
+        {
+          "name": "Rabbit wagon",
+          "priceText": "5p",
+          "pips": 5
+        },
+        {
+          "name": "River raft",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Pigeon flight",
+          "priceText": "200p",
+          "pips": 200
+        }
+      ],
+      "availability": "Prices are per mouse, per hex."
+    },
+    {
+      "id": "hired-help",
+      "name": "Hired help",
+      "items": [
+        {
+          "name": "Torchbearer",
+          "priceText": "1p",
+          "pips": 1
+        },
+        {
+          "name": "Labourer",
+          "priceText": "2p",
+          "pips": 2
+        },
+        {
+          "name": "Tunnel digger",
+          "priceText": "5p",
+          "pips": 5
+        },
+        {
+          "name": "Armourer/blacksmith",
+          "priceText": "8p",
+          "pips": 8
+        },
+        {
+          "name": "Local guide",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Mouse-at-arms",
+          "priceText": "10p",
+          "pips": 10
+        },
+        {
+          "name": "Scholar",
+          "priceText": "20p",
+          "pips": 20
+        },
+        {
+          "name": "Knight",
+          "priceText": "25p",
+          "pips": 25
+        },
+        {
+          "name": "Interpreter",
+          "priceText": "30p",
+          "pips": 30
+        }
+      ],
+      "availability": "Prices are per day, and do not include food and shelter."
+    }
+  ]
+}

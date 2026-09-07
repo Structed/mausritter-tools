@@ -1,0 +1,180 @@
+{
+  "_source": {
+    "describes": "Non-player mice tables",
+    "work": "Mausritter System Reference Document",
+    "version": "2.3.1",
+    "url": "https://mausritter.com/srd/",
+    "sourceFiles": [
+      "11-useful-tables.md"
+    ],
+    "licence": "CC BY 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "This work is based on Mausritter (https://mausritter.com), a product of Losing Games and Isaac Williams, and is licensed for use under the Creative Commons Attribution 4.0 International (CC BY 4.0) licence.",
+    "generatedBy": "tools/Import-SrdTables.ps1",
+    "warning": "Generated file. Do not edit by hand; re-run the importer instead."
+  },
+  "socialPositions": [
+    {
+      "roll": 1,
+      "name": "Poor",
+      "payment": "d6p"
+    },
+    {
+      "roll": 2,
+      "name": "Common",
+      "payment": "d6 x 10p"
+    },
+    {
+      "roll": 3,
+      "name": "Common",
+      "payment": "d6 x 10p"
+    },
+    {
+      "roll": 4,
+      "name": "Burghermouse",
+      "payment": "d6 x 50p"
+    },
+    {
+      "roll": 5,
+      "name": "Guildmouse",
+      "payment": "d4 x 100p"
+    },
+    {
+      "roll": 6,
+      "name": "Noblemouse",
+      "payment": "d4 x 1000p"
+    }
+  ],
+  "birthsigns": [
+    {
+      "roll": 1,
+      "name": "Star",
+      "disposition": "Brave / Reckless",
+      "virtue": "Brave",
+      "vice": "Reckless"
+    },
+    {
+      "roll": 2,
+      "name": "Wheel",
+      "disposition": "Industrious / Unimaginative",
+      "virtue": "Industrious",
+      "vice": "Unimaginative"
+    },
+    {
+      "roll": 3,
+      "name": "Acorn",
+      "disposition": "Inquisitive / Stubborn",
+      "virtue": "Inquisitive",
+      "vice": "Stubborn"
+    },
+    {
+      "roll": 4,
+      "name": "Storm",
+      "disposition": "Generous / Wrathful",
+      "virtue": "Generous",
+      "vice": "Wrathful"
+    },
+    {
+      "roll": 5,
+      "name": "Moon",
+      "disposition": "Wise / Mysterious",
+      "virtue": "Wise",
+      "vice": "Mysterious"
+    },
+    {
+      "roll": 6,
+      "name": "Mother",
+      "disposition": "Nurturing / Worrying",
+      "virtue": "Nurturing",
+      "vice": "Worrying"
+    }
+  ],
+  "appearance": [
+    "Soulful eyes",
+    "Bright, patched clothes",
+    "Wreath of daisies",
+    "Grubby clothes",
+    "Large floppy hat",
+    "Pockets full of seed",
+    "Bent twig walking stick",
+    "Carries rusted pinsword",
+    "Long, wild fur",
+    "Very, very old",
+    "Bandaged tail",
+    "Tail tied with a bow",
+    "Missing an ear",
+    "Long whiskers",
+    "Twinkling eyes",
+    "Huge, heavy black cloak",
+    "Old battle scars",
+    "Very young",
+    "Shaved fur",
+    "Braided fur"
+  ],
+  "quirk": [
+    "Constantly grooming",
+    "Obsessed with weather",
+    "Very high energy",
+    "Traveled, knowledgeable",
+    "Cursed by a wizard",
+    "Scares easily",
+    "Ashamed of past crimes",
+    "Very competitive",
+    "Flamboyant drunkard",
+    "Extremely polite",
+    "Unreservedly honest",
+    "Slow, careful speech",
+    "Quick, erratic speech",
+    "Secret servant of a cat",
+    "Raised by rats",
+    "Outcast from home",
+    "Many pet insects",
+    "Hates being outdoors",
+    "Local hero",
+    "Very twitchy whiskers"
+  ],
+  "wants": [
+    "Freedom",
+    "Safety",
+    "Escape",
+    "Excitement",
+    "Power",
+    "Meaning",
+    "Health",
+    "Wealth",
+    "Protection",
+    "Love",
+    "To protect",
+    "Food",
+    "Friendship",
+    "Rest",
+    "Knowledge",
+    "Savagery",
+    "Beauty",
+    "Revenge",
+    "To serve",
+    "Fun"
+  ],
+  "relationship": [
+    "Parent",
+    "Sibling",
+    "Cousin",
+    "Second cousin",
+    "Grandparent",
+    "Related, but don’t know it",
+    "Married",
+    "Former lovers",
+    "In love, unrequited",
+    "Drinking buddies",
+    "Debt owed",
+    "Long and tumultuous",
+    "Sworn enemies",
+    "Guild brothers",
+    "Childhood friends",
+    "One stole from the other",
+    "Worked together",
+    "Grew up together",
+    "Serve the same lord",
+    "Never met before"
+  ]
+}
