@@ -40,7 +40,7 @@ the tavern are keyed to numbered buildings and cross-referenced in a legend.
 
 ```
 .github/github-app.yml           GitHub Copilot app scripts and project instructions
-.github/workflows/deploy.yml     Build + deploy to GitHub Pages
+.github/workflows/deploy.yml     Build, deploy to GitHub Pages, preview every pull request
 src/MausritterTools.Core/        Domain logic: tables, generators, mapping, rendering
 src/MausritterTools.Web/         Blazor WebAssembly app
 tests/MausritterTools.Core.Tests/  Unit tests
@@ -197,26 +197,54 @@ A few decisions that are easy to undo by accident:
 
 ## Deployment
 
-Every push to `main` runs `.github/workflows/deploy.yml`, which publishes the app and
-deploys `publish/wwwroot` to GitHub Pages. Pull requests build the same way but do not deploy.
+`.github/workflows/deploy.yml` publishes the app and pushes `publish/wwwroot` to the
+`gh-pages` branch, which is what GitHub Pages serves. A push to `main` goes to the root of
+that branch and becomes the live site. A pull request instead goes to
+`pr-preview/pr-<number>/`, so every pull request gets its own deployment to try out before
+it is merged:
 
-Two things are needed to make a Blazor WASM app work on GitHub Pages, and the workflow
-handles both:
+```
+gh-pages/                      https://structed.github.io/mausritter-tools/
+├── pr-preview/
+│   ├── pr-12/                 https://structed.github.io/mausritter-tools/pr-preview/pr-12/
+│   └── pr-15/                 https://structed.github.io/mausritter-tools/pr-preview/pr-15/
+└── ...                        the production site
+```
+
+A bot comment on the pull request links to its preview, each push rebuilds it, and closing
+or merging the pull request deletes the directory again. Previews and production share one
+branch because GitHub Pages serves only one publishing source per repository, so the
+production deploy excludes `pr-preview/` when it cleans up stale files — otherwise
+publishing `main` would wipe every open pull request's preview.
+
+A pull request from a fork is built and checked but not deployed, because GitHub gives it a
+read-only token that cannot write to `gh-pages`.
+
+Three things are needed to make a Blazor WASM app work on GitHub Pages, and the workflow
+handles all of them:
 
 - **Base path** — a project page is served from `/<repo-name>/`, not `/`, so the workflow
   rewrites `<base href="/" />` in the published `index.html`. If the repository is ever
   renamed the correct path is picked up automatically; a `<user>.github.io` repository
-  keeps `/`.
+  keeps `/`. A preview is served from a deeper path still, so its build gets
+  `/<repo-name>/pr-preview/pr-<number>/` instead — with the production base path it would
+  look for `_framework` at the root and load the production app instead of itself.
 - **Client-side routing** — GitHub Pages has no SPA fallback, so `index.html` is copied to
   `404.html`. Deep links return a 404 status but still boot the app, and the Blazor router
-  takes over from there.
-
-A `.nojekyll` marker is also published so the `_framework` directory is never stripped.
+  takes over from there. Each preview carries its own copy, so the fallback is present
+  wherever it is looked for.
+- **Jekyll** — a `.nojekyll` marker is published so the `_framework` directory is never
+  stripped for starting with an underscore. Jekyll skips underscore-prefixed directories at
+  any depth and the marker only counts at the branch root, so a preview makes sure the root
+  has one before deploying itself. It is a dotfile, so the build artifact that carries the
+  site between jobs also has to be told explicitly to keep hidden files.
 
 ### One-time setup
 
-In **Settings → Pages**, set **Source** to **GitHub Actions**. Without this the deploy job
-fails with a "Pages not enabled" error.
+In **Settings → Pages**, set **Source** to **Deploy from a branch**, then pick the
+`gh-pages` branch and the `/ (root)` folder. The branch does not exist until the workflow
+first deploys to it, so run the workflow once — merging to `main`, or dispatching it
+manually — before changing the setting, and the live site never goes dark.
 
 ## Licence and attribution
 
