@@ -235,6 +235,14 @@ public sealed record FantasiaArchiveText
     /// <summary>What arrives, and that it can be brought back here again.</summary>
     public string ReadMeNote { get => field ?? ""; init; } = "";
 
+    /// <summary>That the map is already in place on the settlement's own document.</summary>
+    public string ReadMeMapNote { get => field ?? ""; init; } = "";
+
+    /// <summary>
+    /// What the map image beside the folder is for. Takes a <c>{map}</c> placeholder.
+    /// </summary>
+    public string ReadMeMapFileNote { get => field ?? ""; init; } = "";
+
     /// <summary>Which generation of Fantasia Archive this was written for.</summary>
     public string ReadMeVersionNote { get => field ?? ""; init; } = "";
 }

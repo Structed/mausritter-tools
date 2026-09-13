@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.Json;
 using MausritterTools.Core.Data;
 using MausritterTools.Core.Generation;
@@ -772,5 +773,319 @@ public class FantasiaArchiveRoundTripTests
         // And it is still recognisable as ours rather than being mistaken for someone else's file.
         Settlement rebuilt = new SettlementGenerator(data).Generate(SettlementSerializer.FromJson(json));
         Assert.Equal(original.Name, rebuilt.Name);
+    }
+}
+
+/// <summary>
+/// Guards the map's passage into a Fantasia Archive project.
+/// </summary>
+/// <remarks>
+/// Fantasia Archive v1 has no image field, no map document type and no attachment support. The map
+/// therefore travels two ways, and both are load-bearing: embedded as a data URL in the settlement's
+/// rich-text description, which the app renders unsanitised, and as a PNG beside the project folder,
+/// which is the only form the app's own image picker and its PDF export will take. Neither is a
+/// route the app itself ever produces, so nothing upstream is guarding it.
+/// </remarks>
+public class FantasiaArchiveMapTests
+{
+    private const string DataUrlPrefix = "data:image/svg+xml;base64,";
+
+    private static (Settlement Settlement, GenerationOptions Options, GameData Data) Build(
+        GenerationOptions options, Locale? locale = null)
+    {
+        GameData data = locale is null ? TestData.Game : TestData.In(locale);
+        return (new SettlementGenerator(data).Generate(options), options, data);
+    }
+
+    private static FantasiaArchiveExport Export(GenerationOptions options, Locale? locale = null)
+    {
+        (Settlement settlement, _, GameData data) = Build(options, locale);
+
+        return FantasiaArchiveExporter.Export(
+            settlement, options, data.Text, DateTimeOffset.UnixEpoch, data.Locale.Code);
+    }
+
+    /// <summary>The settlement's own document, which is the one the map is drawn into.</summary>
+    private static JsonElement SettlementDocument(FantasiaArchiveExport export) =>
+        PouchDump.ReadDocuments(
+                export.Files.Single(f => f.Name == PouchDump.FileNameFor(FantasiaArchiveBlueprints.Locations)).Content)
+            .Single(document => PouchDump.FieldString(
+                document, FantasiaArchiveBlueprints.StateField) is not null);
+
+    private static string DescriptionOf(FantasiaArchiveExport export) =>
+        PouchDump.FieldString(
+            SettlementDocument(export), FantasiaArchiveBlueprints.Common.Description)!;
+
+    /// <summary>Pulls the one embedded image back out of a description.</summary>
+    private static string EmbeddedSvg(string description)
+    {
+        int start = description.IndexOf(DataUrlPrefix, StringComparison.Ordinal);
+        Assert.True(start >= 0, "The settlement's description carries no embedded map.");
+
+        start += DataUrlPrefix.Length;
+        int end = description.IndexOf('\'', start);
+        Assert.True(end > start, "The embedded map's data URL is unterminated.");
+
+        return Encoding.UTF8.GetString(Convert.FromBase64String(description[start..end]));
+    }
+
+    [Fact]
+    public void TheSettlementsDescriptionCarriesTheMapAsADataUrl()
+    {
+        FantasiaArchiveExport export = Export(new GenerationOptions { Seed = 4242, Size = 6 });
+
+        string embedded = EmbeddedSvg(DescriptionOf(export));
+
+        Assert.StartsWith("<svg", embedded, StringComparison.Ordinal);
+        Assert.EndsWith("</svg>", embedded, StringComparison.Ordinal);
+
+        // The very same drawing the export hands out, not a second one rendered from a seed that
+        // might have been derived differently.
+        Assert.Equal(export.MapSvg, embedded);
+    }
+
+    /// <summary>
+    /// An image with no intrinsic size is drawn at the default object size of 300×150, so a map
+    /// without one arrives as a thumbnail however large the drawing really is.
+    /// </summary>
+    [Fact]
+    public void TheEmbeddedMapCarriesItsOwnDimensions()
+    {
+        FantasiaArchiveExport export = Export(new GenerationOptions { Seed = 77, Size = 4 });
+
+        Assert.Contains("width=\"420\"", export.MapSvg, StringComparison.Ordinal);
+        Assert.Contains("height=\"320\"", export.MapSvg, StringComparison.Ordinal);
+        Assert.Contains("viewBox=\"0 0 420 320\"", export.MapSvg, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// The app's PDF export re-reads every image from its <c>src</c> and understands only
+    /// <c>file://</c> and <c>http(s)://</c>, so the embedded copy is silently dropped from a PDF.
+    /// The numbering has to survive that, because every shop's document cites its map number.
+    /// </summary>
+    [Fact]
+    public void TheKeyIsWrittenOutAsTextBesideTheDrawing()
+    {
+        GenerationOptions options = new() { Seed = 4242, Size = 6 };
+        (Settlement settlement, _, GameData data) = Build(options);
+
+        FantasiaArchiveExport export = FantasiaArchiveExporter.Export(
+            settlement, options, data.Text, DateTimeOffset.UnixEpoch, data.Locale.Code);
+
+        SettlementMap map = MapGenerator.Generate(
+            settlement, MapGenerator.SeedFor(options), data.Text.Grammar);
+
+        Assert.NotEmpty(map.Legend);
+
+        string description = DescriptionOf(export);
+
+        foreach (MapLegendEntry entry in map.Legend)
+        {
+            Assert.Contains(
+                System.Net.WebUtility.HtmlEncode(entry.Name), description, StringComparison.Ordinal);
+            Assert.Contains(
+                System.Net.WebUtility.HtmlEncode(entry.Detail), description, StringComparison.Ordinal);
+        }
+    }
+
+    /// <summary>
+    /// A name with an apostrophe or an ampersand in it must not be able to close the attribute it
+    /// sits in and start writing markup of its own.
+    /// </summary>
+    [Fact]
+    public void EverythingAroundTheDrawingIsEscaped()
+    {
+        string description = DescriptionOf(Export(new GenerationOptions { Seed = 909, Size = 6 }));
+
+        // Only the one image, and its src is the only place a raw apostrophe may appear.
+        string withoutImage = System.Text.RegularExpressions.Regex.Replace(
+            description, "<img [^>]*>", "");
+
+        Assert.DoesNotContain("<script", withoutImage, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain(" & ", withoutImage, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// One settlement, one map. Drawing it onto every premises as well would multiply a 25 KB
+    /// payload by the number of shops and would be caught by nothing else here.
+    /// </summary>
+    [Fact]
+    public void TheMapIsEmbeddedExactlyOnceInTheWholeExport()
+    {
+        FantasiaArchiveExport export = Export(new GenerationOptions { Seed = 999999, Size = 6 });
+
+        // Counted through the parser rather than over the raw text: the writer escapes the plus in
+        // "svg+xml" as \u002B, so the prefix does not appear literally in the file.
+        int occurrences = export.Files
+            .SelectMany(file => PouchDump.ReadDocuments(file.Content))
+            .Sum(document => document.GetProperty("extraFields")
+                .EnumerateArray()
+                .Count(field =>
+                    field.TryGetProperty("value", out JsonElement value) &&
+                    value.ValueKind == JsonValueKind.String &&
+                    value.GetString()!.Contains(DataUrlPrefix, StringComparison.Ordinal)));
+
+        Assert.Equal(1, occurrences);
+
+        // Measured at roughly 116 KB for the largest settlement the generator makes; this is a
+        // ceiling on a runaway rather than a target.
+        ExportedFile locations = export.Files.Single(
+            f => f.Name == PouchDump.FileNameFor(FantasiaArchiveBlueprints.Locations));
+
+        Assert.InRange(Encoding.UTF8.GetByteCount(locations.Content), 1, 512 * 1024);
+    }
+
+    [Fact]
+    public void RedrawingTheMapChangesTheExportedOne()
+    {
+        GenerationOptions options = new() { Seed = 4242, Size = 6 };
+
+        string first = Export(options).MapSvg;
+        string second = Export(options.WithReroll(MapGenerator.RerollKey)).MapSvg;
+
+        Assert.NotEqual(first, second);
+
+        // And the same settings still produce the same drawing, byte for byte.
+        Assert.Equal(first, Export(new GenerationOptions { Seed = 4242, Size = 6 }).MapSvg);
+    }
+
+    /// <summary>
+    /// Every dump must still parse. A description is a JSON string, and a base64 payload of this
+    /// size is exactly the sort of thing that breaks a hand-written writer.
+    /// </summary>
+    [Fact]
+    public void TheDumpsStillParseWithTheMapInThem()
+    {
+        FantasiaArchiveExport export = Export(new GenerationOptions { Seed = 31337, Size = 6 });
+
+        foreach (ExportedFile file in export.Files)
+        {
+            Assert.NotEmpty(PouchDump.ReadDocuments(file.Content));
+        }
+
+        // Newline-delimited JSON, so no document may span a line.
+        Assert.DoesNotContain('\n', DescriptionOf(export));
+    }
+
+    [Fact]
+    public void TheMapImageSitsBesideTheProjectFolderAndNeverInsideIt()
+    {
+        FantasiaArchiveExport export = Export(new GenerationOptions { Seed = 5150, Size = 5 });
+
+        byte[] png = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
+        byte[] zip = FantasiaArchivePackage.Create(export, "how to import", png);
+
+        using MemoryStream stream = new(zip);
+        using System.IO.Compression.ZipArchive archive = new(stream);
+
+        string mapName = FantasiaArchivePackage.MapFileNameFor(export);
+        List<string> names = [.. archive.Entries.Select(entry => entry.FullName)];
+
+        // Inside the folder it would be read as a database and would take the whole import down.
+        Assert.Contains(mapName, names);
+        Assert.DoesNotContain($"{export.FolderName}/{mapName}", names);
+        Assert.DoesNotContain(
+            names,
+            name => name.StartsWith($"{export.FolderName}/", StringComparison.Ordinal) &&
+                    !name.EndsWith(PouchDump.FileExtension, StringComparison.Ordinal));
+
+        Assert.Equal(png, archive.GetEntry(mapName)!.Open().ReadAllBytes());
+    }
+
+    [Fact]
+    public void AnArchiveWithoutARasterisedMapIsTheOneWeAlwaysWrote()
+    {
+        FantasiaArchiveExport export = Export(new GenerationOptions { Seed = 5150, Size = 5 });
+
+        using MemoryStream withNull = new(FantasiaArchivePackage.Create(export, "how to import", null));
+        using MemoryStream withEmpty = new(FantasiaArchivePackage.Create(export, "how to import", []));
+
+        using System.IO.Compression.ZipArchive first = new(withNull);
+        using System.IO.Compression.ZipArchive second = new(withEmpty);
+
+        Assert.Equal(
+            [.. first.Entries.Select(e => e.FullName)],
+            [.. second.Entries.Select(e => e.FullName)]);
+
+        Assert.DoesNotContain(
+            FantasiaArchivePackage.MapFileNameFor(export),
+            first.Entries.Select(e => e.FullName));
+    }
+
+    /// <summary>The map is not a dump, so a re-zipped project must not try to load it as one.</summary>
+    [Fact]
+    public void ReadingAProjectBackIgnoresTheMapImage()
+    {
+        GenerationOptions options = new() { Seed = 8080, Size = 6 };
+        FantasiaArchiveExport export = Export(options);
+
+        using MemoryStream stream = new(FantasiaArchivePackage.Create(
+            export, "how to import", [0x89, 0x50, 0x4E, 0x47]));
+
+        IReadOnlyList<string> dumps = FantasiaArchivePackage.ExtractDumps(stream);
+
+        Assert.Equal(export.Files.Count, dumps.Count);
+        Assert.Equal(options.Seed, FantasiaArchiveImporter.Read(dumps).Options.Seed);
+    }
+
+    /// <summary>
+    /// The instructions only mention the image file when there is one, because a browser that
+    /// cannot rasterise leaves the embedded copy as the only map.
+    /// </summary>
+    [Fact]
+    public void TheInstructionsDescribeTheMapFileOnlyWhenItIsThere()
+    {
+        FantasiaArchiveExport export = Export(new GenerationOptions { Seed = 606, Size = 4 });
+        string mapName = FantasiaArchivePackage.MapFileNameFor(export);
+
+        string without = FantasiaArchiveReadMe.Compose(TestData.Game.Text, export.FolderName);
+        string with = FantasiaArchiveReadMe.Compose(TestData.Game.Text, export.FolderName, mapName);
+
+        Assert.DoesNotContain(mapName, without, StringComparison.Ordinal);
+        Assert.Contains(mapName, with, StringComparison.Ordinal);
+
+        // No placeholder may survive into either version.
+        Assert.DoesNotContain("{map}", with, StringComparison.Ordinal);
+        Assert.DoesNotContain("{folder}", with, StringComparison.Ordinal);
+        Assert.DoesNotContain("{map}", without, StringComparison.Ordinal);
+        Assert.DoesNotContain("{folder}", without, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// A translated export must still carry a map, and the legend in it must be the translated one.
+    /// </summary>
+    [Fact]
+    public void ATranslatedExportCarriesATranslatedKey()
+    {
+        GenerationOptions options = new() { Seed = 4242, Size = 6 };
+
+        FantasiaArchiveExport german = Export(options, Locale.German);
+        GameData data = TestData.In(Locale.German);
+
+        SettlementMap map = MapGenerator.Generate(
+            new SettlementGenerator(data).Generate(options),
+            MapGenerator.SeedFor(options),
+            data.Text.Grammar);
+
+        string description = DescriptionOf(german);
+
+        Assert.NotEmpty(map.Legend);
+        Assert.Contains(
+            System.Net.WebUtility.HtmlEncode(map.Legend[0].Detail),
+            description,
+            StringComparison.Ordinal);
+
+        // And the drawing itself is still there.
+        Assert.Equal(german.MapSvg, EmbeddedSvg(description));
+    }
+}
+
+internal static class StreamReadExtensions
+{
+    public static byte[] ReadAllBytes(this Stream stream)
+    {
+        using MemoryStream buffer = new();
+        stream.CopyTo(buffer);
+        return buffer.ToArray();
     }
 }

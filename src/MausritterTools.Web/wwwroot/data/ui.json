@@ -218,6 +218,8 @@
     ],
     "readMeWarning": "Do not put anything else in the {folder} folder. Fantasia Archive reads every file in it as a database, so a stray note or screenshot will break the import. That is exactly why these instructions are outside the folder rather than in it.",
     "readMeNote": "The settlement arrives as a Location, with its tavern and shops as buildings inside it, numbered as they are on the map. Their keepers arrive as Characters and their stock as Items, all linked to each other. The settlement also quietly carries the seed it was generated from, so you can bring it back: save the project out of Fantasia Archive again and import that folder into the settlement generator.",
+    "readMeMapNote": "The map is already there. It is drawn into the settlement's own description, above the licence notice, with the numbered key written out beneath it. You do not have to do anything to see it.",
+    "readMeMapFileNote": "Beside this note is {map}, the same map as an image file. Fantasia Archive's PDF export cannot include the embedded copy, so if you want the map in an exported PDF, edit the settlement's description, use the toolbar's image button, choose \"Local image\", and pick {map} from wherever you unzipped it. Leave it where it is or move it somewhere else entirely — anywhere except into the {folder} folder.",
     "readMeVersionNote": "Written for Fantasia Archive v1, the format every released version reads."
   },
 

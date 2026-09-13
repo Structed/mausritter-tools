@@ -26,7 +26,21 @@ public static class SvgMapRenderer
     /// The accessible label, with a <c>{host}</c> placeholder. Optional so that geometry tests need
     /// not load a language.
     /// </param>
-    public static string Render(SettlementMap map, uint seed, string? ariaLabelPattern = null)
+    /// <param name="intrinsicSize">
+    /// Writes the map's size onto the root element as well as into the <c>viewBox</c>.
+    /// </param>
+    /// <remarks>
+    /// <para>
+    /// <paramref name="intrinsicSize"/> is off by default because the page wants a map that fills
+    /// its frame, which is what a bare <c>viewBox</c> gives. It has to be on for any copy that
+    /// leaves the page: an SVG with no intrinsic dimensions has no natural size to be drawn at, so
+    /// an <c>&lt;img&gt;</c> or an image viewer falls back to the default object size of 300×150
+    /// and the map arrives as a thumbnail. The page is unaffected either way, because
+    /// <c>.settlement-map</c> sets the width in CSS and CSS beats a presentation attribute.
+    /// </para>
+    /// </remarks>
+    public static string Render(
+        SettlementMap map, uint seed, string? ariaLabelPattern = null, bool intrinsicSize = false)
     {
         ArgumentNullException.ThrowIfNull(map);
 
@@ -36,11 +50,15 @@ public static class SvgMapRenderer
             ariaLabelPattern is { Length: > 0 } pattern ? pattern : DefaultAriaLabel,
             ("host", map.HostName)));
 
+        string size = intrinsicSize
+            ? $""" width="{RoughPen.N(map.Width)}" height="{RoughPen.N(map.Height)}" """
+            : " ";
+
         StringBuilder svg = new();
 
         svg.Append(
             $"""
-             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {RoughPen.N(map.Width)} {RoughPen.N(map.Height)}" 
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {RoughPen.N(map.Width)} {RoughPen.N(map.Height)}"{size}
              role="img" aria-label="{ariaLabel}" class="settlement-map">
              """);
 

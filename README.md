@@ -66,7 +66,32 @@ journey a round trip: save the project back out of Fantasia Archive and import t
 the settlement returns intact and still re-rollable. A project this tool did not write cannot be
 imported, and says so — generation is a pure function of a seed, and it does not run backwards.
 
-Some things that are easy to get wrong here, all covered by `FantasiaArchiveExportTests`:
+##### The map goes too
+
+Fantasia Archive v1 has no image field, no map document type and no attachment support: its blueprint
+field types are an exhaustive list of seventeen, and none of them is an image. What it does have is a
+rich-text field whose value is a raw HTML string, rendered in view mode with Vue's `v-html` under no
+sanitiser and no content security policy. The map therefore arrives three ways at once, because each
+one fails somewhere the others do not:
+
+- **Drawn into the settlement's description** as an `<img>` carrying the SVG as a data URL. Nothing
+  to do; open the settlement and the map is there.
+- **As a PNG beside the folder**, rasterised in the browser on the way out. This is the only form the
+  app will take through its own image button — its file picker lists `jpg`, `png`, `gif` and `webp`,
+  so it will not even show an SVG — and the only one its PDF export includes, since that re-reads
+  each image from its `src` and understands `file://` and `http(s)://` but not `data:`. If the
+  browser cannot rasterise, the export simply ships without it.
+- **As a numbered key in text** under the drawing, which survives PDF and Markdown export whatever
+  becomes of the image, and matters because every shop's document cites its map number.
+
+The PNG sits at the root of the ZIP, beside the instructions and never inside the project folder, for
+the same reason the instructions do — and rather more urgently. The merge hands *every* file in that
+folder to its database loader with no extension filter, and its only error handler is a bare `catch`:
+a stray image leaves the reader on a frozen spinner, and by then the loader has already deleted the
+project it was merging into.
+
+Some things that are easy to get wrong here, all covered by `FantasiaArchiveExportTests` and
+`FantasiaArchiveMapTests`:
 
 - **This targets Fantasia Archive v1**, the format every released version reads. The rewrite on the
   project's `master` branch replaces it with a single-file SQLite `.faproject`, whose own

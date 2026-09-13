@@ -57,6 +57,33 @@ public class SvgMapRendererTests
         Assert.Contains(map.HostName, document.Root.Attribute("aria-label")!.Value, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// The page wants a map that fills its frame, which a bare <c>viewBox</c> gives. A copy that
+    /// leaves the page has to carry its own size instead: an image with no intrinsic dimensions is
+    /// drawn at the default object size of 300×150, so the map would arrive as a thumbnail.
+    /// </summary>
+    [Fact]
+    public void ASizeIsWrittenOnlyWhenItIsAskedFor()
+    {
+        (_, SettlementMap map, string onPage) = Render(2468);
+
+        Assert.Null(XDocument.Parse(onPage).Root!.Attribute("width"));
+        Assert.Null(XDocument.Parse(onPage).Root!.Attribute("height"));
+
+        XElement standalone =
+            XDocument.Parse(SvgMapRenderer.Render(map, 2468, intrinsicSize: true)).Root!;
+
+        Assert.Equal(map.Width.ToString(System.Globalization.CultureInfo.InvariantCulture),
+            standalone.Attribute("width")!.Value);
+        Assert.Equal(map.Height.ToString(System.Globalization.CultureInfo.InvariantCulture),
+            standalone.Attribute("height")!.Value);
+
+        // The viewBox is unchanged, so the drawing inside is identical either way.
+        Assert.Equal(
+            XDocument.Parse(onPage).Root!.Attribute("viewBox")!.Value,
+            standalone.Attribute("viewBox")!.Value);
+    }
+
     [Fact]
     public void EveryRoadAndBuildingIsDrawn()
     {
