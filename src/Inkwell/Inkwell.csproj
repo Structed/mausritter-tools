@@ -36,10 +36,6 @@
     <!-- The tests reach internal helpers such as the name assembler's seam smoothing directly,
          rather than widening the public API purely to make them reachable. -->
     <InternalsVisibleTo Include="Inkwell.Tests" />
-
-    <!-- Temporary, and removed when the engine moves to its own repository: until then the
-         Mausritter tests still exercise engine internals they used to own. -->
-    <InternalsVisibleTo Include="MausritterTools.Core.Tests" />
   </ItemGroup>
 
 </Project>

@@ -15,8 +15,16 @@ namespace Structed.Inkwell.Data;
 /// </remarks>
 public sealed class LocalisingDataFileReader(IDataFileReader inner, Locale locale) : IDataFileReader
 {
-    /// <summary>Matches the leniency the source-generated deserialiser is configured with.</summary>
-    internal static readonly JsonDocumentOptions DocumentOptions = new()
+    /// <summary>
+    /// The leniency a data file is parsed with, which matches what the source-generated
+    /// deserialiser is configured with.
+    /// </summary>
+    /// <remarks>
+    /// Public because anyone checking their own data files — a translation validator, an importer —
+    /// has to parse them exactly as this reader will. Keeping a second copy of these options
+    /// somewhere else is how a checker comes to accept a file the loader then rejects.
+    /// </remarks>
+    public static JsonDocumentOptions DocumentOptions { get; } = new()
     {
         CommentHandling = JsonCommentHandling.Skip,
         AllowTrailingCommas = true
