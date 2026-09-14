@@ -1,4 +1,4 @@
-using MausritterTools.Core.Randomness;
+using Structed.Inkwell.Randomness;
 
 namespace MausritterTools.Core.Generation;
 

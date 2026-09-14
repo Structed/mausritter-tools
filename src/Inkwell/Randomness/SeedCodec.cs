@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace MausritterTools.Core.Randomness;
+namespace Structed.Inkwell.Randomness;
 
 /// <summary>
 /// Encodes a root seed as a short, URL-friendly base-36 string.

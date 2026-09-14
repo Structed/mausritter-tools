@@ -1,4 +1,4 @@
-namespace MausritterTools.Core.Randomness;
+namespace Structed.Inkwell.Randomness;
 
 /// <summary>
 /// A source of deterministic pseudo-random numbers.

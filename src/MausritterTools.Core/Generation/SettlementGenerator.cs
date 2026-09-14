@@ -1,6 +1,6 @@
 using MausritterTools.Core.Data;
 using MausritterTools.Core.Model;
-using MausritterTools.Core.Randomness;
+using Structed.Inkwell.Randomness;
 
 namespace MausritterTools.Core.Generation;
 

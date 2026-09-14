@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Model;
+using Structed.Inkwell.Randomness;
 
 namespace MausritterTools.Core.Serialization;
 
@@ -153,7 +154,7 @@ public static class SettlementSerializer
             slug = "settlement";
         }
 
-        return $"{slug}-{Randomness.SeedCodec.Encode(settlement.Seed)}.json";
+        return $"{slug}-{SeedCodec.Encode(settlement.Seed)}.json";
     }
 }
 

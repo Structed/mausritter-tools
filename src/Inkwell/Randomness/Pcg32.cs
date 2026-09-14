@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace MausritterTools.Core.Randomness;
+namespace Structed.Inkwell.Randomness;
 
 /// <summary>
 /// PCG-XSH-RR 64/32, the "pcg32" variant of Melissa O'Neill's permuted congruential generator.

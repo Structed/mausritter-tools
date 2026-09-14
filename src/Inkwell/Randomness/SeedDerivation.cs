@@ -1,4 +1,4 @@
-namespace MausritterTools.Core.Randomness;
+namespace Structed.Inkwell.Randomness;
 
 /// <summary>
 /// Derives independent, reproducible random streams from a single root seed plus a field path.

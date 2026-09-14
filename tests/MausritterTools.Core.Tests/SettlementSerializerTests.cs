@@ -1,6 +1,6 @@
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Model;
-using MausritterTools.Core.Randomness;
+using Structed.Inkwell.Randomness;
 using MausritterTools.Core.Serialization;
 
 namespace MausritterTools.Core.Tests;

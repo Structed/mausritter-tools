@@ -12,4 +12,8 @@
     <InternalsVisibleTo Include="MausritterTools.Core.Tests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Inkwell\Inkwell.csproj" />
+  </ItemGroup>
+
 </Project>

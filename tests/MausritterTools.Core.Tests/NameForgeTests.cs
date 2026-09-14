@@ -1,5 +1,5 @@
 using MausritterTools.Core.Generation;
-using MausritterTools.Core.Randomness;
+using Structed.Inkwell.Randomness;
 
 namespace MausritterTools.Core.Tests;
 

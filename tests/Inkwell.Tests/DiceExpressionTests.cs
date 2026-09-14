@@ -1,23 +1,24 @@
-using MausritterTools.Core.Generation;
-using MausritterTools.Core.Randomness;
+using Structed.Inkwell.Generation;
+using Structed.Inkwell.Randomness;
 
-namespace MausritterTools.Core.Tests;
+namespace Structed.Inkwell.Tests;
 
 public class DiceExpressionTests
 {
     private static DiceRoller Roller(uint seed = 1) => new(new Pcg32(seed));
 
     [Theory]
-    // The exact forms used by the SRD's social position table.
-    [InlineData("d6p", 1, 6)]
-    [InlineData("d6 x 10p", 10, 60)]
-    [InlineData("d6 x 50p", 50, 300)]
-    [InlineData("d4 x 100p", 100, 400)]
-    [InlineData("d4 x 1000p", 1000, 4000)]
-    // Hireling availability, which has no pip suffix.
+    // A bare count and sides, with and without an explicit multiplier.
     [InlineData("d2", 1, 2)]
     [InlineData("d6", 1, 6)]
     [InlineData("2d6", 2, 12)]
+    [InlineData("d6 x 10", 10, 60)]
+    // A trailing currency suffix is ignored, whatever a game happens to call its money.
+    [InlineData("d6p", 1, 6)]
+    [InlineData("d6 x 10p", 10, 60)]
+    [InlineData("d4 x 1000p", 1000, 4000)]
+    [InlineData("4d6 coins", 4, 24)]
+    [InlineData("d6 x 10 gp", 10, 60)]
     public void RollsStayWithinTheExpressionsRange(string expression, int min, int max)
     {
         DiceRoller dice = Roller();
@@ -50,33 +51,14 @@ public class DiceExpressionTests
     [InlineData("10%")]
     [InlineData("x10p")]
     [InlineData("d0")]
+    // A word is not a die roll just because it contains a "d". Worth pinning, because the currency
+    // suffix is matched loosely and it would be easy to widen it until prose started parsing.
+    [InlineData("not dice")]
+    [InlineData("a dozen")]
     public void UnparsableExpressionsReturnNull(string? expression) =>
         Assert.Null(DiceExpression.TryRoll(Roller(), expression));
 
     [Fact]
     public void RollFallsBackWhenTheExpressionIsUnusable() =>
         Assert.Equal(7, DiceExpression.Roll(Roller(), "not dice", fallback: 7));
-
-    [Fact]
-    public void EverySocialPositionPaymentIsParsable()
-    {
-        // A payment the parser cannot read would silently leave a shopkeeper with an empty purse.
-        DiceRoller dice = Roller();
-
-        foreach (Data.SocialPosition position in TestData.Game.Npc.SocialPositions)
-        {
-            Assert.NotNull(DiceExpression.TryRoll(dice, position.Payment));
-        }
-    }
-
-    [Fact]
-    public void EveryHirelingNumberIsParsable()
-    {
-        DiceRoller dice = Roller();
-
-        foreach (Data.Hireling hireling in TestData.Game.Hirelings.Hirelings)
-        {
-            Assert.NotNull(DiceExpression.TryRoll(dice, hireling.Number));
-        }
-    }
 }

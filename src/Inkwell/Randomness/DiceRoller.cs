@@ -1,4 +1,4 @@
-namespace MausritterTools.Core.Randomness;
+namespace Structed.Inkwell.Randomness;
 
 /// <summary>
 /// Dice and selection helpers expressed in the terms Mausritter's tables actually use.

@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json;
-using MausritterTools.Core.Randomness;
+using Structed.Inkwell.Randomness;
 
 namespace MausritterTools.Core.Interop.FantasiaArchive;
 

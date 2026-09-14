@@ -1,18 +1,28 @@
 using System.Text.RegularExpressions;
-using MausritterTools.Core.Randomness;
+using Structed.Inkwell.Randomness;
 
-namespace MausritterTools.Core.Generation;
+namespace Structed.Inkwell.Generation;
 
 /// <summary>
-/// Evaluates the compact dice expressions the SRD tables use.
+/// Evaluates the compact dice expressions table data uses.
 /// </summary>
 /// <remarks>
-/// Payments appear as "d6p", "d6 x 10p" or "d4 x 1000p", and hireling availability as "d2" or
-/// "d6". Parsing them means the numbers come from the tables rather than being duplicated in code.
+/// Covers the forms a price or availability column tends to be written in: <c>d6</c>, <c>2d6</c>,
+/// <c>d6 x 10</c>, and any of those carrying a trailing currency suffix such as <c>d6p</c> or
+/// <c>4d6 coins</c>. Parsing them means the numbers come from the tables rather than being
+/// duplicated in code.
 /// </remarks>
 public static partial class DiceExpression
 {
-    [GeneratedRegex(@"^\s*(\d*)\s*d\s*(\d+)\s*(?:x\s*(\d+))?\s*p?\s*$", RegexOptions.IgnoreCase)]
+    /// <summary>
+    /// Matches a dice expression with an optional multiplier and an optional currency suffix.
+    /// </summary>
+    /// <remarks>
+    /// The suffix is matched as letters rather than as a literal <c>p</c>, so the parser does not
+    /// have one game's currency baked into it. It stays anchored and stays after the numbers, which
+    /// is what keeps prose such as "not dice" or "a dozen" from being read as a roll.
+    /// </remarks>
+    [GeneratedRegex(@"^\s*(\d*)\s*d\s*(\d+)\s*(?:x\s*(\d+))?\s*[\p{L}]*\s*$", RegexOptions.IgnoreCase)]
     private static partial Regex Pattern { get; }
 
     /// <summary>

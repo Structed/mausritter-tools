@@ -1,6 +1,6 @@
-using MausritterTools.Core.Randomness;
+using Structed.Inkwell.Randomness;
 
-namespace MausritterTools.Core.Tests;
+namespace Structed.Inkwell.Tests;
 
 public class Pcg32Tests
 {

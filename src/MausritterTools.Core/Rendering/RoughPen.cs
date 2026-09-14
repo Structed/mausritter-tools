@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Text;
 using MausritterTools.Core.Mapping;
-using MausritterTools.Core.Randomness;
+using Structed.Inkwell.Randomness;
 
 namespace MausritterTools.Core.Rendering;
 

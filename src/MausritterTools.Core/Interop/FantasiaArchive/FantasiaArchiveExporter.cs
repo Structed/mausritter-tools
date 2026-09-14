@@ -5,7 +5,7 @@ using MausritterTools.Core.Data;
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Mapping;
 using MausritterTools.Core.Model;
-using MausritterTools.Core.Randomness;
+using Structed.Inkwell.Randomness;
 using MausritterTools.Core.Rendering;
 using MausritterTools.Core.Serialization;
 
