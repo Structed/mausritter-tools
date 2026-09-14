@@ -10,6 +10,7 @@ using MausritterTools.Core.Model;
 using MausritterTools.Core.Rendering;
 using MausritterTools.Core.Serialization;
 using Structed.Inkwell.Data;
+using Structed.Inkwell.Interop.FantasiaArchive;
 using Structed.Inkwell.Mapping;
 
 namespace MausritterTools.Core.Tests;

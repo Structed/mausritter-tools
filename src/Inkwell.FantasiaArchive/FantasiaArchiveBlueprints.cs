@@ -1,4 +1,4 @@
-namespace MausritterTools.Core.Interop.FantasiaArchive;
+namespace Structed.Inkwell.Interop.FantasiaArchive;
 
 /// <summary>
 /// The parts of Fantasia Archive's built-in document types this exporter writes to.
@@ -101,7 +101,7 @@ public static class FantasiaArchiveBlueprints
         public const string CurrentCharacters = "pairedCurrentCharactersNew";
 
         /// <summary>
-        /// Mice tied to this place without necessarily living in it. Pairs with
+        /// People tied to this place without necessarily living in it. Pairs with
         /// <see cref="Character.ConnectedPlaces"/>.
         /// </summary>
         public const string ConnectedCharacters = "pairedConnectedCharacter";
@@ -125,7 +125,7 @@ public static class FantasiaArchiveBlueprints
         public const string CurrentLocation = "pairedCurrentLocationNew";
 
         /// <summary>
-        /// Places they are tied to, which is where a shop's keeper is linked to their shop. Pairs
+        /// Places they are tied to, which is where a premises' keeper is linked to it. Pairs
         /// with <see cref="Location.ConnectedCharacters"/>.
         /// </summary>
         public const string ConnectedPlaces = "pairedConnectedPlaces";
@@ -139,7 +139,7 @@ public static class FantasiaArchiveBlueprints
         /// </summary>
         /// <remarks>
         /// Fantasia Archive has no price, quantity or rarity field on an item, so everything a
-        /// shopper would want to know goes here, where it renders as "Price: 20p".
+        /// buyer would want to know goes here, where it renders as "Price: 20p".
         /// </remarks>
         public const string Features = "features";
 
@@ -148,46 +148,7 @@ public static class FantasiaArchiveBlueprints
     }
 
     /// <summary>
-    /// The field this tool's own state rides in on the settlement's location document.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// No blueprint declares this id, which is precisely the point. Fantasia Archive renders a
-    /// document by walking the <em>blueprint's</em> fields and looking each one up, so an entry it
-    /// has never heard of is invisible in the UI and cannot be edited by hand, while its save path
-    /// only ever appends to the field list and never rebuilds it. The entry therefore survives
-    /// being opened, edited and saved, which is what makes the round trip work.
-    /// </para>
-    /// <para>
-    /// The name matters. The app's "repair project" tool deletes six specific field ids outright
-    /// (<c>strength</c>, <c>constitution</c>, <c>dexterity</c>, <c>intellect</c>, <c>wisdom</c> and
-    /// <c>charisma</c>), so this must not be one of them, and should stay obviously namespaced so it
-    /// never collides with a field a future blueprint introduces.
-    /// </para>
-    /// </remarks>
-    public const string StateField = "mausritterToolsState";
-
-    /// <summary>
-    /// Location types, which are fixed strings in the app's own dropdown.
-    /// </summary>
-    /// <remarks>
-    /// Mausritter's two smallest settlements have no counterpart: a farm or manor is just a
-    /// building, and a crossroads is nothing the list contemplates. Both keep their real Mausritter
-    /// size as a tag, so choosing the nearest available key loses nothing.
-    /// </remarks>
-    public static string LocationTypeForSize(int sizeValue) => sizeValue switch
-    {
-        1 => "Building",
-        2 => "Other",
-        3 => "Hamlet",
-        4 => "Village",
-        5 => "Town",
-        6 => "City",
-        _ => "Other"
-    };
-
-    /// <summary>
-    /// What a shop or tavern is: a building, which is what it is on the settlement's map.
+    /// What a shop, tavern or other premises is: a building.
     /// </summary>
     public const string PremisesLocationType = "Building";
 }

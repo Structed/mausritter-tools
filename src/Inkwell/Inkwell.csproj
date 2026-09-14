@@ -21,8 +21,8 @@
     <Description>
       A seeded generator engine for table-driven tabletop tools: stable PCG32 randomness, per-field
       random streams that make one value re-rollable without disturbing its neighbours, JSON
-      translation overlays, provenance and licensing, hand-inked SVG map drawing, and Fantasia
-      Archive export. Knows nothing about any particular game.
+      translation overlays, provenance and licensing, hand-inked SVG map drawing, and a versioned
+      document envelope for sharing what was generated. Knows nothing about any particular game.
     </Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>tabletop;rpg;generator;osr;procedural;svg;deterministic</PackageTags>

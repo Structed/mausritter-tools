@@ -1,7 +1,7 @@
 using System.IO.Compression;
 using System.Text;
 
-namespace MausritterTools.Core.Interop.FantasiaArchive;
+namespace Structed.Inkwell.Interop.FantasiaArchive;
 
 /// <summary>
 /// Packs an export into a ZIP, and unpacks one again.
@@ -28,7 +28,7 @@ public static class FantasiaArchivePackage
     /// <param name="export">The project folder's contents.</param>
     /// <param name="readMe">The instructions.</param>
     /// <param name="mapPng">
-    /// The settlement's map as a PNG, or null if it could not be rasterised.
+    /// The subject's map as a PNG, or null if it could not be rasterised.
     /// </param>
     /// <remarks>
     /// The map goes beside the folder for the same reason the instructions do, and rather more

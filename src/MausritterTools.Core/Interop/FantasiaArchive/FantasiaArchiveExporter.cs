@@ -8,29 +8,12 @@ using MausritterTools.Core.Model;
 using MausritterTools.Core.Rendering;
 using MausritterTools.Core.Serialization;
 using Structed.Inkwell.Data;
+using Structed.Inkwell.Interop.FantasiaArchive;
 using Structed.Inkwell.Mapping;
 using Structed.Inkwell.Randomness;
 using Structed.Inkwell.Rendering;
 
 namespace MausritterTools.Core.Interop.FantasiaArchive;
-
-/// <summary>One file in an exported project folder.</summary>
-public sealed record ExportedFile(string Name, string Content);
-
-/// <summary>A settlement rendered as a Fantasia Archive project folder.</summary>
-/// <param name="FolderName">The folder the files belong in, which is what the user points the app at.</param>
-/// <param name="Files">The database dumps, one per document type.</param>
-/// <param name="MapSvg">
-/// The settlement's map, as it was embedded in the settlement's own document.
-/// </param>
-/// <remarks>
-/// The map is exposed as well as embedded so a caller that can rasterise it — which in practice
-/// means one with a browser to hand — can package a copy Fantasia Archive is willing to accept
-/// through its own image button. It is the very same drawing either way, rather than a second one
-/// rendered from a seed that might have been derived differently.
-/// </remarks>
-public sealed record FantasiaArchiveExport(
-    string FolderName, IReadOnlyList<ExportedFile> Files, string MapSvg = "");
 
 /// <summary>
 /// Turns a settlement into a Fantasia Archive project folder.
@@ -51,7 +34,7 @@ public sealed record FantasiaArchiveExport(
 public static class FantasiaArchiveExporter
 {
     /// <summary>Identifies this tool's state so a foreign file is not mistaken for one of ours.</summary>
-    public const string StateFormatId = "mausritter-tools/fantasia-archive-state";
+    public const string StateFormatId = MausritterArchiveKeys.StateFormatId;
 
     /// <summary>Renders a settlement as a project folder.</summary>
     public static FantasiaArchiveExport Export(
@@ -318,7 +301,7 @@ public static class FantasiaArchiveExporter
                     description: SettlementDescription()),
 
                 new(FantasiaArchiveBlueprints.Location.LocationType,
-                    new TextValue(FantasiaArchiveBlueprints.LocationTypeForSize(_settlement.Size.SizeValue))),
+                    new TextValue(MausritterArchiveKeys.LocationTypeForSize(_settlement.Size.SizeValue))),
 
                 // Text rather than a number, which is just as well: Mausritter states a population
                 // as a range or as "1000+".
@@ -342,7 +325,7 @@ public static class FantasiaArchiveExporter
 
                 // Everything needed to rebuild the settlement, in a field no blueprint declares and
                 // the app therefore never renders, edits or discards.
-                new(FantasiaArchiveBlueprints.StateField, new TextValue(State()))
+                new(MausritterArchiveKeys.StateField, new TextValue(State()))
             ];
 
             return Build(FantasiaArchiveBlueprints.Locations, _settlementId, fields);

@@ -7,6 +7,7 @@ using MausritterTools.Core.Mapping;
 using MausritterTools.Core.Model;
 using MausritterTools.Core.Serialization;
 using Structed.Inkwell.Data;
+using Structed.Inkwell.Interop.FantasiaArchive;
 using Structed.Inkwell.Mapping;
 using Structed.Inkwell.Serialization;
 
@@ -482,7 +483,7 @@ public class FantasiaArchiveExportTests
 
         // "City" for a Stadt: the key the app's dropdown offers, not the word the reader sees.
         Assert.Equal(
-            FantasiaArchiveBlueprints.LocationTypeForSize(settlement.Size.SizeValue),
+            MausritterArchiveKeys.LocationTypeForSize(settlement.Size.SizeValue),
             Field(place, FantasiaArchiveBlueprints.Location.LocationType).GetString());
 
         Assert.Equal("City", Field(place, FantasiaArchiveBlueprints.Location.LocationType).GetString());
@@ -567,7 +568,7 @@ public class FantasiaArchiveExportTests
         List<JsonElement> carriers =
         [
             .. AllDocuments(export)
-                .Where(d => PouchDump.FieldString(d, FantasiaArchiveBlueprints.StateField) is not null)
+                .Where(d => PouchDump.FieldString(d, MausritterArchiveKeys.StateField) is not null)
         ];
 
         JsonElement carrier = Assert.Single(carriers);
@@ -813,7 +814,7 @@ public class FantasiaArchiveMapTests
         PouchDump.ReadDocuments(
                 export.Files.Single(f => f.Name == PouchDump.FileNameFor(FantasiaArchiveBlueprints.Locations)).Content)
             .Single(document => PouchDump.FieldString(
-                document, FantasiaArchiveBlueprints.StateField) is not null);
+                document, MausritterArchiveKeys.StateField) is not null);
 
     private static string DescriptionOf(FantasiaArchiveExport export) =>
         PouchDump.FieldString(

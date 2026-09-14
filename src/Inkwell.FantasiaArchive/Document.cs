@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace MausritterTools.Core.Interop.FantasiaArchive;
+namespace Structed.Inkwell.Interop.FantasiaArchive;
 
 /// <summary>
 /// One value on a Fantasia Archive document.
