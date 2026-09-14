@@ -2,6 +2,7 @@
 @using MausritterTools.Core.Data
 @using MausritterTools.Web.Components
 @using MausritterTools.Web.Services
+@using Structed.Inkwell.Data
 @inject GameDataProvider DataProvider
 
 <PageTitle>@TextTemplate.Format(Text.App.PageTitlePattern, ("page", Text.About.Heading))</PageTitle>
@@ -32,7 +33,7 @@
                     <tr>
                         <td>@source.Describes</td>
                         <td>
-                            @if (source.IsSrdDerived)
+                            @if (source.IsDerived)
                             {
                                 <a href="@source.Url" target="_blank" rel="noopener">@source.Work</a>
                                 @(source.Version is { Length: > 0 } v ? $" v{v}" : "")
@@ -44,6 +45,12 @@
                         </td>
                         <td>@(source.Licence ?? Text.About.DataSources.OriginalLicence)</td>
                     </tr>
+                    @foreach (string notice in source.Notices)
+                    {
+                        <tr>
+                            <td colspan="3"><small>@notice</small></td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>

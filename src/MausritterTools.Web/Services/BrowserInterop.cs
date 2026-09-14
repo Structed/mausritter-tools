@@ -93,6 +93,31 @@ public sealed class BrowserInterop(IJSRuntime jsRuntime) : IAsyncDisposable
         await module.InvokeVoidAsync("printPage");
     }
 
+    /// <summary>
+    /// Draws an SVG to a canvas and returns it as PNG, or null if the browser could not.
+    /// </summary>
+    /// <param name="svg">The drawing, which must carry its own width and height.</param>
+    /// <param name="scale">How many device pixels to spend per unit of the drawing.</param>
+    /// <remarks>
+    /// Null is an ordinary outcome, not a failure worth reporting: the only caller ships the map
+    /// embedded in a document as well, so a browser that will not rasterise costs the user a
+    /// convenience rather than the map itself.
+    /// </remarks>
+    public async Task<byte[]?> RasteriseSvgAsync(string svg, double scale)
+    {
+        ArgumentNullException.ThrowIfNull(svg);
+
+        try
+        {
+            IJSObjectReference module = await ModuleAsync();
+            return await module.InvokeAsync<byte[]?>("rasteriseSvg", svg, scale);
+        }
+        catch (JSException)
+        {
+            return null;
+        }
+    }
+
     /// <summary>The language the browser asks for, used only as a first guess.</summary>
     public async Task<string?> GetBrowserLanguageAsync()
     {

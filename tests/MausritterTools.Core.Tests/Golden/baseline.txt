@@ -1,0 +1,1623 @@
+Golden baseline. Regenerate with UPDATE_GOLDEN=1 and read the diff before committing.
+format=mausritter-tools/settlement version=2
+fantasiaArchiveState=mausritter-tools/fantasia-archive-state
+
+======================================================================
+case smallest [en]
+======================================================================
+
+-- field paths and pinned positions --
+settlement/event = #14
+settlement/features = #9
+settlement/governance = #1
+settlement/host = #19
+settlement/industries = #12
+settlement/inhabitants = #4
+settlement/name = Applegrove
+settlement/size = #0
+
+-- map --
+boundary=Greenhouse shape=boxy
+canvas=420x320
+boundaryPoints=72
+roads=5 buildings=4 scatter=46
+water=none
+svgLength=20311
+svgSha256=80035bc5c7b141f0e9d581e2b1586e38f78c6048197fe245185b9a4feb1dd663
+
+-- fantasia archive --
+folder=applegrove-qc6u5w
+characters.txt: 1 document(s)
+  b9d6bb5d-3856-45a0-965f-10a8da4a778a
+items.txt: 1 document(s)
+  a893e028-34ea-41cf-8743-b920c1da4abd
+locations.txt: 1 document(s)
+  800beb88-93e4-4704-a795-10df4e93dece
+
+-- json export --
+{
+  "format": "mausritter-tools/settlement",
+  "version": 2,
+  "generatedUtc": "2024-06-01T12:00:00.0000000Z",
+  "locale": "en",
+  "attribution": "Settlement tables from Mausritter (https://mausritter.com), a product of Losing Games and Isaac Williams, used under CC BY 4.0. Shops, services and mouse names are unofficial house rules original to mausritter-tools.",
+  "options": {
+    "seed": "qc6u5w",
+    "size": 1,
+    "nearHumanTown": false,
+    "pins": {},
+    "rerolls": {}
+  },
+  "settlement": {
+    "name": "Applegrove",
+    "size": "Farm/manor",
+    "population": "1-3 families",
+    "host": "Greenhouse",
+    "hostDescription": "Warm, damp, and overgrown. Food grows year-round and so does everything else.",
+    "nearHumanTown": false,
+    "governance": "Administered by a knight or lower-caste lord",
+    "governanceRoll": 4,
+    "inhabitants": "Believe grooming their fur is bad luck",
+    "notableFeatures": [
+      "Beetle racing rink"
+    ],
+    "industries": [
+      "Keep silkworms and weave fine cloth"
+    ],
+    "event": "Faerie emissary with an impossible request",
+    "shops": []
+  }
+}
+
+======================================================================
+case city-near-humans [en]
+======================================================================
+
+-- field paths and pinned positions --
+settlement/event = #17
+settlement/features = #4\n#17
+settlement/governance = #4
+settlement/host = #4
+settlement/industries = #5\n#8
+settlement/inhabitants = #6
+settlement/name = Friendburn
+settlement/size = #5
+shop/0/keeper/appearance = #0
+shop/0/keeper/birthsign = #1
+shop/0/keeper/name = Walnut Rushmere
+shop/0/keeper/position = #2
+shop/0/keeper/quirk = #12
+shop/0/keeper/relationship = #8
+shop/0/keeper/wants = #10
+shop/0/quirk = #3
+shop/0/sign = The Storehouse
+shop/1/keeper/appearance = #7
+shop/1/keeper/birthsign = #1
+shop/1/keeper/name = Laurel Ditchwater
+shop/1/keeper/position = #0
+shop/1/keeper/quirk = #1
+shop/1/keeper/relationship = #13
+shop/1/keeper/wants = #16
+shop/1/quirk = #5
+shop/1/sign = Platter & Griddle
+shop/10/keeper/appearance = #18
+shop/10/keeper/birthsign = #5
+shop/10/keeper/name = Cedar Nettlebed
+shop/10/keeper/position = #4
+shop/10/keeper/quirk = #9
+shop/10/keeper/wants = #7
+shop/10/quirk = #15
+shop/10/sign = The Patched Inkpot
+shop/2/keeper/appearance = #0
+shop/2/keeper/birthsign = #4
+shop/2/keeper/name = Walnut Candlewick
+shop/2/keeper/position = #3
+shop/2/keeper/quirk = #17
+shop/2/keeper/wants = #9
+shop/2/quirk = #10
+shop/2/sign = The Tilted Scrap
+shop/3/keeper/appearance = #5
+shop/3/keeper/birthsign = #2
+shop/3/keeper/name = Cinder Nettlebed
+shop/3/keeper/position = #2
+shop/3/keeper/quirk = #12
+shop/3/keeper/relationship = #9
+shop/3/keeper/wants = #4
+shop/3/quirk = #6
+shop/3/sign = Nettlebed's Taper
+shop/4/keeper/appearance = #6
+shop/4/keeper/birthsign = #1
+shop/4/keeper/name = Coriander Barleycorn
+shop/4/keeper/position = #3
+shop/4/keeper/quirk = #12
+shop/4/keeper/relationship = #14
+shop/4/keeper/wants = #11
+shop/4/quirk = #14
+shop/4/sign = Barleycorn & Daughters
+shop/5/keeper/appearance = #1
+shop/5/keeper/birthsign = #4
+shop/5/keeper/name = Samphire Saltmarsh
+shop/5/keeper/position = #2
+shop/5/keeper/quirk = #1
+shop/5/keeper/wants = #8
+shop/5/quirk = #12
+shop/5/sign = Saltmarsh's Vault
+shop/6/keeper/appearance = #18
+shop/6/keeper/birthsign = #4
+shop/6/keeper/name = Chicory Loamfield
+shop/6/keeper/position = #3
+shop/6/keeper/quirk = #7
+shop/6/keeper/relationship = #0
+shop/6/keeper/wants = #11
+shop/6/quirk = #19
+shop/6/sign = The Gilded Bolt
+shop/7/keeper/appearance = #13
+shop/7/keeper/birthsign = #1
+shop/7/keeper/name = Juniper Brambleford
+shop/7/keeper/position = #3
+shop/7/keeper/quirk = #16
+shop/7/keeper/relationship = #8
+shop/7/keeper/wants = #19
+shop/7/quirk = #0
+shop/7/sign = The Honest Harness
+shop/8/keeper/appearance = #12
+shop/8/keeper/birthsign = #0
+shop/8/keeper/name = Citron Bracken
+shop/8/keeper/position = #2
+shop/8/keeper/quirk = #19
+shop/8/keeper/relationship = #12
+shop/8/keeper/wants = #17
+shop/8/quirk = #18
+shop/8/sign = The Wilted Curio
+shop/9/keeper/appearance = #14
+shop/9/keeper/birthsign = #1
+shop/9/keeper/name = Myrtle Wainwright
+shop/9/keeper/position = #0
+shop/9/keeper/quirk = #1
+shop/9/keeper/wants = #7
+shop/9/quirk = #13
+shop/9/sign = Wainwright's Setting
+tavern/keeper/appearance = #12
+tavern/keeper/birthsign = #0
+tavern/keeper/name = Clover Whistledown
+tavern/keeper/position = #1
+tavern/keeper/quirk = #6
+tavern/keeper/wants = #2
+tavern/meal = #8
+tavern/name = The Broken Rat
+
+-- map --
+boundary=Huge flat rock shape=sprawl
+canvas=420x320
+boundaryPoints=72
+roads=47 buildings=38 scatter=28
+water=none
+keyed 1: The Broken Rat at 226.01,149.91 16x15 angle 0.225
+keyed 2: The Storehouse at 195.14,134.74 22x13 angle -1.595
+keyed 3: Platter & Griddle at 250.7,156.22 19x12 angle 0.252
+keyed 4: The Tilted Scrap at 216.18,96.36 18x12 angle -1.93
+keyed 5: Nettlebed's Taper at 280.61,199.09 17x16 angle 0.453
+keyed 6: Barleycorn & Daughters at 124.94,206.33 20x15 angle 2.227
+keyed 7: Saltmarsh's Vault at 329.11,199.66 17x15 angle 0.754
+keyed 8: The Gilded Bolt at 322.71,236.34 21x13 angle 0.789
+keyed 9: The Honest Harness at 245.22,185.13 19x13 angle 1.507
+keyed 10: The Wilted Curio at 200.41,217.99 16x13 angle 0.758
+keyed 11: Wainwright's Setting at 216.75,236.73 17x9 angle 0.766
+keyed 12: The Patched Inkpot at 247.84,230.47 18x10 angle 1.71
+legend 1: The Broken Rat / Tavern — Fresh buttered bread
+legend 2: The Storehouse / General store — Walnut Rushmere
+legend 3: Platter & Griddle / Victualler — Laurel Ditchwater
+legend 4: The Tilted Scrap / Scavenger's stall — Walnut Candlewick
+legend 5: Nettlebed's Taper / Chandler — Cinder Nettlebed
+legend 6: Barleycorn & Daughters / Apothecary — Coriander Barleycorn
+legend 7: Saltmarsh's Vault / Bank and safebox — Samphire Saltmarsh
+legend 8: The Gilded Bolt / Clothier — Chicory Loamfield
+legend 9: The Honest Harness / Stables and transport — Juniper Brambleford
+legend 10: The Wilted Curio / Curio dealer — Citron Bracken
+legend 11: Wainwright's Setting / Jeweller — Myrtle Wainwright
+legend 12: The Patched Inkpot / Sage's scriptorium — Cedar Nettlebed
+svgLength=42461
+svgSha256=0a8485013422e225d08a4b601e7e251002626729acbd66efaac94f8f281e4ee6
+
+-- fantasia archive --
+folder=friendburn-3cs83k
+characters.txt: 13 document(s)
+  06fc79a4-97b6-4a6f-ad5b-e5e6310f0c6a
+  174ff83b-228d-45d3-b487-28c1e028cdf9
+  3ba239e9-898f-45a7-962c-2e630685b7ae
+  3cdb4501-faaa-490e-99df-f47e08f40387
+  400914ac-2cd4-477a-ac41-7ef184aa19f3
+  4bf0b0df-98ca-4011-9f7f-4db70cb6aff4
+  5b7eedb2-1062-412f-bb2d-d6ffb260df79
+  7f50338d-3e36-414e-a33e-33cf098e17b6
+  96f3191a-0aef-4c46-b44d-8d39db354650
+  a5c71f8c-ebd1-485c-991d-a27f9bc72354
+  c1544df7-7a70-4a74-9874-8b65a09f8126
+  cc7443ba-61c3-4115-bc50-9ed01afd24f6
+  d670f4cc-0438-4ec3-9808-ca28f0343de6
+items.txt: 37 document(s)
+  0a2aef1e-682b-4417-9a63-e3f4767ec9b3
+  0c09fa68-39eb-4887-932f-c0c852e7e6f5
+  1346ed39-0285-409a-a115-1565a8cd9e3c
+  1e1e85cb-0ee4-4bbf-8b3d-55f4ead6ef54
+  23607670-63ca-4e98-aa30-d08c168fda58
+  2964c38f-891a-4847-a335-f2cb6f66fd42
+  2965283e-81da-4035-993a-a6f8084a75c8
+  2c6c7687-b761-43c0-bfcf-c7a9a800bb62
+  2e24fd4d-990d-4ff1-ada9-145a8cff8668
+  3277bf09-661c-4660-b0e7-9376f6118523
+  4a8c0feb-4e5d-468e-bf3a-5c54cc53d3f2
+  4def69f9-e575-4866-8b73-c96e77be6c34
+  53d8ba87-69c9-42e0-98fc-568887cb8881
+  55248156-508c-499c-a598-1750659aa12b
+  581699fd-ac4a-4137-ba55-f94a881be9f7
+  68149022-98e0-44c8-a825-f2b7160da793
+  6b80eba6-80fb-4e71-a8c9-06dafcd4fbee
+  6f3f7b4e-6563-40f0-a9bc-2e1df8a15899
+  705848e3-f0f6-41bb-8b4e-7284ecf2be5d
+  74358bfe-d305-4e62-b47a-bbba013dec69
+  7acb2ae4-5b72-4424-b7f2-1ac291d4d2cb
+  7da7f6ef-8620-4b2d-82a3-0cd3b2553f90
+  94a85443-5df2-43da-8528-a17d9cbe7d14
+  a53001c0-4588-434e-b4ae-3b2a4e570c88
+  a93ab509-bd03-489e-8e84-0c701d4c7ef0
+  b1e7f05b-9900-415a-9a45-9f744ad5ca68
+  c5f45981-4bac-4ed6-b798-2aa7c6b8e9ec
+  c8a09778-3493-41af-8d37-316942e9bbab
+  d2b601ac-b3d6-4406-8a69-4c2c2e0fed3d
+  d58b0822-7b0e-4321-99e2-b5b85079f68c
+  d699725c-e24d-4059-8d31-12986d5250d8
+  df2aab86-7f19-4132-b80f-194094135b58
+  e7562526-8113-4910-b7ed-bb69524e7180
+  eabd6350-db1d-47fa-96d2-96c68533cae0
+  efb78226-bfb7-4c4a-b818-a70163c1f860
+  f67679f3-6dc2-4f38-821d-23dab373344b
+  f8b7d6d5-3782-457c-bca3-c20a518d160c
+locations.txt: 13 document(s)
+  197f9882-49d6-4cc3-8b19-107eff6cf431
+  1efeb161-a52d-482f-9f62-b99179afb634
+  4802bdd2-2bd5-46ce-a5be-5a28bbdbb715
+  713d8232-ef7e-4c92-8bbd-9c5af749ee49
+  78466804-349a-4b75-9abe-91d293b77b65
+  8afef524-c8cd-4405-9483-ffc89b9a2a60
+  a835cf48-65bf-4610-a984-114a72b75cbd
+  bcc95320-c31c-4dcb-ac12-80e3ccf3cbe1
+  c27b611f-563c-44ab-838a-981a8d0e634d
+  d36e18ed-3971-46bd-b47c-a61b1a439d45
+  edf30b32-3395-4139-ace0-27c83e660a98
+  f78597cd-ea73-407b-a7a5-7318e8fce64d
+  fee47d75-ba58-4434-afe9-03200ccf7955
+
+-- json export --
+{
+  "format": "mausritter-tools/settlement",
+  "version": 2,
+  "generatedUtc": "2024-06-01T12:00:00.0000000Z",
+  "locale": "en",
+  "attribution": "Settlement tables from Mausritter (https://mausritter.com), a product of Losing Games and Isaac Williams, used under CC BY 4.0. Shops, services and mouse names are unofficial house rules original to mausritter-tools.",
+  "options": {
+    "seed": "3cs83k",
+    "size": 6,
+    "nearHumanTown": true,
+    "terrain": "forest",
+    "pins": {},
+    "rerolls": {}
+  },
+  "settlement": {
+    "name": "Friendburn",
+    "size": "City",
+    "population": "1000\u002B mice",
+    "host": "Huge flat rock",
+    "hostDescription": "A roof of stone over a wide, dry, permanently twilit plaza.",
+    "nearHumanTown": true,
+    "governance": "House of an upper caste noblemouse",
+    "governanceRoll": 11,
+    "inhabitants": "Brew honey-mead, flavoured with pungent herbs",
+    "notableFeatures": [
+      "Cow skull, repurposed as a guildhouse",
+      "Pigeon rider\u2019s roost"
+    ],
+    "industries": [
+      "Pungent cheese, cured for years",
+      "Merchants and traders, often in need of guards"
+    ],
+    "event": "Cat lord demands a heavy tithe",
+    "tavern": {
+      "name": "The Broken Rat",
+      "specialtyMeal": "Fresh buttered bread",
+      "keeper": {
+        "name": "Clover Whistledown",
+        "appearance": "Missing an ear",
+        "quirk": "Ashamed of past crimes",
+        "wants": "Escape",
+        "position": "Common",
+        "purse": 20,
+        "birthsign": "Star",
+        "disposition": "Brave / Reckless"
+      }
+    },
+    "shops": [
+      {
+        "index": 1,
+        "type": "General store",
+        "sign": "The Storehouse",
+        "quirk": "Keeps a beetle on a leash by the door",
+        "keeper": {
+          "name": "Walnut Rushmere",
+          "appearance": "Soulful eyes",
+          "quirk": "Quick, erratic speech",
+          "wants": "To protect",
+          "position": "Common",
+          "purse": 50,
+          "birthsign": "Wheel",
+          "disposition": "Industrious / Unimaginative",
+          "relationship": "Laurel Ditchwater: in love, unrequited"
+        },
+        "priceAdjustmentPercent": -9,
+        "stock": [
+          {
+            "item": "Bucket",
+            "price": "5p",
+            "quantity": 5
+          },
+          {
+            "item": "Cookpots",
+            "price": "9p",
+            "quantity": 6
+          },
+          {
+            "item": "Horn",
+            "price": "9p",
+            "quantity": 1
+          },
+          {
+            "item": "Hourglass",
+            "price": "273p",
+            "quantity": 1
+          },
+          {
+            "item": "Metal file",
+            "price": "5p",
+            "quantity": 2
+          },
+          {
+            "item": "Mirror",
+            "price": "182p",
+            "quantity": 1
+          },
+          {
+            "item": "Set of loaded dice",
+            "price": "5p",
+            "quantity": 6
+          },
+          {
+            "item": "Waterskin",
+            "price": "5p",
+            "quantity": 3
+          },
+          {
+            "item": "Whistle",
+            "price": "5p",
+            "quantity": 3
+          },
+          {
+            "item": "Wooden pole, 6\u0022",
+            "price": "1p",
+            "quantity": 6
+          }
+        ]
+      },
+      {
+        "index": 2,
+        "type": "Victualler",
+        "sign": "Platter \u0026 Griddle",
+        "quirk": "Prices are chalked up and rubbed out hourly",
+        "keeper": {
+          "name": "Laurel Ditchwater",
+          "appearance": "Carries rusted pinsword",
+          "quirk": "Obsessed with weather",
+          "wants": "Beauty",
+          "position": "Poor",
+          "purse": 6,
+          "birthsign": "Wheel",
+          "disposition": "Industrious / Unimaginative",
+          "relationship": "Walnut Rushmere: guild brothers"
+        },
+        "priceAdjustmentPercent": 12,
+        "stock": [
+          {
+            "item": "Bunkhouse bed",
+            "price": "1p per night",
+            "quantity": 3
+          },
+          {
+            "item": "Grand meal",
+            "price": "56p",
+            "quantity": 3
+          },
+          {
+            "item": "Hot bath",
+            "price": "2p",
+            "quantity": 6
+          },
+          {
+            "item": "Meal",
+            "price": "2p",
+            "quantity": 1
+          },
+          {
+            "item": "Private room",
+            "price": "6p per night",
+            "quantity": 1
+          },
+          {
+            "item": "Travel rations",
+            "price": "6p",
+            "quantity": 3
+          }
+        ]
+      },
+      {
+        "index": 3,
+        "type": "Scavenger\u0027s stall",
+        "sign": "The Tilted Scrap",
+        "quirk": "Sells at a loss and cannot explain why",
+        "keeper": {
+          "name": "Walnut Candlewick",
+          "appearance": "Soulful eyes",
+          "quirk": "Hates being outdoors",
+          "wants": "Love",
+          "position": "Burghermouse",
+          "purse": 50,
+          "birthsign": "Moon",
+          "disposition": "Wise / Mysterious"
+        },
+        "priceAdjustmentPercent": 11,
+        "stock": [
+          {
+            "item": "Incense stick",
+            "price": "22p",
+            "quantity": 1
+          },
+          {
+            "item": "Lens",
+            "price": "222p",
+            "quantity": 1
+          },
+          {
+            "item": "Padlock and key, large",
+            "price": "111p",
+            "quantity": 1
+          },
+          {
+            "item": "Twine, roll",
+            "price": "44p",
+            "quantity": 3
+          }
+        ]
+      },
+      {
+        "index": 4,
+        "type": "Chandler",
+        "sign": "Nettlebed\u0027s Taper",
+        "quirk": "Insists on telling you the history of each item",
+        "keeper": {
+          "name": "Cinder Nettlebed",
+          "appearance": "Pockets full of seed",
+          "quirk": "Quick, erratic speech",
+          "wants": "Power",
+          "position": "Common",
+          "purse": 20,
+          "birthsign": "Acorn",
+          "disposition": "Inquisitive / Stubborn",
+          "relationship": "Myrtle Wainwright: drinking buddies"
+        },
+        "priceAdjustmentPercent": -14,
+        "stock": [
+          {
+            "item": "Batteries, for electric lantern",
+            "price": "43p",
+            "quantity": 3
+          },
+          {
+            "item": "Electric lantern",
+            "price": "172p",
+            "quantity": 1
+          },
+          {
+            "item": "Oil, for lantern",
+            "price": "9p",
+            "quantity": 6
+          }
+        ]
+      },
+      {
+        "index": 5,
+        "type": "Apothecary",
+        "sign": "Barleycorn \u0026 Daughters",
+        "quirk": "Counts pips three times, out loud",
+        "keeper": {
+          "name": "Coriander Barleycorn",
+          "appearance": "Bent twig walking stick",
+          "quirk": "Quick, erratic speech",
+          "wants": "Food",
+          "position": "Burghermouse",
+          "purse": 250,
+          "birthsign": "Wheel",
+          "disposition": "Industrious / Unimaginative",
+          "relationship": "Myrtle Wainwright: childhood friends"
+        },
+        "priceAdjustmentPercent": 19,
+        "stock": [
+          {
+            "item": "Bottle",
+            "price": "1p",
+            "quantity": 1
+          },
+          {
+            "item": "Cookpots",
+            "price": "12p",
+            "quantity": 4
+          },
+          {
+            "item": "Glue",
+            "price": "6p",
+            "quantity": 1
+          },
+          {
+            "item": "Hourglass",
+            "price": "357p",
+            "quantity": 1
+          },
+          {
+            "item": "Waterskin",
+            "price": "6p",
+            "quantity": 3
+          }
+        ]
+      },
+      {
+        "index": 6,
+        "type": "Bank and safebox",
+        "sign": "Saltmarsh\u0027s Vault",
+        "quirk": "Owes money to someone frightening",
+        "keeper": {
+          "name": "Samphire Saltmarsh",
+          "appearance": "Bright, patched clothes",
+          "quirk": "Obsessed with weather",
+          "wants": "Protection",
+          "position": "Common",
+          "purse": 20,
+          "birthsign": "Moon",
+          "disposition": "Wise / Mysterious"
+        },
+        "terms": "Storage is free. Retrieval costs 1% of the value stored.",
+        "priceAdjustmentPercent": -12,
+        "stock": []
+      },
+      {
+        "index": 7,
+        "type": "Clothier",
+        "sign": "The Gilded Bolt",
+        "quirk": "Convinced a rival is stealing from them",
+        "keeper": {
+          "name": "Chicory Loamfield",
+          "appearance": "Shaved fur",
+          "quirk": "Very competitive",
+          "wants": "Food",
+          "position": "Burghermouse",
+          "purse": 150,
+          "birthsign": "Moon",
+          "disposition": "Wise / Mysterious",
+          "relationship": "Citron Bracken: parent"
+        },
+        "priceAdjustmentPercent": -4,
+        "stock": [
+          {
+            "item": "Noble",
+            "price": "960p",
+            "quantity": 1
+          },
+          {
+            "item": "Poor",
+            "price": "10p",
+            "quantity": 5
+          },
+          {
+            "item": "Standard",
+            "price": "48p",
+            "quantity": 1
+          },
+          {
+            "item": "Waterproof cloak",
+            "price": "96p",
+            "quantity": 2
+          },
+          {
+            "item": "Winter cloak",
+            "price": "144p",
+            "quantity": 2
+          }
+        ]
+      },
+      {
+        "index": 8,
+        "type": "Stables and transport",
+        "sign": "The Honest Harness",
+        "quirk": "Refuses to haggle, on principle",
+        "keeper": {
+          "name": "Juniper Brambleford",
+          "appearance": "Long whiskers",
+          "quirk": "Many pet insects",
+          "wants": "Fun",
+          "position": "Burghermouse",
+          "purse": 250,
+          "birthsign": "Wheel",
+          "disposition": "Industrious / Unimaginative",
+          "relationship": "Cedar Nettlebed: in love, unrequited"
+        },
+        "priceAdjustmentPercent": -7,
+        "stock": [
+          {
+            "item": "Rabbit wagon",
+            "price": "5p per hex",
+            "quantity": 1
+          },
+          {
+            "item": "River raft",
+            "price": "9p per hex",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "index": 9,
+        "type": "Curio dealer",
+        "sign": "The Wilted Curio",
+        "quirk": "Discounts for anyone who admires the beetle-shell sign",
+        "keeper": {
+          "name": "Citron Bracken",
+          "appearance": "Missing an ear",
+          "quirk": "Very twitchy whiskers",
+          "wants": "Revenge",
+          "position": "Common",
+          "purse": 20,
+          "birthsign": "Star",
+          "disposition": "Brave / Reckless",
+          "relationship": "Chicory Loamfield: sworn enemies"
+        },
+        "priceAdjustmentPercent": 62,
+        "stock": [
+          {
+            "item": "Musical instrument",
+            "price": "324p",
+            "quantity": 2
+          },
+          {
+            "item": "Perfume",
+            "price": "81p",
+            "quantity": 2
+          },
+          {
+            "item": "Set of loaded dice",
+            "price": "8p",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "index": 10,
+        "type": "Jeweller",
+        "sign": "Wainwright\u0027s Setting",
+        "quirk": "Runs the shop from a hammock",
+        "keeper": {
+          "name": "Myrtle Wainwright",
+          "appearance": "Twinkling eyes",
+          "quirk": "Obsessed with weather",
+          "wants": "Wealth",
+          "position": "Poor",
+          "purse": 4,
+          "birthsign": "Wheel",
+          "disposition": "Industrious / Unimaginative"
+        },
+        "terms": "Buys recovered treasure, typically at about half its listed value.",
+        "priceAdjustmentPercent": -4,
+        "stock": []
+      },
+      {
+        "index": 11,
+        "type": "Sage\u0027s scriptorium",
+        "sign": "The Patched Inkpot",
+        "quirk": "Extends credit to anyone with a sad story",
+        "keeper": {
+          "name": "Cedar Nettlebed",
+          "appearance": "Shaved fur",
+          "quirk": "Extremely polite",
+          "wants": "Wealth",
+          "position": "Guildmouse",
+          "purse": 100,
+          "birthsign": "Mother",
+          "disposition": "Nurturing / Worrying"
+        },
+        "priceAdjustmentPercent": -1,
+        "stock": [
+          {
+            "item": "Book, blank",
+            "price": "297p",
+            "quantity": 1
+          },
+          {
+            "item": "Book, reading",
+            "price": "594p",
+            "quantity": 1
+          },
+          {
+            "item": "Bottle",
+            "price": "1p",
+            "quantity": 2
+          }
+        ]
+      }
+    ]
+  }
+}
+
+======================================================================
+case pinned-and-rerolled-in-german [de]
+======================================================================
+
+-- field paths and pinned positions --
+settlement/event = #7
+settlement/features = #0
+settlement/governance = #4
+settlement/host = #15
+settlement/industries = #1
+settlement/inhabitants = #7
+settlement/name = Hollowbridge
+settlement/size = #3
+shop/0/keeper/appearance = #2
+shop/0/keeper/birthsign = #5
+shop/0/keeper/name = Glut Aschenhang
+shop/0/keeper/position = #1
+shop/0/keeper/quirk = #15
+shop/0/keeper/wants = #1
+shop/0/quirk = #18
+shop/0/sign = Aschenhangs Scheffel
+shop/1/keeper/appearance = #19
+shop/1/keeper/birthsign = #2
+shop/1/keeper/name = Kastanie Pfeifenwind
+shop/1/keeper/position = #5
+shop/1/keeper/quirk = #14
+shop/1/keeper/relationship = #5
+shop/1/keeper/wants = #9
+shop/1/quirk = #13
+shop/1/sign = Zum Geflickten Talg
+shop/2/keeper/appearance = #7
+shop/2/keeper/birthsign = #4
+shop/2/keeper/name = Farn Windhalm
+shop/2/keeper/position = #2
+shop/2/keeper/quirk = #11
+shop/2/keeper/wants = #7
+shop/2/quirk = #16
+shop/2/sign = Windhalms Bank
+shop/3/keeper/appearance = #6
+shop/3/keeper/birthsign = #1
+shop/3/keeper/name = Ringelblume Eschengrund
+shop/3/keeper/position = #5
+shop/3/keeper/quirk = #10
+shop/3/keeper/relationship = #5
+shop/3/keeper/wants = #6
+shop/3/quirk = #1
+shop/3/sign = Zum Krummen Fingerhut
+shop/4/keeper/appearance = #16
+shop/4/keeper/birthsign = #5
+shop/4/keeper/name = Grünkohl Pfennigpfeife
+shop/4/keeper/position = #5
+shop/4/keeper/quirk = #12
+shop/4/keeper/wants = #4
+shop/4/quirk = #11
+shop/4/sign = Pfennigpfeifes Zügel
+tavern/keeper/appearance = #11
+tavern/keeper/birthsign = #0
+tavern/keeper/name = Schlüsselblume Grabenwasser
+tavern/keeper/position = #5
+tavern/keeper/quirk = #6
+tavern/keeper/wants = #13
+tavern/meal = #2
+tavern/name = Zur Schlauen Biene
+
+-- map --
+boundary=Steinbrücke shape=linear
+canvas=420x320
+boundaryPoints=72
+roads=26 buildings=22 scatter=24
+water=none
+keyed 1: Zur Schlauen Biene at 221.11,172.83 22x13 angle 0.011
+keyed 2: Aschenhangs Scheffel at 162.49,136.48 20x11 angle -2.948
+keyed 3: Zum Geflickten Talg at 287.77,166.74 19x13 angle -0.156
+keyed 4: Windhalms Bank at 127.74,122.59 20x14 angle -2.702
+keyed 5: Zum Krummen Fingerhut at 313.69,159.98 18x12 angle -0.257
+keyed 6: Pfennigpfeifes Zügel at 240.57,190.84 13x13 angle 1.616
+legend 1: Zur Schlauen Biene / Taverne — Brombeerkuchen
+legend 2: Aschenhangs Scheffel / Gemischtwarenladen — Glut Aschenhang
+legend 3: Zum Geflickten Talg / Kerzenzieherei — Kastanie Pfeifenwind
+legend 4: Windhalms Bank / Heuerhalle — Farn Windhalm
+legend 5: Zum Krummen Fingerhut / Tuchhandlung — Ringelblume Eschengrund
+legend 6: Pfennigpfeifes Zügel / Stall und Transport — Grünkohl Pfennigpfeife
+svgLength=30259
+svgSha256=8ed44c816cff1a296500dde4d8ef0bc4ca57a0aca35b66b21907123edeff7e06
+
+-- fantasia archive --
+folder=hollowbridge-1gz7oji
+characters.txt: 7 document(s)
+  1073672b-9818-46fc-aaf0-96e507b4bb15
+  1461f34c-d365-4fd6-9933-a9c92c27cdd4
+  1ea9d641-9113-491a-b9fb-0c94f46401b2
+  5ae2bf5f-75a2-44f2-bbb7-6e971d340f48
+  70acc4c8-846c-4bfe-b6bd-2ea7bcd447be
+  b4a8e2a4-a9ec-467a-85f7-d4f7c9c0c48a
+  e1978470-a840-480d-a243-0fde71f5eaae
+items.txt: 21 document(s)
+  02e3e0f8-34a3-4808-a1d9-d8cb3a04c45d
+  109451dd-adaa-4942-847e-2f05e76784ac
+  13f1a66c-4b2e-4fee-8e17-103f345a6242
+  156c0639-67d9-4922-a623-cfa4437c1fe9
+  1aafbcdb-0da0-406e-b950-32320901dac7
+  1ef4df7a-90c0-42d1-a26c-09e4f779075e
+  29109c4f-659f-473b-93f2-8f16b0bf357f
+  38c8082b-4203-478e-9c7f-539413fd602d
+  41c40aa6-4cdb-46ef-abda-bf6692d7d6a3
+  64b12091-963b-4fd0-ad19-97c5491e9228
+  9345be9b-7dad-4ecb-a2a6-9f98f4ab4de5
+  93999e04-5e4a-49e7-b853-b127e294a26d
+  9417228d-6363-4fbc-b8d3-5f1d125f8ddd
+  97247938-d71d-43ed-b412-91e320b006a4
+  9f999c3f-bfc7-4d72-87d0-363c151abb63
+  d06be4a1-b805-4cd8-b6ad-597a509dd755
+  d3edc1c8-a7fd-40aa-a105-c404d110eb0b
+  dc96f5c6-81a1-4fbb-a79d-235e7f2c4a25
+  df2474b4-b36e-4806-9ae2-65037d26489b
+  f5e7169e-8267-4358-a0ee-bb030fc186f3
+  f9a5a9fb-e7ec-43ab-81c3-97d5858e48fb
+locations.txt: 7 document(s)
+  0486653d-f245-4677-ab7b-914e14dff688
+  11a7cd2f-ad87-4385-a17d-d38846cb75a2
+  58ef98af-7917-42bc-a382-dbf18d78f8a7
+  6bc27c2a-65f9-419d-86bd-e2a93c37f45a
+  79bcb88d-f077-49b2-b94a-94d41018aefa
+  9357fd66-f7c4-4732-851a-b67e003863e8
+  d53c6f18-6dd8-4d71-9e83-962b551517e3
+
+-- json export --
+{
+  "format": "mausritter-tools/settlement",
+  "version": 2,
+  "generatedUtc": "2024-06-01T12:00:00.0000000Z",
+  "locale": "de",
+  "attribution": "Settlement tables from Mausritter (https://mausritter.com), a product of Losing Games and Isaac Williams, used under CC BY 4.0. Shops, services and mouse names are unofficial house rules original to mausritter-tools.",
+  "options": {
+    "seed": "1gz7oji",
+    "size": 4,
+    "nearHumanTown": false,
+    "pins": {
+      "settlement/event": "#7",
+      "settlement/name": "Hollowbridge"
+    },
+    "rerolls": {
+      "settlement/industries": 2,
+      "map": 1
+    }
+  },
+  "settlement": {
+    "name": "Hollowbridge",
+    "size": "Dorf",
+    "population": "150\u2013300 M\u00E4use",
+    "host": "Steinbr\u00FCcke",
+    "hostDescription": "In den Bogen gebaut, \u00FCber der Wasserlinie. Meistens.",
+    "nearHumanTown": false,
+    "governance": "Haus einer hochgeborenen Adelsmaus",
+    "governanceRoll": 10,
+    "inhabitants": "Verh\u00FCllen ihre Gesichter mit langen Kapuzen",
+    "notableFeatures": [
+      "Labyrinth aus wehrhaften, fallenreichen G\u00E4ngen"
+    ],
+    "industries": [
+      "Holzf\u00E4ller mit S\u00E4gen und Gurtzeug"
+    ],
+    "event": "Eine Kriegsbande sammelt sich gegen eine Bestie",
+    "tavern": {
+      "name": "Zur Schlauen Biene",
+      "specialtyMeal": "Brombeerkuchen",
+      "keeper": {
+        "name": "Schl\u00FCsselblume Grabenwasser",
+        "appearance": "Schwanz mit einer Schleife gebunden",
+        "quirk": "Sch\u00E4mt sich fr\u00FCherer Verbrechen",
+        "wants": "Ruhe",
+        "position": "Adelsmaus",
+        "purse": 2000,
+        "birthsign": "Stern",
+        "disposition": "Tapfer / Waghalsig"
+      }
+    },
+    "shops": [
+      {
+        "index": 1,
+        "type": "Gemischtwarenladen",
+        "sign": "Aschenhangs Scheffel",
+        "quirk": "Rabatt f\u00FCr alle, die das Schild aus K\u00E4ferpanzer bewundern",
+        "keeper": {
+          "name": "Glut Aschenhang",
+          "appearance": "Kranz aus G\u00E4nsebl\u00FCmchen",
+          "quirk": "Aus der Heimat versto\u00DFen",
+          "wants": "Sicherheit",
+          "position": "Einfach",
+          "purse": 60,
+          "birthsign": "Mutter",
+          "disposition": "F\u00FCrsorglich / Besorgt"
+        },
+        "priceAdjustmentPercent": 5,
+        "stock": [
+          {
+            "item": "Brecheisen",
+            "price": "11 K",
+            "quantity": 4
+          },
+          {
+            "item": "Kr\u00E4henf\u00FC\u00DFe, Beutel",
+            "price": "11 K",
+            "quantity": 4
+          },
+          {
+            "item": "Mei\u00DFel",
+            "price": "5 K",
+            "quantity": 2
+          },
+          {
+            "item": "Schaufel",
+            "price": "11 K",
+            "quantity": 1
+          },
+          {
+            "item": "Schlafrolle",
+            "price": "11 K",
+            "quantity": 2
+          },
+          {
+            "item": "Trillerpfeife",
+            "price": "5 K",
+            "quantity": 1
+          },
+          {
+            "item": "Vorh\u00E4ngeschloss mit Schl\u00FCssel, klein",
+            "price": "21 K",
+            "quantity": 4
+          }
+        ]
+      },
+      {
+        "index": 2,
+        "type": "Kerzenzieherei",
+        "sign": "Zum Geflickten Talg",
+        "quirk": "F\u00FChrt den Laden aus einer H\u00E4ngematte heraus",
+        "keeper": {
+          "name": "Kastanie Pfeifenwind",
+          "appearance": "Geflochtenes Fell",
+          "quirk": "Von Ratten aufgezogen",
+          "wants": "Liebe",
+          "position": "Adelsmaus",
+          "purse": 1000,
+          "birthsign": "Eichel",
+          "disposition": "Wissbegierig / Starrk\u00F6pfig",
+          "relationship": "Farn Windhalm: Verwandt, ohne es zu wissen"
+        },
+        "priceAdjustmentPercent": -5,
+        "stock": [
+          {
+            "item": "Batterien, f\u00FCr die elektrische Laterne",
+            "price": "48 K",
+            "quantity": 3
+          },
+          {
+            "item": "Fackeln",
+            "price": "10 K",
+            "quantity": 2
+          },
+          {
+            "item": "Laterne",
+            "price": "48 K",
+            "quantity": 3
+          },
+          {
+            "item": "\u00D6l, f\u00FCr die Laterne",
+            "price": "10 K",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "index": 3,
+        "type": "Heuerhalle",
+        "sign": "Windhalms Bank",
+        "quirk": "Blitzsauber, und riecht nach Bienenwachs",
+        "keeper": {
+          "name": "Farn Windhalm",
+          "appearance": "Tr\u00E4gt ein rostiges Nadelschwert",
+          "quirk": "Spricht langsam und bedacht",
+          "wants": "Reichtum",
+          "position": "Einfach",
+          "purse": 10,
+          "birthsign": "Mond",
+          "disposition": "Weise / R\u00E4tselhaft"
+        },
+        "priceAdjustmentPercent": -6,
+        "stock": [
+          {
+            "item": "Tagel\u00F6hner",
+            "price": "2 K",
+            "quantity": 2
+          },
+          {
+            "item": "Waffen- und Grobschmied",
+            "price": "8 K",
+            "quantity": 2
+          },
+          {
+            "item": "Waffenmaus",
+            "price": "9 K",
+            "quantity": 3
+          }
+        ]
+      },
+      {
+        "index": 4,
+        "type": "Tuchhandlung",
+        "sign": "Zum Krummen Fingerhut",
+        "quirk": "Feilscht erbittert und genie\u00DFt es",
+        "keeper": {
+          "name": "Ringelblume Eschengrund",
+          "appearance": "Krummer Wanderstock aus einem Zweig",
+          "quirk": "Schonungslos ehrlich",
+          "wants": "Gesundheit",
+          "position": "Adelsmaus",
+          "purse": 4000,
+          "birthsign": "Rad",
+          "disposition": "Flei\u00DFig / Fantasielos",
+          "relationship": "Kastanie Pfeifenwind: Verwandt, ohne es zu wissen"
+        },
+        "priceAdjustmentPercent": 15,
+        "stock": [
+          {
+            "item": "Adelig",
+            "price": "1150 K",
+            "quantity": 1
+          },
+          {
+            "item": "Gew\u00F6hnlich",
+            "price": "58 K",
+            "quantity": 2
+          },
+          {
+            "item": "Wintermantel",
+            "price": "173 K",
+            "quantity": 2
+          }
+        ]
+      },
+      {
+        "index": 5,
+        "type": "Stall und Transport",
+        "sign": "Pfennigpfeifes Z\u00FCgel",
+        "quirk": "H\u00E4lt die gute Ware unter dem Tresen versteckt",
+        "keeper": {
+          "name": "Gr\u00FCnkohl Pfennigpfeife",
+          "appearance": "Alte Kampfnarben",
+          "quirk": "Spricht schnell und sprunghaft",
+          "wants": "Macht",
+          "position": "Adelsmaus",
+          "purse": 2000,
+          "birthsign": "Mutter",
+          "disposition": "F\u00FCrsorglich / Besorgt"
+        },
+        "priceAdjustmentPercent": 6,
+        "stock": [
+          {
+            "item": "Flussflo\u00DF",
+            "price": "11 K pro Hexfeld",
+            "quantity": 5
+          },
+          {
+            "item": "Kaninchenkarren",
+            "price": "5 K pro Hexfeld",
+            "quantity": 1
+          },
+          {
+            "item": "Taubenflug",
+            "price": "212 K pro Hexfeld",
+            "quantity": 2
+          }
+        ]
+      }
+    ]
+  }
+}
+
+======================================================================
+case waterside [en]
+======================================================================
+
+-- field paths and pinned positions --
+settlement/event = #5
+settlement/features = #17
+settlement/governance = #4
+settlement/host = #9
+settlement/industries = #2\n#10
+settlement/inhabitants = #18
+settlement/name = Acornashe
+settlement/size = #4
+shop/0/keeper/appearance = #5
+shop/0/keeper/birthsign = #5
+shop/0/keeper/name = Flax Fernhollow
+shop/0/keeper/position = #1
+shop/0/keeper/quirk = #11
+shop/0/keeper/relationship = #1
+shop/0/keeper/wants = #6
+shop/0/quirk = #0
+shop/0/sign = Fernhollow's Storehouse
+shop/1/keeper/appearance = #15
+shop/1/keeper/birthsign = #2
+shop/1/keeper/name = Spelt Wrenfield
+shop/1/keeper/position = #3
+shop/1/keeper/quirk = #5
+shop/1/keeper/relationship = #19
+shop/1/keeper/wants = #4
+shop/1/quirk = #12
+shop/1/sign = The Weathered Griddle
+shop/2/keeper/appearance = #3
+shop/2/keeper/birthsign = #3
+shop/2/keeper/name = Lichen Wickersley
+shop/2/keeper/position = #3
+shop/2/keeper/quirk = #14
+shop/2/keeper/relationship = #9
+shop/2/keeper/wants = #3
+shop/2/quirk = #18
+shop/2/sign = Hammer & Anvil
+shop/3/keeper/appearance = #0
+shop/3/keeper/birthsign = #5
+shop/3/keeper/name = Yew Tumbledown
+shop/3/keeper/position = #4
+shop/3/keeper/quirk = #12
+shop/3/keeper/relationship = #3
+shop/3/keeper/wants = #7
+shop/3/quirk = #6
+shop/3/sign = Tumbledown's Mortar
+shop/4/keeper/appearance = #11
+shop/4/keeper/birthsign = #3
+shop/4/keeper/name = Citron Thatchbury
+shop/4/keeper/position = #4
+shop/4/keeper/quirk = #13
+shop/4/keeper/wants = #17
+shop/4/quirk = #19
+shop/4/sign = The Humble Stitch
+shop/5/keeper/appearance = #11
+shop/5/keeper/birthsign = #0
+shop/5/keeper/name = Marigold Pennywhistle
+shop/5/keeper/position = #0
+shop/5/keeper/quirk = #0
+shop/5/keeper/wants = #16
+shop/5/quirk = #11
+shop/5/sign = Pennywhistle's Halter
+shop/6/keeper/appearance = #11
+shop/6/keeper/birthsign = #0
+shop/6/keeper/name = Mustard Wickersley
+shop/6/keeper/position = #4
+shop/6/keeper/quirk = #16
+shop/6/keeper/wants = #10
+shop/6/quirk = #5
+shop/6/sign = The Margin
+tavern/keeper/appearance = #3
+tavern/keeper/birthsign = #5
+tavern/keeper/name = Citron Larkspur
+tavern/keeper/position = #1
+tavern/keeper/quirk = #4
+tavern/keeper/wants = #15
+tavern/meal = #4
+tavern/name = The Broken Kernel
+
+-- map --
+boundary=Woodshed shape=boxy
+canvas=420x320
+boundaryPoints=72
+roads=38 buildings=38 scatter=31
+water=17 points
+keyed 1: The Broken Kernel at 202.64,144.02 20x15 angle -2.981
+keyed 2: Fernhollow's Storehouse at 199.87,187.29 20x13 angle 1.518
+keyed 3: The Weathered Griddle at 225.04,203.26 15x13 angle 1.496
+keyed 4: Hammer & Anvil at 175.96,165.74 20x13 angle -2.952
+keyed 5: Tumbledown's Mortar at 243.1,110.7 17x14 angle -0.513
+keyed 6: The Humble Stitch at 164.55,134.02 15x11 angle -2.592
+keyed 7: Pennywhistle's Halter at 196.97,238.46 21x16 angle 1.684
+keyed 8: The Margin at 292.8,84.7 18x16 angle -0.264
+legend 1: The Broken Kernel / Tavern — Barley porridge
+legend 2: Fernhollow's Storehouse / General store — Flax Fernhollow
+legend 3: The Weathered Griddle / Victualler — Spelt Wrenfield
+legend 4: Hammer & Anvil / Smith and armourer — Lichen Wickersley
+legend 5: Tumbledown's Mortar / Apothecary — Yew Tumbledown
+legend 6: The Humble Stitch / Clothier — Citron Thatchbury
+legend 7: Pennywhistle's Halter / Stables and transport — Marigold Pennywhistle
+legend 8: The Margin / Sage's scriptorium — Mustard Wickersley
+svgLength=43933
+svgSha256=dee3f059696e8c0de68220b0000c815cb71175b5fd6c977e3c01424a0d3acc75
+
+-- fantasia archive --
+folder=acornashe-4f9kd1
+characters.txt: 9 document(s)
+  0a8a1a8c-68c6-4b47-9c84-8332079ca53c
+  29ea4df4-73b2-45d0-94de-31cc78071762
+  4dbc7063-114e-41b9-85b2-230e280aa002
+  76eb6ecc-2ebb-46d2-b2cf-6162ecb94949
+  83ecc4df-9032-4331-8e35-683bfc3fb25e
+  be69c4c5-5ef6-4ef8-89a7-a29e1808b5d3
+  f73e92a3-90b9-41a5-a773-695bc584ae15
+  fcca5561-a160-4271-8f0d-7e94192a6d33
+  feebe579-67af-4e4d-b704-183802671840
+items.txt: 26 document(s)
+  05c0713f-49b2-4c1a-843d-9eab48599036
+  18599a5a-745c-4673-a246-e861a84aff53
+  211ecd12-f056-42a5-b7ca-78a6b2dbd2c8
+  21ec8050-68e7-44fe-9d7e-68d4076bae65
+  22f6b06b-f091-4efb-8891-df1cadfc9df7
+  234e9747-b97b-4c81-a8f1-1fe5a2724956
+  257daf18-c1bc-4521-913c-1264b3f36b50
+  27cf15dc-a8b8-43f8-a0f3-6286f7ee4109
+  2f7c690c-8316-4d8a-8605-8df0841c7d51
+  32111cb5-5d1c-4510-be70-d5f18c08c424
+  47b8bf9f-4be2-4d6b-9c85-2c19b48c1138
+  4b10f775-0b4b-43c3-8b7d-872120e41419
+  5b1c1e47-a2c5-4a15-b9e6-eb315a4124e0
+  6c340d7f-19d9-49e2-aeb3-b3c874058fb7
+  89739f1d-7b7f-4cf7-8ea7-99aa8877e669
+  923f6961-29f3-4160-8f34-76ce7dd9bdbe
+  942bdb39-c0ab-43ca-9f0c-1f56e8f2ef0d
+  a1fbab70-4150-4397-990e-50d555217940
+  bc761e7b-a67c-4a64-9feb-ca57dbf5bc26
+  d19bf0a3-99a3-4801-bb99-c30bfadef0d7
+  dc367b68-86d1-4dd7-9dfd-5435de7129a7
+  ecb1ce0d-e553-4463-8ada-c836f9d3d50b
+  eda77eeb-8126-43af-87a1-a3456b89e9b1
+  f0875711-296d-4e47-ad2c-313e2e2cdd93
+  f1a765b0-d2b0-45f5-a8cd-02e17093962f
+  fe7e6b42-a164-4204-9354-a81d45dcce6d
+locations.txt: 9 document(s)
+  2db1122a-d3fc-4857-a2ae-c57422884ea7
+  2dcd3957-f92d-4287-ba90-915ae3f005bf
+  3067a746-4cf9-4c18-ad0b-f2c3d5f10583
+  3b5452a5-57fa-40e5-a7ef-fb54ebd8d813
+  595f8605-4a9b-4097-acfd-23e96f773dc6
+  81629c75-0a44-4a87-bb14-6e94135bce62
+  82f86ece-cdda-4007-a4b8-f89bb247c22d
+  b136ae39-07ef-4216-af3d-3e299242c58d
+  ebbb9dbd-b932-42a4-8933-09557a1dd88f
+
+-- json export --
+{
+  "format": "mausritter-tools/settlement",
+  "version": 2,
+  "generatedUtc": "2024-06-01T12:00:00.0000000Z",
+  "locale": "en",
+  "attribution": "Settlement tables from Mausritter (https://mausritter.com), a product of Losing Games and Isaac Williams, used under CC BY 4.0. Shops, services and mouse names are unofficial house rules original to mausritter-tools.",
+  "options": {
+    "seed": "4f9kd1",
+    "size": 5,
+    "nearHumanTown": false,
+    "terrain": "riverbank",
+    "pins": {
+      "settlement/industries": "#2\n#10"
+    },
+    "rerolls": {}
+  },
+  "settlement": {
+    "name": "Acornashe",
+    "size": "Town",
+    "population": "300-1000 mice",
+    "host": "Woodshed",
+    "hostDescription": "A stacked city of split logs, rearranged every winter by giants.",
+    "nearHumanTown": false,
+    "governance": "House of an upper caste noblemouse",
+    "governanceRoll": 11,
+    "inhabitants": "Have laws and customs confusing to outsiders",
+    "notableFeatures": [
+      "Pigeon rider\u2019s roost"
+    ],
+    "industries": [
+      "Rough and scarred fishermice, with nets and rafts",
+      "Flour mill, driven by a large water-wheel"
+    ],
+    "event": "Market day, farmers flock to the settlement",
+    "tavern": {
+      "name": "The Broken Kernel",
+      "specialtyMeal": "Barley porridge",
+      "keeper": {
+        "name": "Citron Larkspur",
+        "appearance": "Grubby clothes",
+        "quirk": "Cursed by a wizard",
+        "wants": "Savagery",
+        "position": "Common",
+        "purse": 60,
+        "birthsign": "Mother",
+        "disposition": "Nurturing / Worrying"
+      }
+    },
+    "shops": [
+      {
+        "index": 1,
+        "type": "General store",
+        "sign": "Fernhollow\u0027s Storehouse",
+        "quirk": "Refuses to haggle, on principle",
+        "keeper": {
+          "name": "Flax Fernhollow",
+          "appearance": "Pockets full of seed",
+          "quirk": "Slow, careful speech",
+          "wants": "Health",
+          "position": "Common",
+          "purse": 10,
+          "birthsign": "Mother",
+          "disposition": "Nurturing / Worrying",
+          "relationship": "Citron Thatchbury: sibling"
+        },
+        "priceAdjustmentPercent": -13,
+        "stock": [
+          {
+            "item": "Book, blank",
+            "price": "261p",
+            "quantity": 1
+          },
+          {
+            "item": "Bucket",
+            "price": "4p",
+            "quantity": 2
+          },
+          {
+            "item": "Cookpots",
+            "price": "9p",
+            "quantity": 5
+          },
+          {
+            "item": "Drill",
+            "price": "9p",
+            "quantity": 6
+          },
+          {
+            "item": "Glue",
+            "price": "4p",
+            "quantity": 3
+          },
+          {
+            "item": "Grease",
+            "price": "4p",
+            "quantity": 5
+          },
+          {
+            "item": "Hammer",
+            "price": "9p",
+            "quantity": 2
+          },
+          {
+            "item": "Tent",
+            "price": "70p",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "index": 2,
+        "type": "Victualler",
+        "sign": "The Weathered Griddle",
+        "quirk": "Owes money to someone frightening",
+        "keeper": {
+          "name": "Spelt Wrenfield",
+          "appearance": "Huge, heavy black cloak",
+          "quirk": "Scares easily",
+          "wants": "Power",
+          "position": "Burghermouse",
+          "purse": 300,
+          "birthsign": "Acorn",
+          "disposition": "Inquisitive / Stubborn",
+          "relationship": "Yew Tumbledown: never met before"
+        },
+        "priceAdjustmentPercent": -15,
+        "stock": [
+          {
+            "item": "Grand meal",
+            "price": "43p",
+            "quantity": 1
+          },
+          {
+            "item": "Hot bath",
+            "price": "2p",
+            "quantity": 1
+          },
+          {
+            "item": "Travel rations",
+            "price": "4p",
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "index": 3,
+        "type": "Smith and armourer",
+        "sign": "Hammer \u0026 Anvil",
+        "quirk": "Discounts for anyone who admires the beetle-shell sign",
+        "keeper": {
+          "name": "Lichen Wickersley",
+          "appearance": "Grubby clothes",
+          "quirk": "Raised by rats",
+          "wants": "Excitement",
+          "position": "Burghermouse",
+          "purse": 200,
+          "birthsign": "Storm",
+          "disposition": "Generous / Wrathful",
+          "relationship": "Yew Tumbledown: drinking buddies"
+        },
+        "priceAdjustmentPercent": -15,
+        "stock": [
+          {
+            "item": "Heavy armour",
+            "price": "425p",
+            "quantity": 2
+          },
+          {
+            "item": "Light",
+            "price": "9p",
+            "quantity": 1
+          },
+          {
+            "item": "Light ranged",
+            "price": "9p",
+            "quantity": 3
+          },
+          {
+            "item": "Repairs, per dot",
+            "price": "10%"
+          },
+          {
+            "item": "Silvered weapons",
+            "price": "x10p"
+          }
+        ]
+      },
+      {
+        "index": 4,
+        "type": "Apothecary",
+        "sign": "Tumbledown\u0027s Mortar",
+        "quirk": "Insists on telling you the history of each item",
+        "keeper": {
+          "name": "Yew Tumbledown",
+          "appearance": "Soulful eyes",
+          "quirk": "Quick, erratic speech",
+          "wants": "Wealth",
+          "position": "Guildmouse",
+          "purse": 400,
+          "birthsign": "Mother",
+          "disposition": "Nurturing / Worrying",
+          "relationship": "Lichen Wickersley: second cousin"
+        },
+        "priceAdjustmentPercent": 16,
+        "stock": [
+          {
+            "item": "Bellows",
+            "price": "12p",
+            "quantity": 3
+          },
+          {
+            "item": "Cookpots",
+            "price": "12p",
+            "quantity": 5
+          },
+          {
+            "item": "Perfume",
+            "price": "58p",
+            "quantity": 1
+          },
+          {
+            "item": "Waterskin",
+            "price": "6p",
+            "quantity": 4
+          }
+        ]
+      },
+      {
+        "index": 5,
+        "type": "Clothier",
+        "sign": "The Humble Stitch",
+        "quirk": "Convinced a rival is stealing from them",
+        "keeper": {
+          "name": "Citron Thatchbury",
+          "appearance": "Tail tied with a bow",
+          "quirk": "Secret servant of a cat",
+          "wants": "Revenge",
+          "position": "Guildmouse",
+          "purse": 200,
+          "birthsign": "Storm",
+          "disposition": "Generous / Wrathful"
+        },
+        "priceAdjustmentPercent": 4,
+        "stock": [
+          {
+            "item": "Poor",
+            "price": "10p",
+            "quantity": 6
+          },
+          {
+            "item": "Waterproof cloak",
+            "price": "104p",
+            "quantity": 3
+          },
+          {
+            "item": "Winter cloak",
+            "price": "156p",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "index": 6,
+        "type": "Stables and transport",
+        "sign": "Pennywhistle\u0027s Halter",
+        "quirk": "Keeps the good stock hidden under the counter",
+        "keeper": {
+          "name": "Marigold Pennywhistle",
+          "appearance": "Tail tied with a bow",
+          "quirk": "Constantly grooming",
+          "wants": "Beauty",
+          "position": "Poor",
+          "purse": 2,
+          "birthsign": "Star",
+          "disposition": "Brave / Reckless"
+        },
+        "priceAdjustmentPercent": -12,
+        "stock": [
+          {
+            "item": "River raft",
+            "price": "9p per hex",
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "index": 7,
+        "type": "Sage\u0027s scriptorium",
+        "sign": "The Margin",
+        "quirk": "Prices are chalked up and rubbed out hourly",
+        "keeper": {
+          "name": "Mustard Wickersley",
+          "appearance": "Tail tied with a bow",
+          "quirk": "Many pet insects",
+          "wants": "To protect",
+          "position": "Guildmouse",
+          "purse": 100,
+          "birthsign": "Star",
+          "disposition": "Brave / Reckless"
+        },
+        "priceAdjustmentPercent": -7,
+        "stock": [
+          {
+            "item": "Book, blank",
+            "price": "279p",
+            "quantity": 2
+          },
+          {
+            "item": "Book, reading",
+            "price": "558p",
+            "quantity": 1
+          },
+          {
+            "item": "Mirror",
+            "price": "186p",
+            "quantity": 1
+          }
+        ]
+      }
+    ]
+  }
+}

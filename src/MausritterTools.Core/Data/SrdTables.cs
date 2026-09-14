@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Structed.Inkwell.Data;
 
 namespace MausritterTools.Core.Data;
 

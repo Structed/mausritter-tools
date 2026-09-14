@@ -3,19 +3,17 @@ using System.Net;
 using System.Text;
 using MausritterTools.Core.Data;
 using MausritterTools.Core.Generation;
+using MausritterTools.Core.Mapping;
 using MausritterTools.Core.Model;
-using MausritterTools.Core.Randomness;
+using MausritterTools.Core.Rendering;
 using MausritterTools.Core.Serialization;
+using Structed.Inkwell.Data;
+using Structed.Inkwell.Interop.FantasiaArchive;
+using Structed.Inkwell.Mapping;
+using Structed.Inkwell.Randomness;
+using Structed.Inkwell.Rendering;
 
 namespace MausritterTools.Core.Interop.FantasiaArchive;
-
-/// <summary>One file in an exported project folder.</summary>
-public sealed record ExportedFile(string Name, string Content);
-
-/// <summary>A settlement rendered as a Fantasia Archive project folder.</summary>
-/// <param name="FolderName">The folder the files belong in, which is what the user points the app at.</param>
-/// <param name="Files">The database dumps, one per document type.</param>
-public sealed record FantasiaArchiveExport(string FolderName, IReadOnlyList<ExportedFile> Files);
 
 /// <summary>
 /// Turns a settlement into a Fantasia Archive project folder.
@@ -36,7 +34,7 @@ public sealed record FantasiaArchiveExport(string FolderName, IReadOnlyList<Expo
 public static class FantasiaArchiveExporter
 {
     /// <summary>Identifies this tool's state so a foreign file is not mistaken for one of ours.</summary>
-    public const string StateFormatId = "mausritter-tools/fantasia-archive-state";
+    public const string StateFormatId = MausritterArchiveKeys.StateFormatId;
 
     /// <summary>Renders a settlement as a project folder.</summary>
     public static FantasiaArchiveExport Export(
@@ -51,9 +49,18 @@ public static class FantasiaArchiveExporter
         ArgumentNullException.ThrowIfNull(text);
 
         DateTimeOffset written = timestamp ?? DateTimeOffset.UtcNow;
-        Builder builder = new(settlement, options, text, written, locale);
 
-        return new FantasiaArchiveExport(FolderName(settlement), builder.Build());
+        // Drawn here rather than handed in, so the export stays a pure function of the settlement
+        // and its settings. The seed comes from the same place the page's own map does, which is
+        // what stops an export shipping a different map from the one the user is looking at.
+        uint mapSeed = MapGenerator.SeedFor(options);
+        PlaceMap map = SettlementMapper.Generate(settlement, mapSeed, text.Grammar);
+        string mapSvg = SettlementMapRenderer.Render(
+            map, mapSeed, text.Settlement.Map.AriaLabel, intrinsicSize: true);
+
+        Builder builder = new(settlement, options, text, written, locale, map, mapSvg);
+
+        return new FantasiaArchiveExport(FolderName(settlement), builder.Build(), mapSvg);
     }
 
     /// <summary>The folder an export belongs in, e.g. <c>owlmill-c21p6</c>.</summary>
@@ -84,6 +91,8 @@ public static class FantasiaArchiveExporter
         private readonly DateTimeOffset _timestamp;
         private readonly string? _locale;
         private readonly CultureInfo _culture;
+        private readonly PlaceMap _map;
+        private readonly string _mapSvg;
 
         private readonly Identity _settlementId;
         private readonly string _signature;
@@ -96,17 +105,21 @@ public static class FantasiaArchiveExporter
             GenerationOptions options,
             UiText text,
             DateTimeOffset timestamp,
-            string? locale)
+            string? locale,
+            PlaceMap map,
+            string mapSvg)
         {
             _settlement = settlement;
             _options = options;
             _text = text;
             _timestamp = timestamp;
             _locale = locale;
+            _map = map;
+            _mapSvg = mapSvg;
 
             // Only the shopkeeper's purse needs this, for its thousands separator. The ambient
             // culture is deliberately never changed, so it is resolved explicitly here.
-            _culture = (locale is { Length: > 0 } code ? Locale.FromCode(code) : Locale.English)
+            _culture = (locale is { Length: > 0 } code ? MausritterLocales.FromCode(code) : MausritterLocales.English)
                 .FormatCulture;
 
             _signature = Signature(options);
@@ -288,7 +301,7 @@ public static class FantasiaArchiveExporter
                     description: SettlementDescription()),
 
                 new(FantasiaArchiveBlueprints.Location.LocationType,
-                    new TextValue(FantasiaArchiveBlueprints.LocationTypeForSize(_settlement.Size.SizeValue))),
+                    new TextValue(MausritterArchiveKeys.LocationTypeForSize(_settlement.Size.SizeValue))),
 
                 // Text rather than a number, which is just as well: Mausritter states a population
                 // as a range or as "1000+".
@@ -312,7 +325,7 @@ public static class FantasiaArchiveExporter
 
                 // Everything needed to rebuild the settlement, in a field no blueprint declares and
                 // the app therefore never renders, edits or discards.
-                new(FantasiaArchiveBlueprints.StateField, new TextValue(State()))
+                new(MausritterArchiveKeys.StateField, new TextValue(State()))
             ];
 
             return Build(FantasiaArchiveBlueprints.Locations, _settlementId, fields);
@@ -554,7 +567,78 @@ public static class FantasiaArchiveExporter
                     _settlement.Industries.Count == 1 ? labels.Industry : labels.Industries,
                     string.Join(", ", _settlement.Industries)),
                 Labelled(labels.RightNow, _settlement.Event),
+                MapPlate(),
                 Attribution());
+        }
+
+        /// <summary>
+        /// The map, drawn into the settlement's own description.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Fantasia Archive v1 has no image field, no map document type and no attachments. What it
+        /// does have is a rich-text field whose value is a raw HTML string, rendered in view mode
+        /// with Vue's <c>v-html</c> and passed through no sanitiser, under no content security
+        /// policy. An <c>&lt;img&gt;</c> carrying the drawing as a data URL is therefore the only
+        /// way a map can arrive already in place, and this is it.
+        /// </para>
+        /// <para>
+        /// The legend is written out as text beneath it and is not decoration. The app's PDF export
+        /// re-reads each image from its <c>src</c> and understands only <c>file://</c> and
+        /// <c>http(s)://</c>, so a data URL is silently dropped from an exported PDF. The numbering
+        /// has to survive that, because every shop's document cites its map number.
+        /// </para>
+        /// </remarks>
+        private string MapPlate()
+        {
+            if (_mapSvg.Length == 0)
+            {
+                return "";
+            }
+
+            string dataUrl = "data:image/svg+xml;base64," +
+                Convert.ToBase64String(Encoding.UTF8.GetBytes(_mapSvg));
+
+            string alt = Escape(TextTemplate.Format(
+                _text.Settlement.Map.AriaLabel, ("host", _map.Subject)));
+
+            StringBuilder builder = new();
+
+            builder
+                .Append("<p><strong>").Append(Escape(_text.Settlement.Map.Heading))
+                .Append("</strong></p>");
+
+            // Single-quoted to match what the app's own editor writes, so a reader who opens the
+            // field's source sees something familiar. Base64 can never contain an apostrophe.
+            builder
+                .Append("<p><img src='").Append(dataUrl).Append("' alt=\"").Append(alt)
+                .Append("\" width=\"").Append(SvgNumber.Format(_map.Width))
+                .Append("\" height=\"").Append(SvgNumber.Format(_map.Height))
+                .Append("\" /></p>");
+
+            builder
+                .Append("<p><em>")
+                .Append(Escape(TextTemplate.Format(
+                    _text.Settlement.Map.Caption, ("host", _map.Subject))))
+                .Append("</em></p>");
+
+            if (_map.Legend.Count > 0)
+            {
+                // An ordered list, because the keys are 1..n in this order by construction: the map
+                // numbers the tavern first and then the shops, exactly as the premises are built.
+                builder.Append("<ol>");
+
+                foreach (MapLegendEntry entry in _map.Legend)
+                {
+                    builder
+                        .Append("<li><strong>").Append(Escape(entry.Name)).Append("</strong> — ")
+                        .Append(Escape(entry.Detail)).Append("</li>");
+                }
+
+                builder.Append("</ol>");
+            }
+
+            return builder.ToString();
         }
 
         private string KeeperDescription(Business business)

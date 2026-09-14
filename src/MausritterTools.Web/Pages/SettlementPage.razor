@@ -4,13 +4,17 @@
 @using MausritterTools.Core.Generation
 @using MausritterTools.Core.Interop.FantasiaArchive
 @using MausritterTools.Core.Mapping
+@using Structed.Inkwell.Interop.FantasiaArchive
+@using Structed.Inkwell.Mapping
 @using MausritterTools.Core.Model
-@using MausritterTools.Core.Randomness
+@using Structed.Inkwell.Randomness
 @using MausritterTools.Core.Rendering
 @using MausritterTools.Core.Serialization
 @using MausritterTools.Web.Components
 @using MausritterTools.Web.Services
 @using Microsoft.AspNetCore.Components.Forms
+@using Structed.Inkwell.Data
+@using Structed.Inkwell.Serialization
 @implements IDisposable
 @inject GameDataProvider DataProvider
 @inject BrowserInterop Browser
@@ -249,7 +253,7 @@
     private UiText _text = new();
     private SettlementGenerator? _generator;
     private Settlement? _settlement;
-    private SettlementMap? _map;
+    private PlaceMap? _map;
     private string _mapSvg = "";
     private GenerationOptions _options = new();
     private string _seedText = "";
@@ -394,7 +398,7 @@
         {
             return SettlementSerializer.FromJson(saved);
         }
-        catch (SettlementFormatException)
+        catch (DocumentFormatException)
         {
             // Written by an older or newer build; discard rather than fail to load the page.
             await Browser.ClearStorageAsync(StorageKey);
@@ -469,8 +473,8 @@
         _settlement = _generator.Generate(_options);
         _seedText = SeedCodec.Encode(_options.Seed);
 
-        _map = MapGenerator.Generate(_settlement, MapSeed, _text.Grammar);
-        _mapSvg = SvgMapRenderer.Render(_map, MapSeed, _text.Settlement.Map.AriaLabel);
+        _map = SettlementMapper.Generate(_settlement, MapSeed, _text.Grammar);
+        _mapSvg = SettlementMapRenderer.Render(_map, MapSeed, _text.Settlement.Map.AriaLabel);
 
         if (updateUrl)
         {
@@ -481,28 +485,21 @@
     }
 
     /// <summary>
-    /// The seed the map is drawn from.
+    /// The seed the map is drawn from, derived in Core so the export cannot disagree about which
+    /// map this settlement has.
     /// </summary>
-    /// <remarks>
-    /// Derived from the settlement's seed so a shared link reproduces the same map, but shifted by
-    /// how many times the map alone has been re-drawn, so the layout can be changed without
-    /// disturbing a settlement the user is happy with.
-    /// </remarks>
-    private uint MapSeed =>
-        _options.Rerolls.TryGetValue("map", out int redraws) && redraws > 0
-            ? (uint)SeedDerivation.Derive(_options.Seed, $"map#{redraws}")
-            : _options.Seed;
+    private uint MapSeed => MapGenerator.SeedFor(_options);
 
     private void RerollMap()
     {
-        _options = _options.WithReroll("map");
+        _options = _options.WithReroll(MapGenerator.RerollKey);
         Regenerate(updateUrl: false);
         _status = _text.Settlement.Status.MapRedrawn;
     }
 
     private async Task DownloadMap()
     {
-        if (_settlement is not { } settlement || _mapSvg.Length == 0)
+        if (_settlement is not { } settlement || _map is not { } map)
         {
             return;
         }
@@ -510,7 +507,12 @@
         string fileName = System.IO.Path.ChangeExtension(
             SettlementSerializer.SuggestFileName(settlement), ".svg");
 
-        await Browser.DownloadTextAsync(fileName, "image/svg+xml", _mapSvg);
+        // Sized explicitly, unlike the copy on the page: a file has to carry its own dimensions,
+        // or an image viewer draws it at the default object size instead of at map size.
+        string svg = SettlementMapRenderer.Render(
+            map, MapSeed, _text.Settlement.Map.AriaLabel, intrinsicSize: true);
+
+        await Browser.DownloadTextAsync(fileName, "image/svg+xml", svg);
         _status = _text.Settlement.Status.MapDownloaded;
     }
 
@@ -694,14 +696,36 @@
         FantasiaArchiveExport export = FantasiaArchiveExporter.Export(
             settlement, _options, _text, locale: Languages.Current.Code);
 
+        // Fantasia Archive will not let a user attach an SVG, so the map is rasterised for the
+        // copy that travels beside the folder. A browser that cannot do it simply gets an archive
+        // without one; the map is embedded in the settlement's own document regardless.
+        byte[]? mapPng = await Browser.RasteriseSvgAsync(export.MapSvg, MapRasterScale);
+
         byte[] archive = FantasiaArchivePackage.Create(
-            export, FantasiaArchiveReadMe.Compose(_text, export.FolderName));
+            export,
+            FantasiaArchiveReadMe.Compose(
+                _text,
+                export.FolderName,
+                mapPng is null ? null : FantasiaArchivePackage.MapFileNameFor(export)),
+            mapPng);
 
         await Browser.DownloadBytesAsync(
             FantasiaArchivePackage.FileNameFor(export), "application/zip", archive);
 
         _status = _text.Settlement.Status.ExportedFantasiaArchive;
     }
+
+    /// <summary>
+    /// Device pixels per map unit for the exported PNG.
+    /// </summary>
+    /// <remarks>
+    /// The map is 420 units across, so this is an 840-pixel image: the numbered keys come out at
+    /// eighteen pixels tall, which reads comfortably on screen and in a PDF. Going further is
+    /// surprisingly expensive — the paper grain is noise, which PNG cannot compress, so trebling
+    /// instead of doubling turns a 480 KB file into 920 KB for a map that is already embedded in
+    /// the document as vector.
+    /// </remarks>
+    private const double MapRasterScale = 2;
 
     /// <summary>
     /// Opens whatever the reader picked.
@@ -773,7 +797,7 @@
             // language they were locked in.
             if (imported.Locale is { Length: > 0 } code)
             {
-                await Languages.SetAsync(Locale.FromCode(code));
+                await Languages.SetAsync(MausritterLocales.FromCode(code));
             }
 
             Regenerate(updateUrl: true);
@@ -788,7 +812,7 @@
                     ("count", found.ToString(Languages.Current.FormatCulture)))
             };
         }
-        catch (SettlementFormatException ex)
+        catch (DocumentFormatException ex)
         {
             _status = TextTemplate.Format(
                 _text.Settlement.Status.ImportFailed, ("message", ex.Message));

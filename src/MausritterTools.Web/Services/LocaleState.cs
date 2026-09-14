@@ -1,4 +1,5 @@
 using MausritterTools.Core.Data;
+using Structed.Inkwell.Data;
 
 namespace MausritterTools.Web.Services;
 
@@ -36,7 +37,7 @@ public sealed class LocaleState(BrowserInterop browser)
         browser ?? throw new ArgumentNullException(nameof(browser));
 
     /// <summary>The language currently being read.</summary>
-    public Locale Current { get; private set; } = Locale.English;
+    public Locale Current { get; private set; } = MausritterLocales.English;
 
     /// <summary>Raised after the language changes, so pages can rebuild in the new one.</summary>
     public event Func<Task>? Changed;
@@ -56,7 +57,7 @@ public sealed class LocaleState(BrowserInterop browser)
         chosen ??= Match(await _browser.ReadStorageAsync(StorageKey));
         chosen ??= Match(await _browser.GetBrowserLanguageAsync());
 
-        Current = chosen ?? Locale.English;
+        Current = chosen ?? MausritterLocales.English;
     }
 
     /// <summary>Switches language, remembering the choice.</summary>
@@ -98,11 +99,11 @@ public sealed class LocaleState(BrowserInterop browser)
             return null;
         }
 
-        Locale resolved = Locale.FromCode(code);
+        Locale resolved = MausritterLocales.FromCode(code);
 
         // FromCode falls back to English, which is indistinguishable from an English request; only
         // treat it as a match when the code really did name a language we have.
-        return resolved.IsCanonical && !code.StartsWith(Locale.CanonicalCode, StringComparison.OrdinalIgnoreCase)
+        return resolved.IsCanonical && !code.StartsWith(MausritterLocales.All.Canonical.Code, StringComparison.OrdinalIgnoreCase)
             ? null
             : resolved;
     }

@@ -1,6 +1,7 @@
-using System.Text;
 using System.Text.Json;
 using MausritterTools.Core.Serialization;
+using Structed.Inkwell.Interop.FantasiaArchive;
+using Structed.Inkwell.Serialization;
 
 namespace MausritterTools.Core.Interop.FantasiaArchive;
 
@@ -8,76 +9,29 @@ namespace MausritterTools.Core.Interop.FantasiaArchive;
 /// The payload this tool hides on a settlement's Fantasia Archive document.
 /// </summary>
 /// <remarks>
-/// Fantasia Archive has nowhere to keep a seed, and a settlement cannot be recovered from its prose:
-/// the generator is not invertible. So the state that regenerates it travels with the document, in a
-/// field the app has no blueprint for and therefore never shows, edits or discards.
+/// A thin naming of <see cref="HiddenState"/>: what is Mausritter's about it is only which format
+/// id marks the payload as ours and what the settlement is nested under, both of which are frozen
+/// by every file already written.
 /// </remarks>
 public static class FantasiaArchiveState
 {
-    /// <summary>Marks the payload as ours, so a field collision is not read as a settlement.</summary>
-    private const string FormatId = FantasiaArchiveExporter.StateFormatId;
-
     /// <summary>Wraps an exported settlement document for the journey.</summary>
     /// <param name="documentId">The Fantasia Archive document this was written onto.</param>
     /// <param name="settlementJson">This project's own export format, verbatim.</param>
-    public static string Write(string documentId, string settlementJson)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(documentId);
-        ArgumentException.ThrowIfNullOrWhiteSpace(settlementJson);
-
-        using MemoryStream stream = new();
-        using (Utf8JsonWriter writer = new(stream, new JsonWriterOptions { Indented = false }))
-        {
-            writer.WriteStartObject();
-            writer.WriteString("format", FormatId);
-
-            // Recorded so a document duplicated inside Fantasia Archive can be told from the
-            // original, which would otherwise leave two documents claiming the same settlement.
-            writer.WriteString("documentId", documentId);
-
-            // Nested as an object rather than as an escaped string, so anyone who does go looking
-            // finds something readable.
-            writer.WritePropertyName("settlement");
-            writer.WriteRawValue(settlementJson);
-
-            writer.WriteEndObject();
-        }
-
-        return Encoding.UTF8.GetString(stream.ToArray());
-    }
+    public static string Write(string documentId, string settlementJson) => HiddenState.Write(
+        MausritterArchiveKeys.StateFormatId,
+        documentId,
+        MausritterArchiveKeys.StatePayloadName,
+        settlementJson);
 
     /// <summary>
     /// Unwraps a payload, returning the settlement export inside it.
     /// </summary>
     /// <returns>The embedded document's JSON, or <c>null</c> if this is not one of ours.</returns>
-    public static string? Read(string? state)
-    {
-        if (state is not { Length: > 0 })
-        {
-            return null;
-        }
-
-        try
-        {
-            using JsonDocument parsed = JsonDocument.Parse(state);
-
-            if (parsed.RootElement.ValueKind != JsonValueKind.Object ||
-                !parsed.RootElement.TryGetProperty("format", out JsonElement format) ||
-                format.ValueKind != JsonValueKind.String ||
-                !string.Equals(format.GetString(), FormatId, StringComparison.Ordinal) ||
-                !parsed.RootElement.TryGetProperty("settlement", out JsonElement settlement) ||
-                settlement.ValueKind != JsonValueKind.Object)
-            {
-                return null;
-            }
-
-            return settlement.GetRawText();
-        }
-        catch (JsonException)
-        {
-            return null;
-        }
-    }
+    public static string? Read(string? state) => HiddenState.Read(
+        MausritterArchiveKeys.StateFormatId,
+        MausritterArchiveKeys.StatePayloadName,
+        state);
 }
 
 /// <summary>
@@ -97,7 +51,7 @@ public static class FantasiaArchiveImporter
     /// The contents of the project folder's files. Files that are not dumps, and dumps holding no
     /// settlement of ours, are skipped.
     /// </param>
-    /// <exception cref="SettlementFormatException">No settlement of ours was in there.</exception>
+    /// <exception cref="DocumentFormatException">No settlement of ours was in there.</exception>
     public static SettlementImport Read(IEnumerable<string> dumps)
     {
         ArgumentNullException.ThrowIfNull(dumps);
@@ -106,7 +60,7 @@ public static class FantasiaArchiveImporter
         {
             foreach (JsonElement document in PouchDump.ReadDocuments(dump))
             {
-                string? state = PouchDump.FieldString(document, FantasiaArchiveBlueprints.StateField);
+                string? state = PouchDump.FieldString(document, MausritterArchiveKeys.StateField);
                 if (FantasiaArchiveState.Read(state) is { } settlementJson)
                 {
                     return SettlementSerializer.Read(settlementJson);
@@ -114,7 +68,7 @@ public static class FantasiaArchiveImporter
             }
         }
 
-        throw new SettlementFormatException(
+        throw new DocumentFormatException(
             "That Fantasia Archive project has no settlement written by this tool. Only a " +
             "settlement exported from here carries the seed needed to rebuild it.");
     }
@@ -130,7 +84,7 @@ public static class FantasiaArchiveImporter
 
         return dumps
             .SelectMany(PouchDump.ReadDocuments)
-            .Select(document => PouchDump.FieldString(document, FantasiaArchiveBlueprints.StateField))
+            .Select(document => PouchDump.FieldString(document, MausritterArchiveKeys.StateField))
             .Count(state => FantasiaArchiveState.Read(state) is not null);
     }
 }

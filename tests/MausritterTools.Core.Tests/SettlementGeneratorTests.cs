@@ -2,6 +2,7 @@ using System.Globalization;
 using MausritterTools.Core.Data;
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Model;
+using Structed.Inkwell.Data;
 
 namespace MausritterTools.Core.Tests;
 

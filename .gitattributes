@@ -16,3 +16,8 @@
 *.ico binary
 *.wasm binary
 *.dat binary
+
+# The golden baseline is compared byte for byte against text the tests generate with LF, and is
+# rewritten in place by UPDATE_GOLDEN=1. Pinning it to LF keeps a Windows checkout from showing the
+# whole file as modified the moment anyone regenerates it.
+tests/**/Golden/*.txt text eol=lf

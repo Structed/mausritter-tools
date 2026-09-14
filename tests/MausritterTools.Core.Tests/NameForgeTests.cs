@@ -1,36 +1,10 @@
 using MausritterTools.Core.Generation;
-using MausritterTools.Core.Randomness;
+using Structed.Inkwell.Randomness;
 
 namespace MausritterTools.Core.Tests;
 
 public class NameForgeTests
 {
-    [Theory]
-    // A doubled letter at the seam is collapsed: Oaks + stand would read "Oaksstand".
-    [InlineData("Oaks", "stand", "Oakstand")]
-    [InlineData("Moon", "nest", "Moonest")]
-    [InlineData("Stump", "pond", "Stumpond")]
-    [InlineData("Fig", "grove", "Figrove")]
-    // A trailing 'e' before a vowel is dropped: Rose + ashe would read "Roseashe".
-    [InlineData("Rose", "ashe", "Rosashe")]
-    [InlineData("Stone", "ashe", "Stonashe")]
-    // Clean joins are left untouched.
-    [InlineData("Willow", "ville", "Willowville")]
-    [InlineData("Black", "creek", "Blackcreek")]
-    [InlineData("Berry", "mill", "Berrymill")]
-    public void JoinSmoothsTheSeam(string start, string end, string expected) =>
-        Assert.Equal(expected, NameForge.Join(start, end));
-
-    [Fact]
-    public void JoinAlwaysCapitalises() =>
-        Assert.Equal("Oakstand", NameForge.Join("oaks", "stand"));
-
-    [Theory]
-    [InlineData("", "thorpe", "Thorpe")]
-    [InlineData("Oaks", "", "Oaks")]
-    public void JoinHandlesMissingHalves(string start, string end, string expected) =>
-        Assert.Equal(expected, NameForge.Join(start, end));
-
     [Fact]
     public void GeneratedNamesNeverContainATripledLetter()
     {
@@ -38,7 +12,8 @@ public class NameForgeTests
         {
             string name = NameForge.SettlementName(
                 new DiceRoller(SeedDerivation.CreateStream(seed, "settlement/name")),
-                TestData.Game.Settlement.NameSeeds,                TestData.Grammar);
+                TestData.Game.Settlement.NameSeeds,
+                TestData.Grammar);
 
             for (int i = 2; i < name.Length; i++)
             {
@@ -58,7 +33,8 @@ public class NameForgeTests
         {
             string name = NameForge.SettlementName(
                 new DiceRoller(SeedDerivation.CreateStream(seed, "settlement/name")),
-                TestData.Game.Settlement.NameSeeds,                TestData.Grammar);
+                TestData.Game.Settlement.NameSeeds,
+                TestData.Grammar);
 
             Assert.False(string.IsNullOrWhiteSpace(name));
             Assert.True(char.IsUpper(name[0]), $"'{name}' should be capitalised.");
@@ -73,7 +49,8 @@ public class NameForgeTests
         [
             .. Enumerable.Range(1, 300).Select(i => NameForge.SettlementName(
                 new DiceRoller(SeedDerivation.CreateStream((uint)i, "settlement/name")),
-                TestData.Game.Settlement.NameSeeds,                TestData.Grammar))
+                TestData.Game.Settlement.NameSeeds,
+                TestData.Grammar))
         ];
 
         Assert.True(names.Distinct().Count() > 150, $"Only {names.Distinct().Count()} distinct names in 300 rolls.");
@@ -105,7 +82,8 @@ public class NameForgeTests
                 new DiceRoller(SeedDerivation.CreateStream(seed, "sign")),
                 TestData.Game.Services,
                 service,
-                "Thistledown",                TestData.Grammar);
+                "Thistledown",
+                TestData.Grammar);
 
             Assert.False(string.IsNullOrWhiteSpace(sign));
             Assert.DoesNotContain('{', sign);
@@ -120,9 +98,10 @@ public class NameForgeTests
 
         bool sawFamilyName = Enumerable.Range(1, 200).Any(i => NameForge.ShopSign(
             new DiceRoller(SeedDerivation.CreateStream((uint)i, "sign")),
-            TestData.Game.Services,
+                TestData.Game.Services,
             service,
-            "Thistledown",            TestData.Grammar).Contains("Thistledown", StringComparison.Ordinal));
+                "Thistledown",
+                TestData.Grammar).Contains("Thistledown", StringComparison.Ordinal));
 
         Assert.True(sawFamilyName, "Family-name sign patterns should be reachable.");
     }
@@ -132,8 +111,8 @@ public class NameForgeTests
     {
         (string given, string family) = NameForge.MouseName(
             new DiceRoller(SeedDerivation.CreateStream(1, "mouse")),
-            TestData.Game.Names,
-            TestData.Grammar);
+                TestData.Game.Names,
+                TestData.Grammar);
 
         Assert.Contains(given, TestData.Game.Names.GivenNames);
         Assert.Contains(family, TestData.Game.Names.FamilyNames);
