@@ -202,7 +202,7 @@ public class GameDataTests
     {
         // The CC BY 4.0 grant is conditional on attribution, so a SRD-derived file without one is
         // a licensing problem, not merely a missing string.
-        foreach (DataProvenance provenance in TestData.Game.Provenance.Where(p => p.IsSrdDerived))
+        foreach (DataProvenance provenance in TestData.Game.Provenance.Where(p => p.IsDerived))
         {
             Assert.False(string.IsNullOrWhiteSpace(provenance.Attribution));
             Assert.Contains("Mausritter", provenance.Attribution!, StringComparison.Ordinal);
