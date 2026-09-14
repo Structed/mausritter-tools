@@ -5,12 +5,13 @@
 @using MausritterTools.Core.Interop.FantasiaArchive
 @using MausritterTools.Core.Mapping
 @using MausritterTools.Core.Model
-@using MausritterTools.Core.Randomness
+@using Structed.Inkwell.Randomness
 @using MausritterTools.Core.Rendering
 @using MausritterTools.Core.Serialization
 @using MausritterTools.Web.Components
 @using MausritterTools.Web.Services
 @using Microsoft.AspNetCore.Components.Forms
+@using Structed.Inkwell.Data
 @implements IDisposable
 @inject GameDataProvider DataProvider
 @inject BrowserInterop Browser
@@ -793,7 +794,7 @@
             // language they were locked in.
             if (imported.Locale is { Length: > 0 } code)
             {
-                await Languages.SetAsync(Locale.FromCode(code));
+                await Languages.SetAsync(MausritterLocales.FromCode(code));
             }
 
             Regenerate(updateUrl: true);

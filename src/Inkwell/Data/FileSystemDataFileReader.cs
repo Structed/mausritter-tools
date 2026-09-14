@@ -1,4 +1,4 @@
-namespace MausritterTools.Core.Data;
+namespace Structed.Inkwell.Data;
 
 /// <summary>
 /// Reads data files from a directory on disk.

@@ -2,7 +2,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace MausritterTools.Core.Data;
+namespace Structed.Inkwell.Data;
 
 /// <summary>
 /// Applies a language's translation overlay to every data file as it is read.

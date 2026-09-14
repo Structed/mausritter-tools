@@ -1,4 +1,5 @@
 using MausritterTools.Core.Data;
+using Structed.Inkwell.Data;
 
 namespace MausritterTools.Core.Model;
 

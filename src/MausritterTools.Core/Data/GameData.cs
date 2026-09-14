@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
+using Structed.Inkwell.Data;
 
 namespace MausritterTools.Core.Data;
 
@@ -86,7 +87,7 @@ public sealed class GameData
     {
         ArgumentNullException.ThrowIfNull(reader);
 
-        IDataFileReader localised = new LocalisingDataFileReader(reader, locale ?? Locale.English);
+        IDataFileReader localised = new LocalisingDataFileReader(reader, locale ?? MausritterLocales.English);
 
         return ReadAsync(localised, UiTextPath, GameDataJsonContext.Default.UiText, cancellationToken);
     }
@@ -105,7 +106,7 @@ public sealed class GameData
     {
         ArgumentNullException.ThrowIfNull(reader);
 
-        Locale resolved = locale ?? Locale.English;
+        Locale resolved = locale ?? MausritterLocales.English;
         IDataFileReader localised = new LocalisingDataFileReader(reader, resolved);
 
         GameData data = new(

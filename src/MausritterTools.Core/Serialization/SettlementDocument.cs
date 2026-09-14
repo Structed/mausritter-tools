@@ -1,5 +1,6 @@
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Model;
+using Structed.Inkwell.Data;
 using Structed.Inkwell.Randomness;
 
 namespace MausritterTools.Core.Serialization;

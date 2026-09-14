@@ -1,4 +1,4 @@
-namespace MausritterTools.Core.Data;
+namespace Structed.Inkwell.Data;
 
 /// <summary>
 /// Supplies the raw JSON for a data file.

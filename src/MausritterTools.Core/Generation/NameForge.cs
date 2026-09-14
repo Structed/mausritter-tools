@@ -1,5 +1,6 @@
 using System.Text;
 using MausritterTools.Core.Data;
+using Structed.Inkwell.Data;
 using Structed.Inkwell.Randomness;
 
 namespace MausritterTools.Core.Generation;

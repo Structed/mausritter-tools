@@ -6,6 +6,7 @@ using MausritterTools.Core.Interop.FantasiaArchive;
 using MausritterTools.Core.Mapping;
 using MausritterTools.Core.Model;
 using MausritterTools.Core.Serialization;
+using Structed.Inkwell.Data;
 
 namespace MausritterTools.Core.Tests;
 
@@ -466,7 +467,7 @@ public class FantasiaArchiveExportTests
     [Fact]
     public void SelectValuesStayEnglishKeysInATranslatedExport()
     {
-        GameData german = TestData.In(Locale.German);
+        GameData german = TestData.In(MausritterLocales.German);
         (Settlement settlement, GenerationOptions options) = Build(data: german);
 
         FantasiaArchiveExport export = FantasiaArchiveExporter.Export(
@@ -537,7 +538,7 @@ public class FantasiaArchiveExportTests
     [Fact]
     public void ATranslatedExportDeclaresItselfAsOne()
     {
-        GameData german = TestData.In(Locale.German);
+        GameData german = TestData.In(MausritterLocales.German);
         (Settlement settlement, GenerationOptions options) = Build(data: german);
 
         FantasiaArchiveExport export = FantasiaArchiveExporter.Export(
@@ -673,12 +674,12 @@ public class FantasiaArchiveRoundTripTests
     public void TheLanguageItWasWrittenInComesBackWithIt()
     {
         GenerationOptions options = new() { Seed = 24, Size = 5 };
-        (Settlement settlement, _, GameData german) = Build(options, Locale.German);
+        (Settlement settlement, _, GameData german) = Build(options, MausritterLocales.German);
 
         FantasiaArchiveExport export = FantasiaArchiveExporter.Export(
-            settlement, options, german.Text, locale: Locale.German.Code);
+            settlement, options, german.Text, locale: MausritterLocales.German.Code);
 
-        Assert.Equal(Locale.German.Code, FantasiaArchiveImporter.Read(Dumps(export)).Locale);
+        Assert.Equal(MausritterLocales.German.Code, FantasiaArchiveImporter.Read(Dumps(export)).Locale);
     }
 
     [Fact]
@@ -1059,8 +1060,8 @@ public class FantasiaArchiveMapTests
     {
         GenerationOptions options = new() { Seed = 4242, Size = 6 };
 
-        FantasiaArchiveExport german = Export(options, Locale.German);
-        GameData data = TestData.In(Locale.German);
+        FantasiaArchiveExport german = Export(options, MausritterLocales.German);
+        GameData data = TestData.In(MausritterLocales.German);
 
         SettlementMap map = MapGenerator.Generate(
             new SettlementGenerator(data).Generate(options),

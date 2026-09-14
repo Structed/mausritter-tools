@@ -1,6 +1,7 @@
 using System.Text;
 using MausritterTools.Core.Data;
 using MausritterTools.Core.Serialization;
+using Structed.Inkwell.Data;
 
 namespace MausritterTools.Core.Interop.FantasiaArchive;
 

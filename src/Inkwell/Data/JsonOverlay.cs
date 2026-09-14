@@ -1,6 +1,6 @@
 using System.Text.Json.Nodes;
 
-namespace MausritterTools.Core.Data;
+namespace Structed.Inkwell.Data;
 
 /// <summary>
 /// Merges a translation overlay onto a canonical data file.

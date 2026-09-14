@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace MausritterTools.Core.Data;
+namespace Structed.Inkwell.Data;
 
 /// <summary>
 /// Where a data file came from and under what licence.

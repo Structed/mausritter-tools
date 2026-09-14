@@ -1,3 +1,4 @@
+using Structed.Inkwell.Data;
 namespace MausritterTools.Core.Data;
 
 /// <summary>
@@ -523,38 +524,4 @@ public sealed record GrammarText
     } = "{amount}{pip} per hex";
 
     public ArticleTables Articles { get => field ?? new(); init; } = new();
-}
-
-/// <summary>
-/// Articles by grammatical gender, keyed <c>m</c>, <c>f</c> or <c>n</c>.
-/// </summary>
-/// <remarks>
-/// Empty in English, which has no gendered articles. In German only two forms are needed, because
-/// of a convenient accident: in the dative singular after a definite article the adjective ending
-/// is <c>-en</c> for every gender, so a sign reads "Zum krummen Käfer", "Zur krummen Rose" and
-/// "Zum krummen Blatt". Only the article changes, so the adjective columns can ship already
-/// declined and no declension code is needed anywhere.
-/// </remarks>
-public sealed record ArticleTables
-{
-    /// <summary>"Ein" / "Eine", used to open the settlement summary.</summary>
-    public IReadOnlyDictionary<string, string> IndefiniteNominative
-    {
-        get => field ?? new Dictionary<string, string>();
-        init;
-    } = new Dictionary<string, string>();
-
-    /// <summary>"Zum" / "Zur", used on tavern and shop signs.</summary>
-    public IReadOnlyDictionary<string, string> DativeDefinite
-    {
-        get => field ?? new Dictionary<string, string>();
-        init;
-    } = new Dictionary<string, string>();
-
-    /// <summary>
-    /// Looks up an article, returning an empty string when the language has none or the gender is
-    /// unknown, so an English pattern that never mentions <c>{article}</c> costs nothing.
-    /// </summary>
-    public static string For(IReadOnlyDictionary<string, string> table, string? gender) =>
-        gender is not null && table.TryGetValue(gender, out string? article) ? article : "";
 }

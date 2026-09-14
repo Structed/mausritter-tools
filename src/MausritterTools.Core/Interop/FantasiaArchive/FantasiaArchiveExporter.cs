@@ -5,6 +5,7 @@ using MausritterTools.Core.Data;
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Mapping;
 using MausritterTools.Core.Model;
+using Structed.Inkwell.Data;
 using Structed.Inkwell.Randomness;
 using MausritterTools.Core.Rendering;
 using MausritterTools.Core.Serialization;
@@ -133,7 +134,7 @@ public static class FantasiaArchiveExporter
 
             // Only the shopkeeper's purse needs this, for its thousands separator. The ambient
             // culture is deliberately never changed, so it is resolved explicitly here.
-            _culture = (locale is { Length: > 0 } code ? Locale.FromCode(code) : Locale.English)
+            _culture = (locale is { Length: > 0 } code ? MausritterLocales.FromCode(code) : MausritterLocales.English)
                 .FormatCulture;
 
             _signature = Signature(options);

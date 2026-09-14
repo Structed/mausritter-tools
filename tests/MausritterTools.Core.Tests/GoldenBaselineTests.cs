@@ -9,6 +9,7 @@ using MausritterTools.Core.Mapping;
 using MausritterTools.Core.Model;
 using MausritterTools.Core.Rendering;
 using MausritterTools.Core.Serialization;
+using Structed.Inkwell.Data;
 
 namespace MausritterTools.Core.Tests;
 
@@ -68,7 +69,7 @@ public sealed class GoldenBaselineTests
     /// </remarks>
     private static IEnumerable<(string Name, GenerationOptions Options, Locale Locale)> Cases()
     {
-        yield return ("smallest", new GenerationOptions { Seed = 0x5EED_1234, Size = 1 }, Locale.English);
+        yield return ("smallest", new GenerationOptions { Seed = 0x5EED_1234, Size = 1 }, MausritterLocales.English);
 
         yield return ("city-near-humans", new GenerationOptions
         {
@@ -76,7 +77,7 @@ public sealed class GoldenBaselineTests
             Size = 6,
             NearHumanTown = true,
             Terrain = "forest"
-        }, Locale.English);
+        }, MausritterLocales.English);
 
         yield return ("pinned-and-rerolled-in-german", new GenerationOptions
         {
@@ -92,7 +93,7 @@ public sealed class GoldenBaselineTests
                 ["settlement/industries"] = 2,
                 ["map"] = 1
             }
-        }, Locale.German);
+        }, MausritterLocales.German);
 
         // Water is not rolled for directly: it appears when the trade or features imply it, so the
         // only way to reach BuildWater deliberately is to lock an industry that names it.
@@ -105,7 +106,7 @@ public sealed class GoldenBaselineTests
             {
                 ["settlement/industries"] = "#2\n#10"
             }
-        }, Locale.English);
+        }, MausritterLocales.English);
     }
 
     private static string BuildManifest()

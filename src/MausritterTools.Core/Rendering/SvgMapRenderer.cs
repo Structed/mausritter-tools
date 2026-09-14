@@ -2,6 +2,7 @@ using System.Net;
 using System.Text;
 using MausritterTools.Core.Data;
 using MausritterTools.Core.Mapping;
+using Structed.Inkwell.Data;
 using Structed.Inkwell.Randomness;
 
 namespace MausritterTools.Core.Rendering;

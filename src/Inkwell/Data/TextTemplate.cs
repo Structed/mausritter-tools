@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace MausritterTools.Core.Data;
+namespace Structed.Inkwell.Data;
 
 /// <summary>
 /// Fills <c>{placeholder}</c> slots in a localised format string.
