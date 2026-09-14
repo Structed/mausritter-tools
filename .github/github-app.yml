@@ -5,8 +5,14 @@ instructions: |
   A Blazor WebAssembly standalone app: the whole site is static files that run in the
   visitor's browser. There is no server and nothing is uploaded.
 
-  MausritterTools.Core holds all domain logic so the generators can be tested without a
-  browser; MausritterTools.Web is a thin UI over it. Put logic in Core, not in a .razor file.
+  The code is in three layers, split by whether it knows what Mausritter is. Structed.Inkwell
+  (src/Inkwell) is the game-agnostic engine: randomness, dice, data loading and translation
+  overlays, name assembly, map generation, SVG rendering, the export envelope. It must never
+  learn about settlements. Structed.Inkwell.FantasiaArchive (src/Inkwell.FantasiaArchive) is
+  interop with someone else's app, kept separate so a tool can opt out. MausritterTools.Core
+  is what is actually Mausritter, and holds all domain logic so the generators can be tested
+  without a browser; MausritterTools.Web is a thin UI over it. Put logic in Core, not in a
+  .razor file, and put anything another game would want in the engine instead.
 
   Table data lives in src/MausritterTools.Web/wwwroot/data/ and is split by provenance:
 
@@ -20,7 +26,7 @@ instructions: |
 
   The app ships in English and German. English is canonical; a translation is an overlay
   deep-merged onto the canonical JSON before it is deserialised, so generators never know
-  about languages. Five things are easy to break by accident:
+  about languages. Six things are easy to break by accident:
 
   - Mausritter has no shops or services table, so that whole layer is an unofficial house
     rule. Keep it labelled as such in the UI, and keep each service's srdBasis honest about
@@ -29,7 +35,12 @@ instructions: |
     be declared.
   - Never use System.Random for anything reachable from a seed. Its seeded output is not
     stable across .NET versions, which would silently invalidate every shared seed URL. Use
-    the Pcg32 generator in Core/Randomness.
+    the Pcg32 generator in Inkwell's Randomness namespace.
+  - A field path such as settlement/event is a load-bearing string, not a label. It is an
+    input to the generator AND the key a lock is filed under in every shared link and export,
+    so renaming one changes what a seed rolls and orphans every file already written. Same
+    for export format ids, version numbers, JSON property names and the map's stream keys.
+    GoldenBaselineTests pins all of it; never regenerate its fixture to make it pass.
   - The System.Text.Json source generator discards property initialisers, so a property
     absent from a data file arrives as null whatever default is written on it. Non-nullable
     properties on the data models coerce null in their getters; keep it that way when adding
