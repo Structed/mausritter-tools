@@ -8,6 +8,7 @@ using MausritterTools.Core.Model;
 using MausritterTools.Core.Serialization;
 using Structed.Inkwell.Data;
 using Structed.Inkwell.Mapping;
+using Structed.Inkwell.Serialization;
 
 namespace MausritterTools.Core.Tests;
 
@@ -745,8 +746,8 @@ public class FantasiaArchiveRoundTripTests
             ],
             DateTimeOffset.UnixEpoch);
 
-        SettlementFormatException error =
-            Assert.Throws<SettlementFormatException>(() => FantasiaArchiveImporter.Read([foreign]));
+        DocumentFormatException error =
+            Assert.Throws<DocumentFormatException>(() => FantasiaArchiveImporter.Read([foreign]));
 
         Assert.Contains("no settlement written by this tool", error.Message, StringComparison.Ordinal);
     }
@@ -754,7 +755,7 @@ public class FantasiaArchiveRoundTripTests
     [Fact]
     public void RubbishIsRefusedRatherThanCrashing()
     {
-        Assert.Throws<SettlementFormatException>(
+        Assert.Throws<DocumentFormatException>(
             () => FantasiaArchiveImporter.Read(["not json at all", "{\"half\":"]));
     }
 

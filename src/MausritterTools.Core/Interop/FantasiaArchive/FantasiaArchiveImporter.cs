@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using MausritterTools.Core.Serialization;
+using Structed.Inkwell.Serialization;
 
 namespace MausritterTools.Core.Interop.FantasiaArchive;
 
@@ -97,7 +98,7 @@ public static class FantasiaArchiveImporter
     /// The contents of the project folder's files. Files that are not dumps, and dumps holding no
     /// settlement of ours, are skipped.
     /// </param>
-    /// <exception cref="SettlementFormatException">No settlement of ours was in there.</exception>
+    /// <exception cref="DocumentFormatException">No settlement of ours was in there.</exception>
     public static SettlementImport Read(IEnumerable<string> dumps)
     {
         ArgumentNullException.ThrowIfNull(dumps);
@@ -114,7 +115,7 @@ public static class FantasiaArchiveImporter
             }
         }
 
-        throw new SettlementFormatException(
+        throw new DocumentFormatException(
             "That Fantasia Archive project has no settlement written by this tool. Only a " +
             "settlement exported from here carries the seed needed to rebuild it.");
     }

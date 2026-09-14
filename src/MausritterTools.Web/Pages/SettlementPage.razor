@@ -13,6 +13,7 @@
 @using MausritterTools.Web.Services
 @using Microsoft.AspNetCore.Components.Forms
 @using Structed.Inkwell.Data
+@using Structed.Inkwell.Serialization
 @implements IDisposable
 @inject GameDataProvider DataProvider
 @inject BrowserInterop Browser
@@ -396,7 +397,7 @@
         {
             return SettlementSerializer.FromJson(saved);
         }
-        catch (SettlementFormatException)
+        catch (DocumentFormatException)
         {
             // Written by an older or newer build; discard rather than fail to load the page.
             await Browser.ClearStorageAsync(StorageKey);
@@ -810,7 +811,7 @@
                     ("count", found.ToString(Languages.Current.FormatCulture)))
             };
         }
-        catch (SettlementFormatException ex)
+        catch (DocumentFormatException ex)
         {
             _status = TextTemplate.Format(
                 _text.Settlement.Status.ImportFailed, ("message", ex.Message));
