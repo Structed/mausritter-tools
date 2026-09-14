@@ -22,8 +22,8 @@ canvas=420x320
 boundaryPoints=72
 roads=5 buildings=4 scatter=46
 water=none
-svgLength=20320
-svgSha256=023f77c65a1a4057bdc9ba26c883e71e7fa7a9266d4296ed07c3300b7d2c4d47
+svgLength=20311
+svgSha256=80035bc5c7b141f0e9d581e2b1586e38f78c6048197fe245185b9a4feb1dd663
 
 -- fantasia archive --
 folder=applegrove-qc6u5w
@@ -216,8 +216,8 @@ legend 9: The Honest Harness / Stables and transport — Juniper Brambleford
 legend 10: The Wilted Curio / Curio dealer — Citron Bracken
 legend 11: Wainwright's Setting / Jeweller — Myrtle Wainwright
 legend 12: The Patched Inkpot / Sage's scriptorium — Cedar Nettlebed
-svgLength=42470
-svgSha256=d471b41ccc93e9f87a1b9d63bf73cc9cee09684d7111e1dd24202f419edcd8a5
+svgLength=42461
+svgSha256=0a8485013422e225d08a4b601e7e251002626729acbd66efaac94f8f281e4ee6
 
 -- fantasia archive --
 folder=friendburn-3cs83k
@@ -844,8 +844,8 @@ legend 3: Zum Geflickten Talg / Kerzenzieherei — Kastanie Pfeifenwind
 legend 4: Windhalms Bank / Heuerhalle — Farn Windhalm
 legend 5: Zum Krummen Fingerhut / Tuchhandlung — Ringelblume Eschengrund
 legend 6: Pfennigpfeifes Zügel / Stall und Transport — Grünkohl Pfennigpfeife
-svgLength=30268
-svgSha256=aea99177a8d9bf17a46872a3e5aa5871e7b16663d55a7b5e6168da9bed25bf16
+svgLength=30259
+svgSha256=8ed44c816cff1a296500dde4d8ef0bc4ca57a0aca35b66b21907123edeff7e06
 
 -- fantasia archive --
 folder=hollowbridge-1gz7oji
@@ -1245,8 +1245,8 @@ legend 5: Tumbledown's Mortar / Apothecary — Yew Tumbledown
 legend 6: The Humble Stitch / Clothier — Citron Thatchbury
 legend 7: Pennywhistle's Halter / Stables and transport — Marigold Pennywhistle
 legend 8: The Margin / Sage's scriptorium — Mustard Wickersley
-svgLength=43942
-svgSha256=475a5094d84c78065073dd3c8bcb5fce01db6ab708030ba632764f5689403948
+svgLength=43933
+svgSha256=dee3f059696e8c0de68220b0000c815cb71175b5fd6c977e3c01424a0d3acc75
 
 -- fantasia archive --
 folder=acornashe-4f9kd1
