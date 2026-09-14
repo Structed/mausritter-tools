@@ -4,6 +4,7 @@ using System.Text;
 using MausritterTools.Core.Data;
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Mapping;
+using Structed.Inkwell.Mapping;
 using MausritterTools.Core.Model;
 using Structed.Inkwell.Data;
 using Structed.Inkwell.Randomness;
@@ -69,7 +70,7 @@ public static class FantasiaArchiveExporter
         // and its settings. The seed comes from the same place the page's own map does, which is
         // what stops an export shipping a different map from the one the user is looking at.
         uint mapSeed = MapGenerator.SeedFor(options);
-        SettlementMap map = MapGenerator.Generate(settlement, mapSeed, text.Grammar);
+        PlaceMap map = SettlementMapper.Generate(settlement, mapSeed, text.Grammar);
         string mapSvg = SvgMapRenderer.Render(
             map, mapSeed, text.Settlement.Map.AriaLabel, intrinsicSize: true);
 
@@ -106,7 +107,7 @@ public static class FantasiaArchiveExporter
         private readonly DateTimeOffset _timestamp;
         private readonly string? _locale;
         private readonly CultureInfo _culture;
-        private readonly SettlementMap _map;
+        private readonly PlaceMap _map;
         private readonly string _mapSvg;
 
         private readonly Identity _settlementId;
@@ -121,7 +122,7 @@ public static class FantasiaArchiveExporter
             UiText text,
             DateTimeOffset timestamp,
             string? locale,
-            SettlementMap map,
+            PlaceMap map,
             string mapSvg)
         {
             _settlement = settlement;
@@ -615,7 +616,7 @@ public static class FantasiaArchiveExporter
                 Convert.ToBase64String(Encoding.UTF8.GetBytes(_mapSvg));
 
             string alt = Escape(TextTemplate.Format(
-                _text.Settlement.Map.AriaLabel, ("host", _map.HostName)));
+                _text.Settlement.Map.AriaLabel, ("host", _map.Subject)));
 
             StringBuilder builder = new();
 
@@ -634,7 +635,7 @@ public static class FantasiaArchiveExporter
             builder
                 .Append("<p><em>")
                 .Append(Escape(TextTemplate.Format(
-                    _text.Settlement.Map.Caption, ("host", _map.HostName))))
+                    _text.Settlement.Map.Caption, ("host", _map.Subject))))
                 .Append("</em></p>");
 
             if (_map.Legend.Count > 0)

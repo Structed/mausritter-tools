@@ -1,6 +1,7 @@
 using System.Xml.Linq;
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Mapping;
+using Structed.Inkwell.Mapping;
 using MausritterTools.Core.Model;
 using MausritterTools.Core.Rendering;
 
@@ -8,7 +9,7 @@ namespace MausritterTools.Core.Tests;
 
 public class SvgMapRendererTests
 {
-    private static (Settlement Settlement, SettlementMap Map, string Svg) Render(uint seed, int? size = 5)
+    private static (Settlement Settlement, PlaceMap Map, string Svg) Render(uint seed, int? size = 5)
     {
         Settlement settlement = new SettlementGenerator(TestData.Game).Generate(new GenerationOptions
         {
@@ -17,7 +18,7 @@ public class SvgMapRendererTests
             NearHumanTown = true
         });
 
-        SettlementMap map = MapGenerator.Generate(settlement, seed);
+        PlaceMap map = SettlementMapper.Generate(settlement, seed);
 
         return (settlement, map, SvgMapRenderer.Render(map, seed));
     }
@@ -39,7 +40,7 @@ public class SvgMapRendererTests
     [Fact]
     public void OutputCarriesAViewBoxSoItScales()
     {
-        (_, SettlementMap map, string svg) = Render(1234);
+        (_, PlaceMap map, string svg) = Render(1234);
         XDocument document = XDocument.Parse(svg);
 
         string viewBox = document.Root!.Attribute("viewBox")!.Value;
@@ -50,11 +51,11 @@ public class SvgMapRendererTests
     [Fact]
     public void OutputIsAccessible()
     {
-        (_, SettlementMap map, string svg) = Render(555);
+        (_, PlaceMap map, string svg) = Render(555);
         XDocument document = XDocument.Parse(svg);
 
         Assert.Equal("img", document.Root!.Attribute("role")!.Value);
-        Assert.Contains(map.HostName, document.Root.Attribute("aria-label")!.Value, StringComparison.Ordinal);
+        Assert.Contains(map.Subject, document.Root.Attribute("aria-label")!.Value, StringComparison.Ordinal);
     }
 
     /// <summary>
@@ -65,7 +66,7 @@ public class SvgMapRendererTests
     [Fact]
     public void ASizeIsWrittenOnlyWhenItIsAskedFor()
     {
-        (_, SettlementMap map, string onPage) = Render(2468);
+        (_, PlaceMap map, string onPage) = Render(2468);
 
         Assert.Null(XDocument.Parse(onPage).Root!.Attribute("width"));
         Assert.Null(XDocument.Parse(onPage).Root!.Attribute("height"));
@@ -87,7 +88,7 @@ public class SvgMapRendererTests
     [Fact]
     public void EveryRoadAndBuildingIsDrawn()
     {
-        (_, SettlementMap map, string svg) = Render(4321, 6);
+        (_, PlaceMap map, string svg) = Render(4321, 6);
         XDocument document = XDocument.Parse(svg);
 
         XNamespace svgNs = "http://www.w3.org/2000/svg";
@@ -110,7 +111,7 @@ public class SvgMapRendererTests
     [Fact]
     public void KeyedBuildingsGetNumberedMarkers()
     {
-        (_, SettlementMap map, string svg) = Render(31337, 6);
+        (_, PlaceMap map, string svg) = Render(31337, 6);
         XDocument document = XDocument.Parse(svg);
 
         XNamespace svgNs = "http://www.w3.org/2000/svg";
@@ -139,7 +140,7 @@ public class SvgMapRendererTests
             new GenerationOptions { Seed = 8, Size = 4 }
                 .WithPin("tavern/name", "The <script>alert(1)</script> & Bell"));
 
-        SettlementMap map = MapGenerator.Generate(settlement, 8);
+        PlaceMap map = SettlementMapper.Generate(settlement, 8);
         string svg = SvgMapRenderer.Render(map, 8);
 
         XDocument document = XDocument.Parse(svg);
@@ -165,7 +166,7 @@ public class SvgMapRendererTests
     {
         for (uint seed = 1; seed <= 120; seed++)
         {
-            (_, SettlementMap map, string svg) = Render(seed);
+            (_, PlaceMap map, string svg) = Render(seed);
 
             if (map.Water is not null)
             {
@@ -180,7 +181,7 @@ public class SvgMapRendererTests
     [Fact]
     public void RenderingIsDeterministic()
     {
-        (_, SettlementMap map, string first) = Render(6161, 6);
+        (_, PlaceMap map, string first) = Render(6161, 6);
 
         Assert.Equal(first, SvgMapRenderer.Render(map, 6161));
     }

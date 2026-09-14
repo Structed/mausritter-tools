@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text;
 using MausritterTools.Core.Data;
-using MausritterTools.Core.Mapping;
+using Structed.Inkwell.Mapping;
 using Structed.Inkwell.Data;
 using Structed.Inkwell.Randomness;
 
@@ -41,7 +41,7 @@ public static class SvgMapRenderer
     /// </para>
     /// </remarks>
     public static string Render(
-        SettlementMap map, uint seed, string? ariaLabelPattern = null, bool intrinsicSize = false)
+        PlaceMap map, uint seed, string? ariaLabelPattern = null, bool intrinsicSize = false)
     {
         ArgumentNullException.ThrowIfNull(map);
 
@@ -49,7 +49,7 @@ public static class SvgMapRenderer
 
         string ariaLabel = Escape(TextTemplate.Format(
             ariaLabelPattern is { Length: > 0 } pattern ? pattern : DefaultAriaLabel,
-            ("host", map.HostName)));
+            ("host", map.Subject)));
 
         string size = intrinsicSize
             ? $""" width="{RoughPen.N(map.Width)}" height="{RoughPen.N(map.Height)}" """
@@ -99,7 +99,7 @@ public static class SvgMapRenderer
     }
 
     /// <summary>The silhouette of the host object, which frames the whole map.</summary>
-    private static void AppendHost(StringBuilder svg, RoughPen pen, SettlementMap map)
+    private static void AppendHost(StringBuilder svg, RoughPen pen, PlaceMap map)
     {
         string outline = pen.ClosedPath(map.Boundary.Points, 0.7);
 
@@ -112,7 +112,7 @@ public static class SvgMapRenderer
         svg.Append("</g>");
     }
 
-    private static void AppendWater(StringBuilder svg, RoughPen pen, SettlementMap map)
+    private static void AppendWater(StringBuilder svg, RoughPen pen, PlaceMap map)
     {
         if (map.Water is not { } water)
         {
@@ -140,7 +140,7 @@ public static class SvgMapRenderer
     /// Stroking the same path twice at different widths is what turns a bare line into an outlined
     /// road without having to compute its two edges.
     /// </remarks>
-    private static void AppendRoads(StringBuilder svg, RoughPen pen, SettlementMap map)
+    private static void AppendRoads(StringBuilder svg, RoughPen pen, PlaceMap map)
     {
         if (map.Roads.Count == 0)
         {
@@ -168,7 +168,7 @@ public static class SvgMapRenderer
         svg.Append("</g>");
     }
 
-    private static void AppendScatter(StringBuilder svg, RoughPen pen, SettlementMap map)
+    private static void AppendScatter(StringBuilder svg, RoughPen pen, PlaceMap map)
     {
         if (map.Scatter.Count == 0)
         {
@@ -210,7 +210,7 @@ public static class SvgMapRenderer
         svg.Append("</g>");
     }
 
-    private static void AppendBuildings(StringBuilder svg, RoughPen pen, SettlementMap map)
+    private static void AppendBuildings(StringBuilder svg, RoughPen pen, PlaceMap map)
     {
         if (map.Buildings.Count == 0)
         {
@@ -239,7 +239,7 @@ public static class SvgMapRenderer
     }
 
     /// <summary>The numbered discs that tie buildings to the legend.</summary>
-    private static void AppendKeys(StringBuilder svg, SettlementMap map)
+    private static void AppendKeys(StringBuilder svg, PlaceMap map)
     {
         IReadOnlyList<MapBuilding> keyed = [.. map.Buildings.Where(b => b.IsKeyed)];
         if (keyed.Count == 0)

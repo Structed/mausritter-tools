@@ -1,6 +1,6 @@
 using System.Globalization;
 using System.Text;
-using MausritterTools.Core.Mapping;
+using Structed.Inkwell.Mapping;
 using Structed.Inkwell.Randomness;
 
 namespace MausritterTools.Core.Rendering;

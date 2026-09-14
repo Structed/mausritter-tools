@@ -1,4 +1,4 @@
-namespace MausritterTools.Core.Mapping;
+namespace Structed.Inkwell.Mapping;
 
 /// <summary>A point in map space.</summary>
 public readonly record struct MapPoint(double X, double Y)

@@ -1,4 +1,4 @@
-namespace MausritterTools.Core.Mapping;
+namespace Structed.Inkwell.Mapping;
 
 /// <summary>A stretch of road or tunnel.</summary>
 public sealed record RoadSegment(MapPoint From, MapPoint To, int Depth)
@@ -86,19 +86,20 @@ public enum ScatterKind
 public sealed record MapLegendEntry(int Key, string Name, string Detail);
 
 /// <summary>
-/// A generated settlement map.
+/// A generated map of a place.
 /// </summary>
 /// <remarks>
-/// Laid out inside the silhouette of the host object rather than on open ground, because a
-/// Mausritter settlement is a human-scale object annotated at mouse scale: an oak hollow, a
-/// farmhouse wall, a cow skull, a boot.
+/// Laid out inside a silhouette rather than on open ground. What the silhouette is belongs to
+/// whoever wrote the brief: a Mausritter settlement is a human-scale object annotated at mouse
+/// scale — an oak hollow, a farmhouse wall, a cow skull, a boot.
 /// </remarks>
-public sealed record SettlementMap
+public sealed record PlaceMap
 {
-    /// <summary>The outline of the host object the settlement occupies.</summary>
+    /// <summary>The outline of the thing the place occupies.</summary>
     public MapPolygon Boundary { get; init; } = null!;
 
-    public string HostName { get; init; } = "";
+    /// <summary>The name of the thing the map is drawn inside.</summary>
+    public string Subject { get; init; } = "";
 
     /// <summary>The layout archetype used, e.g. hollow, linear, vessel.</summary>
     public string Shape { get; init; } = "";

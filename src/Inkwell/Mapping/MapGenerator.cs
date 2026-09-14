@@ -1,20 +1,17 @@
-using MausritterTools.Core.Data;
-using MausritterTools.Core.Generation;
-using MausritterTools.Core.Model;
-using Structed.Inkwell.Data;
+using Structed.Inkwell.Generation;
 using Structed.Inkwell.Randomness;
 
-namespace MausritterTools.Core.Mapping;
+namespace Structed.Inkwell.Mapping;
 
 /// <summary>
-/// Lays out a settlement map inside the silhouette of its host object.
+/// Lays out a map inside the silhouette of the place it describes.
 /// </summary>
 /// <remarks>
 /// <para>
 /// Roads are grown first and buildings placed along them, which is the approach that suits a small
 /// rural settlement: the alternative, subdividing a block into lots, produces dense urban patches
-/// and makes the building count an emergent property rather than something the settlement's size
-/// can dictate.
+/// and makes the building count an emergent property rather than something the place's size can
+/// dictate.
 /// </para>
 /// <para>
 /// Growth uses a priority queue rather than an L-system. Each candidate road is popped, tested
@@ -32,48 +29,38 @@ public static class MapGenerator
     private const double CanvasHeight = 320;
     private const double EdgeMargin = 26;
 
-    /// <summary>Words in a settlement's trade or features that imply open water.</summary>
-    private static readonly string[] WaterCues =
-    [
-        "fishermice", "water-wheel", "raft", "riverboat", "dock", "bridge", "pond", "brook", "mill"
-    ];
-
     /// <summary>
-    /// The seed a settlement's map is drawn from.
+    /// The seed a place's map is drawn from.
     /// </summary>
     /// <remarks>
-    /// Derived from the settlement's own seed so a shared link reproduces the same map, but shifted
-    /// by how many times the map alone has been re-drawn, so its layout can be changed without
-    /// disturbing a settlement the user is happy with. It lives here rather than at the call site
+    /// Derived from the place's own seed so a shared link reproduces the same map, but shifted by
+    /// how many times the map alone has been re-drawn, so its layout can be changed without
+    /// disturbing a result the user is happy with. It lives here rather than at the call site
     /// because more than one caller needs it and they must agree: an export that derived the seed
     /// differently would ship a different map from the one on screen.
     /// </remarks>
-    public static uint SeedFor(GenerationOptions options)
+    public static uint SeedFor(RollPlan plan)
     {
-        ArgumentNullException.ThrowIfNull(options);
+        ArgumentNullException.ThrowIfNull(plan);
 
-        return options.Rerolls.TryGetValue(RerollKey, out int redraws) && redraws > 0
-            ? (uint)SeedDerivation.Derive(options.Seed, $"map#{redraws}")
-            : options.Seed;
+        return plan.Rerolls.TryGetValue(RerollKey, out int redraws) && redraws > 0
+            ? (uint)SeedDerivation.Derive(plan.Seed, $"map#{redraws}")
+            : plan.Seed;
     }
 
-    /// <summary>Builds the map for a settlement.</summary>
-    /// <param name="settlement">The settlement to draw.</param>
+    /// <summary>Builds the map for a place.</summary>
+    /// <param name="brief">What is being drawn: its silhouette, its size and what earns a key.</param>
     /// <param name="seed">The map's own seed, so it can be redrawn without re-rolling the place.</param>
-    /// <param name="grammar">
-    /// Supplies the legend's phrasing. Optional so that geometry tests need not load a language;
-    /// the defaults are the English ones.
-    /// </param>
-    public static SettlementMap Generate(Settlement settlement, uint seed, GrammarText? grammar = null)
+    public static PlaceMap Generate(MapBrief brief, uint seed)
     {
-        ArgumentNullException.ThrowIfNull(settlement);
+        ArgumentNullException.ThrowIfNull(brief);
 
         DiceRoller dice = new(SeedDerivation.CreateStream(seed, "map"));
 
-        string shape = string.IsNullOrWhiteSpace(settlement.Host.Shape) ? "hollow" : settlement.Host.Shape;
-        MapPolygon boundary = BuildBoundary(dice, shape, settlement.Size.SizeValue);
+        string shape = string.IsNullOrWhiteSpace(brief.Shape) ? "hollow" : brief.Shape;
+        MapPolygon boundary = BuildBoundary(dice, shape, brief.Scale);
 
-        MapPolygon? water = ShouldHaveWater(settlement)
+        MapPolygon? water = brief.HasWater
             ? BuildWater(new DiceRoller(SeedDerivation.CreateStream(seed, "map/water")))
             : null;
 
@@ -82,17 +69,16 @@ public static class MapGenerator
             boundary,
             water,
             shape,
-            settlement.Size.SizeValue);
+            brief.Scale);
 
         IReadOnlyList<MapBuilding> buildings = PlaceBuildings(
             new DiceRoller(SeedDerivation.CreateStream(seed, "map/buildings")),
             boundary,
             water,
             roads,
-            settlement.Size.SizeValue);
+            brief.Scale);
 
-        (buildings, IReadOnlyList<MapLegendEntry> legend) = AssignKeys(
-            settlement, buildings, grammar ?? new GrammarText());
+        (buildings, IReadOnlyList<MapLegendEntry> legend) = AssignKeys(brief.Keys, buildings);
 
         IReadOnlyList<MapScatter> scatter = PlaceScatter(
             new DiceRoller(SeedDerivation.CreateStream(seed, "map/scatter")),
@@ -101,10 +87,10 @@ public static class MapGenerator
             roads,
             buildings);
 
-        return new SettlementMap
+        return new PlaceMap
         {
             Boundary = boundary,
-            HostName = settlement.Host.Name,
+            Subject = brief.Subject,
             Shape = shape,
             Roads = roads,
             Buildings = buildings,
@@ -237,17 +223,6 @@ public static class MapGenerator
     #endregion
 
     #region Water
-
-    private static bool ShouldHaveWater(Settlement settlement)
-    {
-        IEnumerable<string> text = settlement.Industries
-            .Concat(settlement.NotableFeatures)
-            .Append(settlement.Host.Name)
-            .Append(settlement.Host.Description);
-
-        return text.Any(entry =>
-            WaterCues.Any(cue => entry.Contains(cue, StringComparison.OrdinalIgnoreCase)));
-    }
 
     /// <summary>A band of water crossing one corner of the map.</summary>
     private static MapPolygon BuildWater(DiceRoller dice)
@@ -643,29 +618,9 @@ public static class MapGenerator
     /// are, so the shops land on the main street rather than scattered down back alleys.
     /// </remarks>
     private static (IReadOnlyList<MapBuilding> Buildings, IReadOnlyList<MapLegendEntry> Legend) AssignKeys(
-        Settlement settlement,
-        IReadOnlyList<MapBuilding> buildings,
-        GrammarText grammar)
+        IReadOnlyList<MapKeySubject> subjects,
+        IReadOnlyList<MapBuilding> buildings)
     {
-        List<(string Name, string Detail)> subjects = [];
-
-        if (settlement.Tavern is { } tavern)
-        {
-            subjects.Add((
-                tavern.Name,
-                TextTemplate.Format(grammar.TavernLegendDetail, ("meal", tavern.SpecialtyMeal))));
-        }
-
-        foreach (Shop shop in settlement.Shops)
-        {
-            subjects.Add((
-                shop.SignName,
-                TextTemplate.Format(
-                    grammar.ShopLegendDetail,
-                    ("service", shop.Service.Name),
-                    ("keeper", shop.Keeper.FullName))));
-        }
-
         if (subjects.Count == 0 || buildings.Count == 0)
         {
             return (buildings, []);
@@ -686,11 +641,11 @@ public static class MapGenerator
 
         for (int i = 0; i < subjects.Count && i < ordered.Count; i++)
         {
-            (string name, string detail) = subjects[i];
+            MapKeySubject subject = subjects[i];
             int key = i + 1;
 
-            assigned[ordered[i]] = (key, name);
-            legend.Add(new MapLegendEntry(key, name, detail));
+            assigned[ordered[i]] = (key, subject.Name);
+            legend.Add(new MapLegendEntry(key, subject.Name, subject.Detail));
         }
 
         List<MapBuilding> result = new(buildings.Count);

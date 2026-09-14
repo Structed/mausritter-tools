@@ -4,6 +4,7 @@ using MausritterTools.Core.Data;
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Interop.FantasiaArchive;
 using MausritterTools.Core.Mapping;
+using Structed.Inkwell.Mapping;
 using MausritterTools.Core.Model;
 using MausritterTools.Core.Serialization;
 using Structed.Inkwell.Data;
@@ -290,7 +291,7 @@ public class FantasiaArchiveExportTests
         (Settlement settlement, GenerationOptions options) = Build(data: game);
         FantasiaArchiveExport export = Export();
 
-        SettlementMap map = MapGenerator.Generate(settlement, options.Seed, game.Text.Grammar);
+        PlaceMap map = SettlementMapper.Generate(settlement, options.Seed, game.Text.Grammar);
 
         Dictionary<string, int> orderByName = Documents(export, FantasiaArchiveBlueprints.Locations)
             .Where(d => Field(d, FantasiaArchiveBlueprints.Location.LocationType).GetString()
@@ -873,7 +874,7 @@ public class FantasiaArchiveMapTests
         FantasiaArchiveExport export = FantasiaArchiveExporter.Export(
             settlement, options, data.Text, DateTimeOffset.UnixEpoch, data.Locale.Code);
 
-        SettlementMap map = MapGenerator.Generate(
+        PlaceMap map = SettlementMapper.Generate(
             settlement, MapGenerator.SeedFor(options), data.Text.Grammar);
 
         Assert.NotEmpty(map.Legend);
@@ -1063,7 +1064,7 @@ public class FantasiaArchiveMapTests
         FantasiaArchiveExport german = Export(options, MausritterLocales.German);
         GameData data = TestData.In(MausritterLocales.German);
 
-        SettlementMap map = MapGenerator.Generate(
+        PlaceMap map = SettlementMapper.Generate(
             new SettlementGenerator(data).Generate(options),
             MapGenerator.SeedFor(options),
             data.Text.Grammar);

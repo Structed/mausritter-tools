@@ -6,6 +6,7 @@ using MausritterTools.Core.Data;
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Interop.FantasiaArchive;
 using MausritterTools.Core.Mapping;
+using Structed.Inkwell.Mapping;
 using MausritterTools.Core.Model;
 using MausritterTools.Core.Rendering;
 using MausritterTools.Core.Serialization;
@@ -124,7 +125,7 @@ public sealed class GoldenBaselineTests
             Settlement settlement = new SettlementGenerator(data).Generate(options);
 
             uint mapSeed = MapGenerator.SeedFor(options);
-            SettlementMap map = MapGenerator.Generate(settlement, mapSeed, data.Text.Grammar);
+            PlaceMap map = SettlementMapper.Generate(settlement, mapSeed, data.Text.Grammar);
             string svg = SvgMapRenderer.Render(
                 map, mapSeed, data.Text.Settlement.Map.AriaLabel, intrinsicSize: true);
 
@@ -158,10 +159,10 @@ public sealed class GoldenBaselineTests
         }
     }
 
-    private static void AppendMap(StringBuilder manifest, SettlementMap map, string svg)
+    private static void AppendMap(StringBuilder manifest, PlaceMap map, string svg)
     {
         manifest.Append("\n-- map --\n");
-        manifest.Append($"boundary={Escape(map.HostName)} shape={map.Shape}\n");
+        manifest.Append($"boundary={Escape(map.Subject)} shape={map.Shape}\n");
         manifest.Append(Invariant($"canvas={map.Width:0.###}x{map.Height:0.###}\n"));
         manifest.Append(Invariant($"boundaryPoints={map.Boundary.Points.Count}\n"));
         manifest.Append(Invariant(

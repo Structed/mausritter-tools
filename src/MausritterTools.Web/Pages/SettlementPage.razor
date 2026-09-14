@@ -4,6 +4,7 @@
 @using MausritterTools.Core.Generation
 @using MausritterTools.Core.Interop.FantasiaArchive
 @using MausritterTools.Core.Mapping
+@using Structed.Inkwell.Mapping
 @using MausritterTools.Core.Model
 @using Structed.Inkwell.Randomness
 @using MausritterTools.Core.Rendering
@@ -250,7 +251,7 @@
     private UiText _text = new();
     private SettlementGenerator? _generator;
     private Settlement? _settlement;
-    private SettlementMap? _map;
+    private PlaceMap? _map;
     private string _mapSvg = "";
     private GenerationOptions _options = new();
     private string _seedText = "";
@@ -470,7 +471,7 @@
         _settlement = _generator.Generate(_options);
         _seedText = SeedCodec.Encode(_options.Seed);
 
-        _map = MapGenerator.Generate(_settlement, MapSeed, _text.Grammar);
+        _map = SettlementMapper.Generate(_settlement, MapSeed, _text.Grammar);
         _mapSvg = SvgMapRenderer.Render(_map, MapSeed, _text.Settlement.Map.AriaLabel);
 
         if (updateUrl)
