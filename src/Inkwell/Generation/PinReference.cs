@@ -1,4 +1,4 @@
-namespace MausritterTools.Core.Generation;
+namespace Structed.Inkwell.Generation;
 
 /// <summary>
 /// How a locked value is written down.
@@ -22,7 +22,7 @@ public static class PinReference
     /// <summary>Writes a pin that refers to a table row by position.</summary>
     public static string ForIndex(int index) => $"{Marker}{index}";
 
-    /// <summary>Writes a pin for several rows, as a locked pair of industries would need.</summary>
+    /// <summary>Writes a pin for several rows, as a locked pair of values from one table would need.</summary>
     public static string ForIndices(IEnumerable<int> indices) =>
         string.Join('\n', indices.Select(ForIndex));
 

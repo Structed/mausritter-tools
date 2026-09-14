@@ -1,23 +1,23 @@
 using Structed.Inkwell.Randomness;
 
-namespace MausritterTools.Core.Generation;
+namespace Structed.Inkwell.Generation;
 
 /// <summary>
 /// Resolves a single field: either its pinned value, or a roll from that field's own stream.
 /// </summary>
 /// <remarks>
-/// Every value in a settlement is addressed by a path such as <c>shop/2/keeper/quirk</c>. Because
-/// each path gets an independent stream derived from the root seed, re-rolling one field cannot
-/// disturb any other, and pinning a field survives a re-roll of everything around it.
+/// Every value in a generated result is addressed by a path such as <c>shop/2/keeper/quirk</c>.
+/// Because each path gets an independent stream derived from the root seed, re-rolling one field
+/// cannot disturb any other, and pinning a field survives a re-roll of everything around it.
 /// </remarks>
-public sealed class RollContext(GenerationOptions options)
+public sealed class RollContext(RollPlan plan)
 {
-    private readonly GenerationOptions _options =
-        options ?? throw new ArgumentNullException(nameof(options));
+    private readonly RollPlan _plan =
+        plan ?? throw new ArgumentNullException(nameof(plan));
 
     private readonly Dictionary<string, string> _pinValues = new(StringComparer.Ordinal);
 
-    public GenerationOptions Options => _options;
+    public RollPlan Plan => _plan;
 
     /// <summary>
     /// What each field would be pinned to if the user locked it.
@@ -34,21 +34,21 @@ public sealed class RollContext(GenerationOptions options)
 
     /// <summary>Creates the dice for one field.</summary>
     public DiceRoller Dice(string path) =>
-        new(SeedDerivation.CreateStream(_options.Seed, StreamKey(path)));
+        new(SeedDerivation.CreateStream(_plan.Seed, StreamKey(path)));
 
     /// <summary>
     /// The stream key for a path, incorporating how many times it has been individually re-rolled
     /// so that each re-roll draws from a different stream.
     /// </summary>
     private string StreamKey(string path) =>
-        _options.Rerolls.TryGetValue(path, out int count) && count > 0
+        _plan.Rerolls.TryGetValue(path, out int count) && count > 0
             ? $"{path}#{count}"
             : path;
 
     /// <summary>Returns the pinned value for a path, if there is one.</summary>
     public bool TryGetPin(string path, out string value)
     {
-        if (_options.Pins.TryGetValue(path, out string? pinned) && pinned is not null)
+        if (_plan.Pins.TryGetValue(path, out string? pinned) && pinned is not null)
         {
             value = pinned;
             return true;
