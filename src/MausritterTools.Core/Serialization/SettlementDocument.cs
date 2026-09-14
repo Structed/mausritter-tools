@@ -1,6 +1,7 @@
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Model;
-using MausritterTools.Core.Randomness;
+using Structed.Inkwell.Randomness;
+using Structed.Inkwell.Serialization;
 
 namespace MausritterTools.Core.Serialization;
 
@@ -13,7 +14,7 @@ namespace MausritterTools.Core.Serialization;
 /// <see cref="Settlement"/> is a flattened snapshot for humans and other tools, so the file is
 /// still worth something to a reader who has never heard of this app.
 /// </remarks>
-public sealed record SettlementDocument
+public sealed record SettlementDocument : IGeneratedDocument
 {
     public const string FormatId = "mausritter-tools/settlement";
 

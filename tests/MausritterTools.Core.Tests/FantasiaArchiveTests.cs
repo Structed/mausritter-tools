@@ -6,6 +6,10 @@ using MausritterTools.Core.Interop.FantasiaArchive;
 using MausritterTools.Core.Mapping;
 using MausritterTools.Core.Model;
 using MausritterTools.Core.Serialization;
+using Structed.Inkwell.Data;
+using Structed.Inkwell.Interop.FantasiaArchive;
+using Structed.Inkwell.Mapping;
+using Structed.Inkwell.Serialization;
 
 namespace MausritterTools.Core.Tests;
 
@@ -289,7 +293,7 @@ public class FantasiaArchiveExportTests
         (Settlement settlement, GenerationOptions options) = Build(data: game);
         FantasiaArchiveExport export = Export();
 
-        SettlementMap map = MapGenerator.Generate(settlement, options.Seed, game.Text.Grammar);
+        PlaceMap map = SettlementMapper.Generate(settlement, options.Seed, game.Text.Grammar);
 
         Dictionary<string, int> orderByName = Documents(export, FantasiaArchiveBlueprints.Locations)
             .Where(d => Field(d, FantasiaArchiveBlueprints.Location.LocationType).GetString()
@@ -466,7 +470,7 @@ public class FantasiaArchiveExportTests
     [Fact]
     public void SelectValuesStayEnglishKeysInATranslatedExport()
     {
-        GameData german = TestData.In(Locale.German);
+        GameData german = TestData.In(MausritterLocales.German);
         (Settlement settlement, GenerationOptions options) = Build(data: german);
 
         FantasiaArchiveExport export = FantasiaArchiveExporter.Export(
@@ -479,7 +483,7 @@ public class FantasiaArchiveExportTests
 
         // "City" for a Stadt: the key the app's dropdown offers, not the word the reader sees.
         Assert.Equal(
-            FantasiaArchiveBlueprints.LocationTypeForSize(settlement.Size.SizeValue),
+            MausritterArchiveKeys.LocationTypeForSize(settlement.Size.SizeValue),
             Field(place, FantasiaArchiveBlueprints.Location.LocationType).GetString());
 
         Assert.Equal("City", Field(place, FantasiaArchiveBlueprints.Location.LocationType).GetString());
@@ -537,7 +541,7 @@ public class FantasiaArchiveExportTests
     [Fact]
     public void ATranslatedExportDeclaresItselfAsOne()
     {
-        GameData german = TestData.In(Locale.German);
+        GameData german = TestData.In(MausritterLocales.German);
         (Settlement settlement, GenerationOptions options) = Build(data: german);
 
         FantasiaArchiveExport export = FantasiaArchiveExporter.Export(
@@ -564,7 +568,7 @@ public class FantasiaArchiveExportTests
         List<JsonElement> carriers =
         [
             .. AllDocuments(export)
-                .Where(d => PouchDump.FieldString(d, FantasiaArchiveBlueprints.StateField) is not null)
+                .Where(d => PouchDump.FieldString(d, MausritterArchiveKeys.StateField) is not null)
         ];
 
         JsonElement carrier = Assert.Single(carriers);
@@ -673,12 +677,12 @@ public class FantasiaArchiveRoundTripTests
     public void TheLanguageItWasWrittenInComesBackWithIt()
     {
         GenerationOptions options = new() { Seed = 24, Size = 5 };
-        (Settlement settlement, _, GameData german) = Build(options, Locale.German);
+        (Settlement settlement, _, GameData german) = Build(options, MausritterLocales.German);
 
         FantasiaArchiveExport export = FantasiaArchiveExporter.Export(
-            settlement, options, german.Text, locale: Locale.German.Code);
+            settlement, options, german.Text, locale: MausritterLocales.German.Code);
 
-        Assert.Equal(Locale.German.Code, FantasiaArchiveImporter.Read(Dumps(export)).Locale);
+        Assert.Equal(MausritterLocales.German.Code, FantasiaArchiveImporter.Read(Dumps(export)).Locale);
     }
 
     [Fact]
@@ -743,8 +747,8 @@ public class FantasiaArchiveRoundTripTests
             ],
             DateTimeOffset.UnixEpoch);
 
-        SettlementFormatException error =
-            Assert.Throws<SettlementFormatException>(() => FantasiaArchiveImporter.Read([foreign]));
+        DocumentFormatException error =
+            Assert.Throws<DocumentFormatException>(() => FantasiaArchiveImporter.Read([foreign]));
 
         Assert.Contains("no settlement written by this tool", error.Message, StringComparison.Ordinal);
     }
@@ -752,7 +756,7 @@ public class FantasiaArchiveRoundTripTests
     [Fact]
     public void RubbishIsRefusedRatherThanCrashing()
     {
-        Assert.Throws<SettlementFormatException>(
+        Assert.Throws<DocumentFormatException>(
             () => FantasiaArchiveImporter.Read(["not json at all", "{\"half\":"]));
     }
 
@@ -810,7 +814,7 @@ public class FantasiaArchiveMapTests
         PouchDump.ReadDocuments(
                 export.Files.Single(f => f.Name == PouchDump.FileNameFor(FantasiaArchiveBlueprints.Locations)).Content)
             .Single(document => PouchDump.FieldString(
-                document, FantasiaArchiveBlueprints.StateField) is not null);
+                document, MausritterArchiveKeys.StateField) is not null);
 
     private static string DescriptionOf(FantasiaArchiveExport export) =>
         PouchDump.FieldString(
@@ -872,7 +876,7 @@ public class FantasiaArchiveMapTests
         FantasiaArchiveExport export = FantasiaArchiveExporter.Export(
             settlement, options, data.Text, DateTimeOffset.UnixEpoch, data.Locale.Code);
 
-        SettlementMap map = MapGenerator.Generate(
+        PlaceMap map = SettlementMapper.Generate(
             settlement, MapGenerator.SeedFor(options), data.Text.Grammar);
 
         Assert.NotEmpty(map.Legend);
@@ -1059,10 +1063,10 @@ public class FantasiaArchiveMapTests
     {
         GenerationOptions options = new() { Seed = 4242, Size = 6 };
 
-        FantasiaArchiveExport german = Export(options, Locale.German);
-        GameData data = TestData.In(Locale.German);
+        FantasiaArchiveExport german = Export(options, MausritterLocales.German);
+        GameData data = TestData.In(MausritterLocales.German);
 
-        SettlementMap map = MapGenerator.Generate(
+        PlaceMap map = SettlementMapper.Generate(
             new SettlementGenerator(data).Generate(options),
             MapGenerator.SeedFor(options),
             data.Text.Grammar);

@@ -1,7 +1,9 @@
 using System.Globalization;
 using MausritterTools.Core.Data;
 using MausritterTools.Core.Model;
-using MausritterTools.Core.Randomness;
+using Structed.Inkwell.Data;
+using Structed.Inkwell.Generation;
+using Structed.Inkwell.Randomness;
 
 namespace MausritterTools.Core.Generation;
 

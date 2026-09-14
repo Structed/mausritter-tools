@@ -12,4 +12,9 @@
     <InternalsVisibleTo Include="MausritterTools.Core.Tests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Structed.Inkwell" Version="0.1.1" />
+    <PackageReference Include="Structed.Inkwell.FantasiaArchive" Version="0.1.1" />
+  </ItemGroup>
+
 </Project>

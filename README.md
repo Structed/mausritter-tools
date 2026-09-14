@@ -121,16 +121,42 @@ here; no blueprint source, tooltip or value list is copied.
 ```
 .github/github-app.yml           GitHub Copilot app scripts and project instructions
 .github/workflows/deploy.yml     Build + deploy to GitHub Pages
-src/MausritterTools.Core/        Domain logic: tables, generators, mapping, rendering
+src/MausritterTools.Core/        What is Mausritter: tables, generators, mapping, rendering
 src/MausritterTools.Web/         Blazor WebAssembly app
-tests/MausritterTools.Core.Tests/  Unit tests
+tests/MausritterTools.Core.Tests/     Mausritter tests
 tools/Import-SrdTables.ps1       Regenerates the SRD data files, and checks the translations
 MausritterTools.slnx             Solution
 global.json                      Pinned .NET SDK band
 ```
 
-`MausritterTools.Core` holds everything that is not UI, so the generators can be tested without a
-browser. `MausritterTools.Web` is a thin Blazor layer over it.
+The code is in three layers, and the line between them is *whether it knows what Mausritter is*.
+The bottom two are NuGet packages built from [`structed/inkwell`](https://github.com/structed/inkwell),
+not code in this repository.
+
+**`Structed.Inkwell`** is the engine, and knows nothing about any particular game: the PCG32
+generator and its per-field streams, dice expressions, seed encoding, the JSON data loader and its
+translation overlays, provenance and licensing, name assembly, map generation, the hand-inked SVG
+renderer, and the versioned envelope a generated document is shared in. It is asked for a map of a
+given silhouette and scale; it has never heard of a settlement.
+
+**`Structed.Inkwell.FantasiaArchive`** writes and reads Fantasia Archive v1 projects. It is a
+separate package rather than part of the engine because it is an integration with somebody else's
+application rather than part of generating anything, and a tool that does not want it should not
+carry it.
+
+**`MausritterTools.Core`** is everything that is actually Mausritter: the tables, the settlement
+generator, what a mouse name is made of, which silhouette a settlement of a given size sits in, and
+how a settlement becomes Fantasia Archive documents. Two adapters — `SettlementMapper` and
+`SettlementMapRenderer` — are the whole of what the engine is told about settlements.
+
+**`MausritterTools.Web`** is a thin Blazor layer over Core, so the generators can be tested without
+a browser. Put logic in Core, not in a `.razor` file.
+
+Both engine packages are consumed from NuGet, and their source and tests live in
+[`structed/inkwell`](https://github.com/structed/inkwell). Changing the engine means changing it
+there and releasing a version, which is deliberate: the engine is shared with other games' tools, so
+it should not be possible to bend it around a Mausritter problem without noticing. Anything that
+knows what a settlement is belongs in `MausritterTools.Core` regardless.
 
 `.github/github-app.yml` surfaces the commands below as buttons in the
 [GitHub Copilot app](https://docs.github.com/copilot/reference/github-copilot-app-reference/repository-configuration),
@@ -252,6 +278,14 @@ A few decisions that are easy to undo by accident:
 - **Each field draws from its own stream**, derived as `SplitMix64(rootSeed ^ FNV1a(fieldPath))`.
   This is what lets one shop be re-rolled without shifting any other value. String hashing must not
   use `string.GetHashCode()`, which is randomised per process.
+- **A field path is a load-bearing string, not a label.** It is an *input* to the generator, so
+  renaming `settlement/event` changes what that seed rolls; and it is the key a lock is filed under
+  in every shared link and every export ever written, so renaming it also orphans them. The same
+  goes for the format ids, version numbers and JSON property names in the export, and for the map's
+  stream keys. `GoldenBaselineTests` pins the whole lot: four settlements, every field path, the map
+  geometry, the SVG's hash, the Fantasia Archive document ids and the full JSON export. It exists to
+  fail when a refactoring changes something a player can see, and regenerating its fixture to make
+  it pass is the one thing that defeats it.
 - **The JSON source generator discards property initialisers.** A property absent from a data file
   arrives as `null` regardless of any `= ""` or `= []` default, so the data models coerce null in
   their getters. `JsonDefaultsTests` guards this; without it, the first optional field anyone adds

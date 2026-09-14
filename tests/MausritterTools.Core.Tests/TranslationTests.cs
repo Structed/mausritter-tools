@@ -2,7 +2,9 @@ using System.Text.Json.Nodes;
 using MausritterTools.Core.Data;
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Model;
-using MausritterTools.Core.Randomness;
+using Structed.Inkwell.Data;
+using Structed.Inkwell.Generation;
+using Structed.Inkwell.Randomness;
 
 namespace MausritterTools.Core.Tests;
 
@@ -14,7 +16,7 @@ public class TranslationTests
 {
     /// <summary>Every language the app ships, other than the one the data files are written in.</summary>
     public static TheoryData<string> TranslatedLocales =>
-        [.. Locale.All.Where(l => !l.IsCanonical).Select(l => l.Code)];
+        [.. MausritterLocales.All.Where(l => !l.IsCanonical).Select(l => l.Code)];
 
     /// <summary>
     /// Property names that are the same in every language wherever they appear.
@@ -70,7 +72,7 @@ public class TranslationTests
     [MemberData(nameof(TranslatedLocales))]
     public void EveryDataFileHasATranslation(string code)
     {
-        Locale locale = Locale.FromCode(code);
+        Locale locale = MausritterLocales.FromCode(code);
 
         foreach (string path in DataFiles)
         {
@@ -93,7 +95,7 @@ public class TranslationTests
     [MemberData(nameof(TranslatedLocales))]
     public void TranslatedTablesLineUpWithTheOriginals(string code)
     {
-        Locale locale = Locale.FromCode(code);
+        Locale locale = MausritterLocales.FromCode(code);
 
         foreach (string path in DataFiles)
         {
@@ -115,7 +117,7 @@ public class TranslationTests
     [MemberData(nameof(TranslatedLocales))]
     public void EveryTranslatableStringIsTranslated(string code)
     {
-        Locale locale = Locale.FromCode(code);
+        Locale locale = MausritterLocales.FromCode(code);
         List<string> missing = [];
 
         foreach (string path in DataFiles)
@@ -142,9 +144,9 @@ public class TranslationTests
     [MemberData(nameof(TranslatedLocales))]
     public void ASeedProducesTheSameSettlementInEveryLanguage(string code)
     {
-        Locale locale = Locale.FromCode(code);
+        Locale locale = MausritterLocales.FromCode(code);
 
-        SettlementGenerator canonical = new(TestData.In(Locale.English));
+        SettlementGenerator canonical = new(TestData.In(MausritterLocales.English));
         SettlementGenerator translated = new(TestData.In(locale));
 
         for (uint seed = 1; seed <= 60; seed++)
@@ -207,9 +209,9 @@ public class TranslationTests
     [MemberData(nameof(TranslatedLocales))]
     public void ALockSurvivesAChangeOfLanguage(string code)
     {
-        Locale locale = Locale.FromCode(code);
+        Locale locale = MausritterLocales.FromCode(code);
 
-        SettlementGenerator canonical = new(TestData.In(Locale.English));
+        SettlementGenerator canonical = new(TestData.In(MausritterLocales.English));
         SettlementGenerator translated = new(TestData.In(locale));
 
         string[] paths =
@@ -255,7 +257,7 @@ public class TranslationTests
     [MemberData(nameof(TranslatedLocales))]
     public void SignNounsAreTaggedWhereTheLanguageNeedsAnArticle(string code)
     {
-        Locale locale = Locale.FromCode(code);
+        Locale locale = MausritterLocales.FromCode(code);
         GameData data = TestData.In(locale);
 
         if (data.Text.Grammar.Articles.DativeDefinite.Count == 0)
@@ -288,7 +290,7 @@ public class TranslationTests
     [MemberData(nameof(TranslatedLocales))]
     public void GeneratedNamesAreWellFormed(string code)
     {
-        GameData data = TestData.In(Locale.FromCode(code));
+        GameData data = TestData.In(MausritterLocales.FromCode(code));
 
         for (uint seed = 1; seed <= 200; seed++)
         {
@@ -325,7 +327,7 @@ public class TranslationTests
     [MemberData(nameof(TranslatedLocales))]
     public void ComposedSentencesReadCleanly(string code)
     {
-        SettlementGenerator generator = new(TestData.In(Locale.FromCode(code)));
+        SettlementGenerator generator = new(TestData.In(MausritterLocales.FromCode(code)));
 
         for (uint seed = 1; seed <= 60; seed++)
         {

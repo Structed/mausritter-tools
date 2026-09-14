@@ -1,23 +1,28 @@
 using System.Text;
 using MausritterTools.Core.Data;
-using MausritterTools.Core.Randomness;
+using Structed.Inkwell.Data;
+using Structed.Inkwell.Generation;
+using Structed.Inkwell.Randomness;
 
 namespace MausritterTools.Core.Generation;
 
 /// <summary>
 /// Builds names from the SRD's seed tables and this project's mouse name lists.
 /// </summary>
+/// <remarks>
+/// What each name is made of is Mausritter's; how the pieces are put together without showing the
+/// seam is <see cref="NameAssembler"/>'s.
+/// </remarks>
 public static class NameForge
 {
-    private const string Vowels = "aeiou";
-
     /// <summary>
     /// Rolls a settlement name from the d12 seed columns.
     /// </summary>
     /// <remarks>
     /// The SRD's instruction is "roll d12 twice, choose a start and an end, massage until it sounds
-    /// nice", so the raw join is explicitly only a starting point. <see cref="Join"/> performs the
-    /// massaging, which matters because straight concatenation produces "Stumppond" and "Moonnest".
+    /// nice", so the raw join is explicitly only a starting point.
+    /// <see cref="NameAssembler.Join"/> performs the massaging, which matters because straight
+    /// concatenation produces "Stumppond" and "Moonnest".
     /// </remarks>
     public static string SettlementName(DiceRoller dice, NameSeedTable seeds, GrammarText grammar)
     {
@@ -42,71 +47,8 @@ public static class NameForge
             end = dice.Pick(ends);
         }
 
-        return Join(start, end);
+        return NameAssembler.Join(start, end);
     }
-
-    /// <summary>
-    /// Joins a name's start and end, smoothing the seam.
-    /// </summary>
-    internal static string Join(string start, string end)
-    {
-        if (string.IsNullOrEmpty(start))
-        {
-            return Capitalise(end);
-        }
-
-        if (string.IsNullOrEmpty(end))
-        {
-            return Capitalise(start);
-        }
-
-        string head = start;
-        char seam = char.ToLowerInvariant(head[^1]);
-        char next = char.ToLowerInvariant(end[0]);
-
-        if (seam == next)
-        {
-            // Oaks + stand -> Oakstand, Moon + nest -> Moonest.
-            head = head[..^1];
-        }
-        else if (seam == 'e' && Vowels.Contains(next))
-        {
-            // Rose + ashe -> Rosashe, rather than the clumsier Roseashe.
-            head = head[..^1];
-        }
-
-        return Capitalise(CollapseRuns(head + end));
-    }
-
-    /// <summary>Reduces any run of three or more identical letters to two.</summary>
-    private static string CollapseRuns(string value)
-    {
-        StringBuilder builder = new(value.Length);
-        int run = 0;
-
-        foreach (char c in value)
-        {
-            if (builder.Length > 0 && char.ToLowerInvariant(builder[^1]) == char.ToLowerInvariant(c))
-            {
-                run++;
-                if (run >= 2)
-                {
-                    continue;
-                }
-            }
-            else
-            {
-                run = 0;
-            }
-
-            builder.Append(c);
-        }
-
-        return builder.ToString();
-    }
-
-    private static string Capitalise(string value) =>
-        value.Length == 0 ? value : char.ToUpperInvariant(value[0]) + value[1..];
 
     /// <summary>Rolls a mouse's given and family name.</summary>
     public static (string Given, string Family) MouseName(
@@ -201,22 +143,14 @@ public static class NameForge
             familyName);
     }
 
-    /// <summary>
-    /// Fills a sign template and tidies the seams.
-    /// </summary>
-    /// <remarks>
-    /// English templates never mention <c>{article}</c>, so it resolves to an empty string and
-    /// would otherwise leave a leading space behind.
-    /// </remarks>
+    /// <summary>Fills one of the sign templates, which all draw on the same handful of slots.</summary>
     private static string Assemble(
         string template, string article, string adjective, string noun, string noun2, string family) =>
-        TextTemplate.Format(
+        NameAssembler.FromTemplate(
             template,
             ("article", article),
             ("adjective", adjective),
-            ("noun2", noun2),
             ("noun", noun),
-            ("family", family))
-            .Replace("  ", " ", StringComparison.Ordinal)
-            .Trim();
+            ("noun2", noun2),
+            ("family", family));
 }

@@ -1,7 +1,8 @@
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Model;
-using MausritterTools.Core.Randomness;
 using MausritterTools.Core.Serialization;
+using Structed.Inkwell.Randomness;
+using Structed.Inkwell.Serialization;
 
 namespace MausritterTools.Core.Tests;
 
@@ -118,12 +119,12 @@ public class SettlementSerializerTests
     [InlineData("{}")]
     [InlineData("{\"format\":\"something-else\",\"version\":1}")]
     public void FilesFromOtherToolsAreRejected(string json) =>
-        Assert.Throws<SettlementFormatException>(() => SettlementSerializer.FromJson(json));
+        Assert.Throws<DocumentFormatException>(() => SettlementSerializer.FromJson(json));
 
     [Fact]
     public void FilesFromNewerVersionsAreRejectedWithAClearMessage()
     {
-        SettlementFormatException ex = Assert.Throws<SettlementFormatException>(
+        DocumentFormatException ex = Assert.Throws<DocumentFormatException>(
             () => SettlementSerializer.FromJson(
                 $"{{\"format\":\"{SettlementDocument.FormatId}\",\"version\":99}}"));
 
@@ -133,7 +134,7 @@ public class SettlementSerializerTests
     [Fact]
     public void MalformedJsonIsRejectedWithAClearMessage()
     {
-        SettlementFormatException ex = Assert.Throws<SettlementFormatException>(
+        DocumentFormatException ex = Assert.Throws<DocumentFormatException>(
             () => SettlementSerializer.FromJson("{not json at all"));
 
         Assert.Contains("valid JSON", ex.Message, StringComparison.OrdinalIgnoreCase);

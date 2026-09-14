@@ -4,13 +4,17 @@
 @using MausritterTools.Core.Generation
 @using MausritterTools.Core.Interop.FantasiaArchive
 @using MausritterTools.Core.Mapping
+@using Structed.Inkwell.Interop.FantasiaArchive
+@using Structed.Inkwell.Mapping
 @using MausritterTools.Core.Model
-@using MausritterTools.Core.Randomness
+@using Structed.Inkwell.Randomness
 @using MausritterTools.Core.Rendering
 @using MausritterTools.Core.Serialization
 @using MausritterTools.Web.Components
 @using MausritterTools.Web.Services
 @using Microsoft.AspNetCore.Components.Forms
+@using Structed.Inkwell.Data
+@using Structed.Inkwell.Serialization
 @implements IDisposable
 @inject GameDataProvider DataProvider
 @inject BrowserInterop Browser
@@ -249,7 +253,7 @@
     private UiText _text = new();
     private SettlementGenerator? _generator;
     private Settlement? _settlement;
-    private SettlementMap? _map;
+    private PlaceMap? _map;
     private string _mapSvg = "";
     private GenerationOptions _options = new();
     private string _seedText = "";
@@ -394,7 +398,7 @@
         {
             return SettlementSerializer.FromJson(saved);
         }
-        catch (SettlementFormatException)
+        catch (DocumentFormatException)
         {
             // Written by an older or newer build; discard rather than fail to load the page.
             await Browser.ClearStorageAsync(StorageKey);
@@ -469,8 +473,8 @@
         _settlement = _generator.Generate(_options);
         _seedText = SeedCodec.Encode(_options.Seed);
 
-        _map = MapGenerator.Generate(_settlement, MapSeed, _text.Grammar);
-        _mapSvg = SvgMapRenderer.Render(_map, MapSeed, _text.Settlement.Map.AriaLabel);
+        _map = SettlementMapper.Generate(_settlement, MapSeed, _text.Grammar);
+        _mapSvg = SettlementMapRenderer.Render(_map, MapSeed, _text.Settlement.Map.AriaLabel);
 
         if (updateUrl)
         {
@@ -505,7 +509,7 @@
 
         // Sized explicitly, unlike the copy on the page: a file has to carry its own dimensions,
         // or an image viewer draws it at the default object size instead of at map size.
-        string svg = SvgMapRenderer.Render(
+        string svg = SettlementMapRenderer.Render(
             map, MapSeed, _text.Settlement.Map.AriaLabel, intrinsicSize: true);
 
         await Browser.DownloadTextAsync(fileName, "image/svg+xml", svg);
@@ -793,7 +797,7 @@
             // language they were locked in.
             if (imported.Locale is { Length: > 0 } code)
             {
-                await Languages.SetAsync(Locale.FromCode(code));
+                await Languages.SetAsync(MausritterLocales.FromCode(code));
             }
 
             Regenerate(updateUrl: true);
@@ -808,7 +812,7 @@
                     ("count", found.ToString(Languages.Current.FormatCulture)))
             };
         }
-        catch (SettlementFormatException ex)
+        catch (DocumentFormatException ex)
         {
             _status = TextTemplate.Format(
                 _text.Settlement.Status.ImportFailed, ("message", ex.Message));

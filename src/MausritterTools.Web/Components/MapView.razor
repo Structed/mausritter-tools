@@ -1,5 +1,6 @@
 @using MausritterTools.Core.Data
-@using MausritterTools.Core.Mapping
+@using Structed.Inkwell.Mapping
+@using Structed.Inkwell.Data
 
 @* Renders a generated settlement map plus its legend. The SVG is produced by the Core renderer
    and injected as markup; every value in it is escaped there. *@
@@ -10,7 +11,7 @@
     </div>
 
     <figcaption class="map-caption">
-        @TextTemplate.Format(Text.Settlement.Map.Caption, ("host", Map.HostName))
+        @TextTemplate.Format(Text.Settlement.Map.Caption, ("host", Map.Subject))
     </figcaption>
 
     @if (Map.Legend.Count > 0)
@@ -33,7 +34,7 @@
     private UiText Text { get; set; } = new();
 
     [Parameter, EditorRequired]
-    public SettlementMap Map { get; set; } = null!;
+    public PlaceMap Map { get; set; } = null!;
 
     [Parameter, EditorRequired]
     public string Svg { get; set; } = "";
