@@ -6,11 +6,11 @@ using MausritterTools.Core.Data;
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Interop.FantasiaArchive;
 using MausritterTools.Core.Mapping;
-using Structed.Inkwell.Mapping;
 using MausritterTools.Core.Model;
 using MausritterTools.Core.Rendering;
 using MausritterTools.Core.Serialization;
 using Structed.Inkwell.Data;
+using Structed.Inkwell.Mapping;
 
 namespace MausritterTools.Core.Tests;
 
@@ -126,7 +126,7 @@ public sealed class GoldenBaselineTests
 
             uint mapSeed = MapGenerator.SeedFor(options);
             PlaceMap map = SettlementMapper.Generate(settlement, mapSeed, data.Text.Grammar);
-            string svg = SvgMapRenderer.Render(
+            string svg = SettlementMapRenderer.Render(
                 map, mapSeed, data.Text.Settlement.Map.AriaLabel, intrinsicSize: true);
 
             manifest.Append($"\n{Rule()}\ncase {name} [{locale.Code}]\n{Rule()}\n");

@@ -472,7 +472,7 @@
         _seedText = SeedCodec.Encode(_options.Seed);
 
         _map = SettlementMapper.Generate(_settlement, MapSeed, _text.Grammar);
-        _mapSvg = SvgMapRenderer.Render(_map, MapSeed, _text.Settlement.Map.AriaLabel);
+        _mapSvg = SettlementMapRenderer.Render(_map, MapSeed, _text.Settlement.Map.AriaLabel);
 
         if (updateUrl)
         {
@@ -507,7 +507,7 @@
 
         // Sized explicitly, unlike the copy on the page: a file has to carry its own dimensions,
         // or an image viewer draws it at the default object size instead of at map size.
-        string svg = SvgMapRenderer.Render(
+        string svg = SettlementMapRenderer.Render(
             map, MapSeed, _text.Settlement.Map.AriaLabel, intrinsicSize: true);
 
         await Browser.DownloadTextAsync(fileName, "image/svg+xml", svg);

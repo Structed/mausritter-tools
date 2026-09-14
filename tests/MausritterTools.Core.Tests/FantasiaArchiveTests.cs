@@ -4,10 +4,10 @@ using MausritterTools.Core.Data;
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Interop.FantasiaArchive;
 using MausritterTools.Core.Mapping;
-using Structed.Inkwell.Mapping;
 using MausritterTools.Core.Model;
 using MausritterTools.Core.Serialization;
 using Structed.Inkwell.Data;
+using Structed.Inkwell.Mapping;
 
 namespace MausritterTools.Core.Tests;
 

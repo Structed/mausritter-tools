@@ -4,12 +4,13 @@ using System.Text;
 using MausritterTools.Core.Data;
 using MausritterTools.Core.Generation;
 using MausritterTools.Core.Mapping;
-using Structed.Inkwell.Mapping;
 using MausritterTools.Core.Model;
-using Structed.Inkwell.Data;
-using Structed.Inkwell.Randomness;
 using MausritterTools.Core.Rendering;
 using MausritterTools.Core.Serialization;
+using Structed.Inkwell.Data;
+using Structed.Inkwell.Mapping;
+using Structed.Inkwell.Randomness;
+using Structed.Inkwell.Rendering;
 
 namespace MausritterTools.Core.Interop.FantasiaArchive;
 
@@ -71,7 +72,7 @@ public static class FantasiaArchiveExporter
         // what stops an export shipping a different map from the one the user is looking at.
         uint mapSeed = MapGenerator.SeedFor(options);
         PlaceMap map = SettlementMapper.Generate(settlement, mapSeed, text.Grammar);
-        string mapSvg = SvgMapRenderer.Render(
+        string mapSvg = SettlementMapRenderer.Render(
             map, mapSeed, text.Settlement.Map.AriaLabel, intrinsicSize: true);
 
         Builder builder = new(settlement, options, text, written, locale, map, mapSvg);
@@ -628,8 +629,8 @@ public static class FantasiaArchiveExporter
             // field's source sees something familiar. Base64 can never contain an apostrophe.
             builder
                 .Append("<p><img src='").Append(dataUrl).Append("' alt=\"").Append(alt)
-                .Append("\" width=\"").Append(RoughPen.N(_map.Width))
-                .Append("\" height=\"").Append(RoughPen.N(_map.Height))
+                .Append("\" width=\"").Append(SvgNumber.Format(_map.Width))
+                .Append("\" height=\"").Append(SvgNumber.Format(_map.Height))
                 .Append("\" /></p>");
 
             builder

@@ -3,7 +3,7 @@ using System.Text;
 using Structed.Inkwell.Mapping;
 using Structed.Inkwell.Randomness;
 
-namespace MausritterTools.Core.Rendering;
+namespace Structed.Inkwell.Rendering;
 
 /// <summary>
 /// Draws lines the way a pen does: slightly off, and twice.
@@ -182,7 +182,6 @@ public sealed class RoughPen(IRandomSource source, double roughness = 1.0)
         }
     }
 
-    /// <summary>Formats a number for SVG, invariantly and without noisy precision.</summary>
-    internal static string N(double value) =>
-        Math.Round(value, 2).ToString("0.##", CultureInfo.InvariantCulture);
+    /// <summary>A terse alias for <see cref="SvgNumber.Format"/>, used heavily below.</summary>
+    internal static string N(double value) => SvgNumber.Format(value);
 }

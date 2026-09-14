@@ -1,14 +1,12 @@
 using System.Net;
 using System.Text;
-using MausritterTools.Core.Data;
 using Structed.Inkwell.Mapping;
-using Structed.Inkwell.Data;
 using Structed.Inkwell.Randomness;
 
-namespace MausritterTools.Core.Rendering;
+namespace Structed.Inkwell.Rendering;
 
 /// <summary>
-/// Renders a settlement map to SVG in an ink-on-paper style.
+/// Renders a map to SVG in an ink-on-paper style.
 /// </summary>
 /// <remarks>
 /// Geometry is wobbled by <see cref="RoughPen"/> rather than by an SVG filter, because filters are
@@ -18,40 +16,23 @@ namespace MausritterTools.Core.Rendering;
 /// </remarks>
 public static class SvgMapRenderer
 {
-    private const string DefaultAriaLabel = "Map of the settlement, {host}";
-
     /// <summary>Renders the map.</summary>
     /// <param name="map">The generated map.</param>
     /// <param name="seed">Seeds the pen's wobble, so a redraw is reproducible.</param>
-    /// <param name="ariaLabelPattern">
-    /// The accessible label, with a <c>{host}</c> placeholder. Optional so that geometry tests need
-    /// not load a language.
+    /// <param name="options">
+    /// How the caller wants the map presented. Optional so that geometry tests need not decide.
     /// </param>
-    /// <param name="intrinsicSize">
-    /// Writes the map's size onto the root element as well as into the <c>viewBox</c>.
-    /// </param>
-    /// <remarks>
-    /// <para>
-    /// <paramref name="intrinsicSize"/> is off by default because the page wants a map that fills
-    /// its frame, which is what a bare <c>viewBox</c> gives. It has to be on for any copy that
-    /// leaves the page: an SVG with no intrinsic dimensions has no natural size to be drawn at, so
-    /// an <c>&lt;img&gt;</c> or an image viewer falls back to the default object size of 300×150
-    /// and the map arrives as a thumbnail. The page is unaffected either way, because
-    /// <c>.settlement-map</c> sets the width in CSS and CSS beats a presentation attribute.
-    /// </para>
-    /// </remarks>
-    public static string Render(
-        PlaceMap map, uint seed, string? ariaLabelPattern = null, bool intrinsicSize = false)
+    public static string Render(PlaceMap map, uint seed, MapRenderOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(map);
 
+        MapRenderOptions presentation = options ?? new MapRenderOptions();
         RoughPen pen = new(SeedDerivation.CreateStream(seed, "map/render"));
 
-        string ariaLabel = Escape(TextTemplate.Format(
-            ariaLabelPattern is { Length: > 0 } pattern ? pattern : DefaultAriaLabel,
-            ("host", map.Subject)));
+        string ariaLabel = Escape(
+            presentation.AriaLabel is { Length: > 0 } label ? label : map.Subject);
 
-        string size = intrinsicSize
+        string size = presentation.IntrinsicSize
             ? $""" width="{RoughPen.N(map.Width)}" height="{RoughPen.N(map.Height)}" """
             : " ";
 
@@ -60,7 +41,7 @@ public static class SvgMapRenderer
         svg.Append(
             $"""
              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {RoughPen.N(map.Width)} {RoughPen.N(map.Height)}"{size}
-             role="img" aria-label="{ariaLabel}" class="settlement-map">
+             role="img" aria-label="{ariaLabel}" class="{Escape(presentation.CssClass)}">
              """);
 
         AppendDefs(svg, seed);
