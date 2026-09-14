@@ -6,10 +6,13 @@ instructions: |
   visitor's browser. There is no server and nothing is uploaded.
 
   The code is in three layers, split by whether it knows what Mausritter is. Structed.Inkwell
-  (src/Inkwell) is the game-agnostic engine: randomness, dice, data loading and translation
+  is the game-agnostic engine: randomness, dice, data loading and translation
   overlays, name assembly, map generation, SVG rendering, the export envelope. It must never
-  learn about settlements. Structed.Inkwell.FantasiaArchive (src/Inkwell.FantasiaArchive) is
-  interop with someone else's app, kept separate so a tool can opt out. MausritterTools.Core
+  learn about settlements. Structed.Inkwell.FantasiaArchive is
+  interop with someone else's app, kept separate so a tool can opt out. Both are NuGet
+  packages built from github.com/structed/inkwell, not code in this repository: fix the
+  engine there and release a version, never by bending it around a Mausritter problem.
+  MausritterTools.Core
   is what is actually Mausritter, and holds all domain logic so the generators can be tested
   without a browser; MausritterTools.Web is a thin UI over it. Put logic in Core, not in a
   .razor file, and put anything another game would want in the engine instead.

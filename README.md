@@ -121,12 +121,8 @@ here; no blueprint source, tooltip or value list is copied.
 ```
 .github/github-app.yml           GitHub Copilot app scripts and project instructions
 .github/workflows/deploy.yml     Build + deploy to GitHub Pages
-src/Inkwell/                     Structed.Inkwell: the game-agnostic generator engine
-src/Inkwell.FantasiaArchive/     Structed.Inkwell.FantasiaArchive: Fantasia Archive interop
 src/MausritterTools.Core/        What is Mausritter: tables, generators, mapping, rendering
 src/MausritterTools.Web/         Blazor WebAssembly app
-tests/Inkwell.Tests/             Engine tests
-tests/Inkwell.FantasiaArchive.Tests/  Interop format tests
 tests/MausritterTools.Core.Tests/     Mausritter tests
 tools/Import-SrdTables.ps1       Regenerates the SRD data files, and checks the translations
 MausritterTools.slnx             Solution
@@ -134,6 +130,8 @@ global.json                      Pinned .NET SDK band
 ```
 
 The code is in three layers, and the line between them is *whether it knows what Mausritter is*.
+The bottom two are NuGet packages built from [`structed/inkwell`](https://github.com/structed/inkwell),
+not code in this repository.
 
 **`Structed.Inkwell`** is the engine, and knows nothing about any particular game: the PCG32
 generator and its per-field streams, dice expressions, seed encoding, the JSON data loader and its
@@ -154,10 +152,11 @@ how a settlement becomes Fantasia Archive documents. Two adapters — `Settlemen
 **`MausritterTools.Web`** is a thin Blazor layer over Core, so the generators can be tested without
 a browser. Put logic in Core, not in a `.razor` file.
 
-Both engine packages live in this repository for now and are consumed as project references. They
-are written to be split out into [`structed/inkwell`](https://github.com/structed/inkwell) and
-published to NuGet, at which point this repository consumes them as packages instead and a second
-tool can be built on the same engine.
+Both engine packages are consumed from NuGet, and their source and tests live in
+[`structed/inkwell`](https://github.com/structed/inkwell). Changing the engine means changing it
+there and releasing a version, which is deliberate: the engine is shared with other games' tools, so
+it should not be possible to bend it around a Mausritter problem without noticing. Anything that
+knows what a settlement is belongs in `MausritterTools.Core` regardless.
 
 `.github/github-app.yml` surfaces the commands below as buttons in the
 [GitHub Copilot app](https://docs.github.com/copilot/reference/github-copilot-app-reference/repository-configuration),
