@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="card-accessible-title card-alt">
+  <title id="card-accessible-title">Mausritter Tools</title>
+  <desc id="card-alt">An original mouse emblem, a hand-drawn map and dice beside the words Mausritter Tools.</desc>
+  <defs>
+    <symbol id="site-mark" viewBox="0 0 64 64">
+      <rect x="2" y="2" width="60" height="60" rx="14" fill="#f6f1e4" stroke="#1a1713" stroke-width="3" />
+      <path d="M16 45C12 39 14 29 22 25C17 20 19 11 26 10C34 8 40 16 37 24C42 27 46 32 54 37C58 39 55 45 50 46L33 50C25 54 19 51 16 45Z" fill="#1a1713" />
+      <ellipse cx="28" cy="20" rx="7" ry="7.5" transform="rotate(-18 28 20)" fill="#8c3b2e" />
+      <circle cx="41" cy="34" r="2.6" fill="#f6f1e4" />
+    </symbol>
+    <pattern id="map-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#cbbfa6" stroke-width="1" />
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#f6f1e4" />
+  <path d="M770 25H1175V605H770Z" fill="#ece4d2" />
+  <path d="M770 25H1175V605H770Z" fill="url(#map-grid)" opacity="0.45" />
+  <rect x="25" y="25" width="1150" height="580" fill="none" stroke="#1a1713" stroke-width="2" />
+  <path d="M770 25V605" stroke="#cbbfa6" stroke-width="1.5" />
+  <use href="#site-mark" x="80" y="75" width="64" height="64" />
+  <path d="M166 107H690" stroke="#cbbfa6" stroke-width="2" />
+  <path d="M166 107H230" stroke="#8c3b2e" stroke-width="3" />
+  <text id="card-title" x="78" y="253" fill="#1a1713" font-family="Arial, Helvetica, sans-serif" font-size="82" font-weight="700" letter-spacing="-3"><tspan x="78" dy="0">Mausritter</tspan><tspan x="78" dy="88">Tools</tspan></text>
+  <text id="card-description" x="82" y="410" fill="#5b544a" font-family="Arial, Helvetica, sans-serif" font-size="27"><tspan x="82" dy="0">Browser-based tools for the Mausritter</tspan><tspan x="82" dy="36">tabletop roleplaying game.</tspan></text>
+  <path d="M82 525H658" stroke="#cbbfa6" stroke-width="1.5" />
+  <path d="M82 525H146" stroke="#8c3b2e" stroke-width="4" />
+  <path d="M674 518L681 525L674 532L667 525Z" fill="#8c3b2e" />
+  <g transform="rotate(-9 973 322)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M837 207L921 186L1003 211L1090 184L1106 443L1020 468L938 443L854 466Z" fill="#1a1713" opacity="0.09" />
+    <path d="M827 197L911 176L993 201L1080 174L1096 433L1010 458L928 433L844 456Z" fill="#f6f1e4" stroke="#1a1713" stroke-width="3" />
+    <path d="M911 176L993 201L1010 458L928 433Z" fill="#ece4d2" />
+    <path d="M911 176L928 433M993 201L1010 458" fill="none" stroke="#cbbfa6" stroke-width="2" />
+    <path d="M835 310C870 283 868 328 913 307S960 301 982 276S1042 284 1085 254" fill="none" stroke="#cbbfa6" stroke-width="10" />
+    <path d="M835 310C870 283 868 328 913 307S960 301 982 276S1042 284 1085 254" fill="none" stroke="#f6f1e4" stroke-width="5" />
+    <path d="M869 408C880 372 915 401 930 370S904 341 923 324S986 350 1003 320S986 277 1012 263S1044 266 1054 230" fill="none" stroke="#8c3b2e" stroke-width="3" stroke-dasharray="6 9" />
+    <circle cx="869" cy="408" r="7" fill="#f6f1e4" stroke="#8c3b2e" stroke-width="3" />
+    <path d="M1048 221L1061 234M1061 221L1048 234" stroke="#8c3b2e" stroke-width="4" />
+    <g fill="#f6f1e4" stroke="#1a1713" stroke-width="2.5">
+      <path d="M943 323V296L960 282L977 296V323Z" />
+      <path d="M938 299L960 279L982 299M956 323V309H964V323" fill="none" />
+      <path d="M865 259V239L878 228L891 239V259Z" />
+      <path d="M861 242L878 226L895 242M875 259V249H881V259" fill="none" />
+      <path d="M1030 394V369L1045 356L1060 369V394Z" />
+      <path d="M1026 372L1045 353L1064 372M1041 394V381H1049V394" fill="none" />
+    </g>
+    <g fill="none" stroke="#5b544a" stroke-width="2">
+      <path d="M951 228L944 241H958ZM951 242V248M971 239L964 252H978ZM971 253V259" />
+      <path d="M883 341L876 354H890ZM883 355V361M866 349L859 362H873ZM866 363V369" />
+      <path d="M958 389L951 402H965ZM958 403V409M980 399L973 412H987ZM980 413V419" />
+    </g>
+    <path d="M842 201L900 187M851 446L917 429M1004 451L1086 427" fill="none" stroke="#1a1713" stroke-width="1" opacity="0.5" />
+  </g>
+  <g transform="translate(1054 111)" stroke="#1a1713" stroke-linejoin="round">
+    <circle r="27" fill="#f6f1e4" stroke="#cbbfa6" stroke-width="1.5" />
+    <path d="M0-37V-29M0 29V37M-37 0H-29M29 0H37" stroke-width="2" />
+    <path d="M0-24L8 0L0 24L-8 0Z" fill="#f6f1e4" stroke-width="2" transform="rotate(24)" />
+    <path d="M0-24L8 0H-8Z" fill="#8c3b2e" stroke-width="1.5" transform="rotate(24)" />
+    <circle r="3" fill="#1a1713" />
+  </g>
+  <g transform="translate(957 492) rotate(-14)" stroke="#1a1713" stroke-width="3" stroke-linejoin="round">
+    <rect x="-35" y="-35" width="70" height="70" rx="9" fill="#f6f1e4" />
+    <g fill="#1a1713" stroke="none">
+      <circle cx="-16" cy="-16" r="5" />
+      <circle cx="16" cy="-16" r="5" />
+      <circle r="5" />
+      <circle cx="-16" cy="16" r="5" />
+      <circle cx="16" cy="16" r="5" />
+    </g>
+  </g>
+  <g transform="translate(1025 519) rotate(15)" stroke="#1a1713" stroke-width="3" stroke-linejoin="round">
+    <rect x="-29" y="-29" width="58" height="58" rx="8" fill="#8c3b2e" />
+    <g fill="#f6f1e4" stroke="none">
+      <circle cx="-13" cy="-13" r="4.5" />
+      <circle r="4.5" />
+      <circle cx="13" cy="13" r="4.5" />
+    </g>
+  </g>
+</svg>

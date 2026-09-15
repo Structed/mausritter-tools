@@ -4,6 +4,7 @@
   "app": {
     "title": "Mausritter Tools",
     "description": "Browser-based tools for the Mausritter tabletop roleplaying game.",
+    "socialImageAlt": "An original mouse emblem, a hand-drawn map and dice beside the words Mausritter Tools.",
     "pageTitlePattern": "{page} — Mausritter Tools"
   },
 

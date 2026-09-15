@@ -4,6 +4,7 @@
   "app": {
     "title": "Mausritter-Werkzeuge",
     "description": "Browser-Werkzeuge für das Tischrollenspiel Mausritter.",
+    "socialImageAlt": "Ein eigenes Maussymbol, eine handgezeichnete Karte und Würfel neben dem Schriftzug Mausritter Tools.",
     "pageTitlePattern": "{page} — Mausritter-Werkzeuge"
   },
 

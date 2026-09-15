@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="favicon-title">
+  <title id="favicon-title">Mausritter Tools</title>
+  <g id="site-mark">
+    <rect x="2" y="2" width="60" height="60" rx="14" fill="#f6f1e4" stroke="#1a1713" stroke-width="3" />
+    <path d="M16 45C12 39 14 29 22 25C17 20 19 11 26 10C34 8 40 16 37 24C42 27 46 32 54 37C58 39 55 45 50 46L33 50C25 54 19 51 16 45Z" fill="#1a1713" />
+    <ellipse cx="28" cy="20" rx="7" ry="7.5" transform="rotate(-18 28 20)" fill="#8c3b2e" />
+    <circle cx="41" cy="34" r="2.6" fill="#f6f1e4" />
+  </g>
+</svg>
