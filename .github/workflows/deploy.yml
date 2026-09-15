@@ -45,10 +45,19 @@ jobs:
           grep -qF "<base href=\"$base_href\" />" publish/wwwroot/index.html \
             || { echo "::error::Failed to rewrite <base href> in index.html"; exit 1; }
 
-      - name: Add SPA fallback and disable Jekyll
+      - name: Add static route entries, SPA fallback and disable Jekyll
+        shell: pwsh
         run: |
-          cp publish/wwwroot/index.html publish/wwwroot/404.html
-          touch publish/wwwroot/.nojekyll
+          $root = Join-Path 'publish' 'wwwroot'
+          $index = Join-Path $root 'index.html'
+          # Social crawlers need successful HTML responses, not the SPA fallback's 404.
+          foreach ($route in 'settlement', 'about') {
+            $directory = Join-Path $root $route
+            New-Item -ItemType Directory -Path $directory -Force | Out-Null
+            Copy-Item -LiteralPath $index -Destination (Join-Path $directory 'index.html')
+          }
+          Copy-Item -LiteralPath $index -Destination (Join-Path $root '404.html')
+          New-Item -ItemType File -Path (Join-Path $root '.nojekyll') -Force | Out-Null
 
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'

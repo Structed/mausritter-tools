@@ -40,6 +40,18 @@ public class JsonDefaultsTests
         Assert.Equal("", service.Blurb);
     }
 
+    [Theory]
+    [InlineData("{}")]
+    [InlineData("{\"app\":null}")]
+    [InlineData("{\"app\":{}}")]
+    [InlineData("{\"app\":{\"socialImageAlt\":null}}")]
+    public void AbsentOrNullSocialImageAltBecomesEmpty(string json)
+    {
+        UiText text = Deserialize(json, GameDataJsonContext.Default.UiText);
+
+        Assert.Equal("", text.App.SocialImageAlt);
+    }
+
     [Fact]
     public void AbsentNestedRecordsAreConstructedRatherThanNull()
     {

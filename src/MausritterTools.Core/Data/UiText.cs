@@ -65,6 +65,8 @@ public sealed record AppText
 
     public string Description { get => field ?? ""; init; } = "";
 
+    public string SocialImageAlt { get => field ?? ""; init; } = "";
+
     /// <summary>Joins a page name to the site name, e.g. "About — Mausritter Tools".</summary>
     public string PageTitlePattern { get => field ?? "{page}"; init; } = "{page}";
 }

@@ -182,6 +182,37 @@ dotnet publish src/MausritterTools.Web -c Release -o publish   # what deployment
 > Installing the `wasm-tools` workload (`dotnet workload install wasm-tools`) enables
 > runtime relinking and AOT, which produces a noticeably smaller download. It is optional.
 
+### Site artwork and link previews
+
+The favicon and sharing card are original artwork, not the Mausritter or Losing Games logos.
+The editable source is `src/MausritterTools.Web/wwwroot/images/open-graph.svg`; its `site-mark`
+symbol is also the source of the favicon. The title, description and image alt text come from
+the canonical `app` entries in `data/ui.json`.
+
+```pwsh
+pwsh .\tools\Export-SiteArtwork.ps1
+```
+
+The exporter uses an installed Chromium browser (Microsoft Edge by default on Windows).
+Pass `-BrowserPath` to use a different Edge, Chrome or Chromium executable. It uses a temporary,
+isolated browser profile to render local SVGs, then removes that profile. It updates the card's
+copy and writes `favicon.svg`, a 32x32 `favicon.png`, and a 1200x630 `images/open-graph.png`.
+Commit the SVGs and PNGs together. Normal builds and deployment use the checked-in assets;
+they do not need a browser or an artwork-export step.
+
+Open Graph and Twitter/X metadata live in the initial `wwwroot/index.html`, because preview
+crawlers do not run WebAssembly. Keep their title, description and alt text in sync with the
+canonical UI copy. All languages and seeded links deliberately share one English card, rather
+than showing an individual settlement. If the public hosting URL changes, update the absolute
+`og:url`, `og:image` and `twitter:image` URLs in that file as well.
+
+The Pages workflow copies the finalized HTML into `settlement/index.html` and `about/index.html`
+after rewriting the base href. Direct visits can therefore receive HTTP 200 instead of relying
+on the SPA's 404 fallback. Pages may redirect these directory URLs to a trailing slash; query
+parameters still carry the seed and language. Add a static entry when adding another public
+route that should support link previews, and keep `404.html` for unknown routes. Social
+platforms may cache previews, so a deployed change may not appear immediately.
+
 ## Data
 
 Table data ships as JSON under `src/MausritterTools.Web/wwwroot/data/`, split by provenance. Every
