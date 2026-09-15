@@ -32,7 +32,7 @@
       "keeperTitle": "Proviantmeister",
       "signNouns": ["Tisch", "Schöpfkelle", "Laib", "Krume", "Platte", "Butterfass", "Bratblech"],
       "signNounGenders": ["m", "f", "m", "f", "f", "n", "n"],
-      "srdBasis": "Das SRD nennt Preise für Mahlzeiten, Festmahle und Reisevorräte und setzt eine Woche Kost und Logis mit 20 P an.",
+      "srdBasis": "Das SRD nennt Preise für Mahlzeiten, Festmahle und Reisevorräte und setzt eine Woche Kost und Logis mit 20 K an.",
       "blurb": "In Wachsblätter gewickelte Vorräte und ein Topf mit etwas Warmem."
     },
     {
@@ -57,7 +57,7 @@
       "signNouns": ["Musterung", "Dienstliste", "Handschlag", "Bank", "Tor", "Hof"],
       "signNounGenders": ["f", "f", "m", "f", "n", "m"],
       "srdBasis": "„In einer Mäusesiedlung kannst du einen Tag damit verbringen, nach Mäusen zu fragen, die Arbeit suchen. Die Größe der Siedlung bestimmt, welche Arten von Mietlingen verfügbar sind.“ Das SRD nennt die Zuordnung nie; die hier verwendete Staffelung ist erfunden.",
-      "blurb": "Mäuse, die hoffnungsvoll herumstehen und darauf warten, gefragt zu werden. WIL-Rettungswurf oder 20 P zum Anwerben."
+      "blurb": "Mäuse, die hoffnungsvoll herumstehen und darauf warten, gefragt zu werden. WIL-Rettungswurf oder 20 K zum Anwerben."
     },
     {
       "name": "Sammlerstand",
@@ -80,8 +80,8 @@
       "keeperTitle": "Bankier",
       "signNouns": ["Geldkassette", "Gewölbe", "Riegel", "Truhe", "Schlüsselbund"],
       "signNounGenders": ["f", "n", "m", "f", "m"],
-      "srdBasis": "„In einer Mäusesiedlung können Pips und Gegenstände in einer Bank oder einem Schließfach verwahrt werden. Deine Maus muss beim Abholen eine Gebühr von 1 % des Wertes zahlen.“",
-      "blurb": "Pips und Erbstücke sicher verwahrt. Das Abholen kostet 1 % des Wertes.",
+      "srdBasis": "„In einer Mäusesiedlung können Kerne und Gegenstände in einer Bank oder einem Schließfach verwahrt werden. Deine Maus muss beim Abholen eine Gebühr von 1 % des Wertes zahlen.“",
+      "blurb": "Kerne und Erbstücke sicher verwahrt. Das Abholen kostet 1 % des Wertes.",
       "serviceTerms": "Die Verwahrung ist kostenlos. Das Abholen kostet 1 % des verwahrten Wertes."
     },
     {
@@ -105,15 +105,15 @@
       "keeperTitle": "Gelehrte",
       "signNouns": ["Feder", "Folio", "Hauptbuch", "Rand", "Tintenfass", "Kodex"],
       "signNounGenders": ["f", "n", "n", "m", "n", "m"],
-      "srdBasis": "Der Mietling Gelehrter hat eine Anzahl von W2, und das SRD setzt ein leeres Buch mit 300 P und ein Lesebuch mit 600 P an.",
-      "blurb": "Bücher für 300 P leer und 600 P beschrieben, und eine Gelehrte, die sie dir vorliest."
+      "srdBasis": "Der Mietling Gelehrter hat eine Anzahl von W2, und das SRD setzt ein leeres Buch mit 300 K und ein Lesebuch mit 600 K an.",
+      "blurb": "Bücher für 300 K leer und 600 K beschrieben, und eine Gelehrte, die sie dir vorliest."
     },
     {
       "name": "Juwelier",
       "keeperTitle": "Juwelierin",
       "signNouns": ["Facette", "Fassung", "Glanz", "Schließe", "Filigran"],
       "signNounGenders": ["f", "f", "m", "f", "n"],
-      "srdBasis": "Hergeleitet aus den Schatzwerten des SRD: Goldring 500 P, Anhänger mit Edelstein 400 P, geschliffener Diamant 1000 P, Perlenkette 1500 P.",
+      "srdBasis": "Hergeleitet aus den Schatzwerten des SRD: Goldring 500 K, Anhänger mit Edelstein 400 K, geschliffener Diamant 1000 K, Perlenkette 1500 K.",
       "blurb": "Kauft Schätze zu einem harten Preis und verkauft sie zu einem härteren zurück.",
       "serviceTerms": "Kauft geborgene Schätze, üblicherweise für etwa die Hälfte ihres Listenwertes."
     },
@@ -122,8 +122,8 @@
       "keeperTitle": "Händler",
       "signNouns": ["Kuriosum", "Wunder", "Reliquie", "Rarität", "Trödel"],
       "signNounGenders": ["n", "n", "f", "f", "m"],
-      "srdBasis": "„Wird er nicht gebraucht, lässt sich ein voll aufgeladener Zauber in einer Siedlung meist für W6 × 100 P verkaufen. Der Wert eines erschöpften Zaubers halbiert sich.“ Man beachte: Das SRD regelt nur den Verkauf von Zaubern, nie den Ankauf — ein Händler, der Zauber verkauft, ist also vollständig Hausregel. Der Warenbestand beschränkt sich auf von Mäusen gefertigte Merkwürdigkeiten, weil von Menschen gefertigte Waren an die Nähe zu einer Menschensiedlung geknüpft sind.",
-      "blurb": "Kauft dir einen Zauber für W6 × 100 P ab. Einen zurückzukaufen ist eine andere Sache."
+      "srdBasis": "„Wird er nicht gebraucht, lässt sich ein voll aufgeladener Zauber in einer Siedlung meist für W6 × 100 K verkaufen. Der Wert eines erschöpften Zaubers halbiert sich.“ Man beachte: Das SRD regelt nur den Verkauf von Zaubern, nie den Ankauf — ein Händler, der Zauber verkauft, ist also vollständig Hausregel. Der Warenbestand beschränkt sich auf von Mäusen gefertigte Merkwürdigkeiten, weil von Menschen gefertigte Waren an die Nähe zu einer Menschensiedlung geknüpft sind.",
+      "blurb": "Kauft dir einen Zauber für W6 × 100 K ab. Einen zurückzukaufen ist eine andere Sache."
     }
   ],
 
@@ -147,7 +147,7 @@
     "Feilscht erbittert und genießt es",
     "Alles ist mit Mehl bestäubt",
     "Hält neben der Tür einen Käfer an der Leine",
-    "Tauscht nur, nimmt niemals Pips",
+    "Tauscht nur, nimmt niemals Kerne",
     "Die Preise werden stündlich angeschrieben und wieder weggewischt",
     "Besteht darauf, dir die Geschichte jedes Stücks zu erzählen",
     "Zutiefst misstrauisch gegenüber Fremden",
@@ -157,7 +157,7 @@
     "Hält die gute Ware unter dem Tresen versteckt",
     "Schuldet jemandem Furchteinflößendem Geld",
     "Führt den Laden aus einer Hängematte heraus",
-    "Zählt die Pips dreimal, laut",
+    "Zählt die Kerne dreimal, laut",
     "Gewährt jedem Kredit, der eine traurige Geschichte hat",
     "Blitzsauber, und riecht nach Bienenwachs",
     "Schläft im Hinterzimmer und nimmt es übel, geweckt zu werden",

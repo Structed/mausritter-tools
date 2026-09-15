@@ -5,7 +5,7 @@
     "warning": "Übersetzung von Hand. Die Platzhalter [SUM] und [DICE] sind Rechenanweisungen und bleiben unverändert."
   },
 
-  "saleValue": "Ein voll aufgeladener Zauber lässt sich in einer Siedlung meist für W6 × 100 P verkaufen. Ein erschöpfter Zauber ist die Hälfte wert.",
+  "saleValue": "Ein voll aufgeladener Zauber lässt sich in einer Siedlung meist für W6 × 100 K verkaufen. Ein erschöpfter Zauber ist die Hälfte wert.",
 
   "spells": [
     {

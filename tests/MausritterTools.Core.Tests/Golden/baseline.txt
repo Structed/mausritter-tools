@@ -959,37 +959,37 @@ locations.txt: 7 document(s)
         "stock": [
           {
             "item": "Brecheisen",
-            "price": "11 P",
+            "price": "11 K",
             "quantity": 4
           },
           {
             "item": "Kr\u00E4henf\u00FC\u00DFe, Beutel",
-            "price": "11 P",
+            "price": "11 K",
             "quantity": 4
           },
           {
             "item": "Mei\u00DFel",
-            "price": "5 P",
+            "price": "5 K",
             "quantity": 2
           },
           {
             "item": "Schaufel",
-            "price": "11 P",
+            "price": "11 K",
             "quantity": 1
           },
           {
             "item": "Schlafrolle",
-            "price": "11 P",
+            "price": "11 K",
             "quantity": 2
           },
           {
             "item": "Trillerpfeife",
-            "price": "5 P",
+            "price": "5 K",
             "quantity": 1
           },
           {
             "item": "Vorh\u00E4ngeschloss mit Schl\u00FCssel, klein",
-            "price": "21 P",
+            "price": "21 K",
             "quantity": 4
           }
         ]
@@ -1014,22 +1014,22 @@ locations.txt: 7 document(s)
         "stock": [
           {
             "item": "Batterien, f\u00FCr die elektrische Laterne",
-            "price": "48 P",
+            "price": "48 K",
             "quantity": 3
           },
           {
             "item": "Fackeln",
-            "price": "10 P",
+            "price": "10 K",
             "quantity": 2
           },
           {
             "item": "Laterne",
-            "price": "48 P",
+            "price": "48 K",
             "quantity": 3
           },
           {
             "item": "\u00D6l, f\u00FCr die Laterne",
-            "price": "10 P",
+            "price": "10 K",
             "quantity": 1
           }
         ]
@@ -1053,17 +1053,17 @@ locations.txt: 7 document(s)
         "stock": [
           {
             "item": "Tagel\u00F6hner",
-            "price": "2 P",
+            "price": "2 K",
             "quantity": 2
           },
           {
             "item": "Waffen- und Grobschmied",
-            "price": "8 P",
+            "price": "8 K",
             "quantity": 2
           },
           {
             "item": "Waffenmaus",
-            "price": "9 P",
+            "price": "9 K",
             "quantity": 3
           }
         ]
@@ -1088,17 +1088,17 @@ locations.txt: 7 document(s)
         "stock": [
           {
             "item": "Adelig",
-            "price": "1150 P",
+            "price": "1150 K",
             "quantity": 1
           },
           {
             "item": "Gew\u00F6hnlich",
-            "price": "58 P",
+            "price": "58 K",
             "quantity": 2
           },
           {
             "item": "Wintermantel",
-            "price": "173 P",
+            "price": "173 K",
             "quantity": 2
           }
         ]
@@ -1122,17 +1122,17 @@ locations.txt: 7 document(s)
         "stock": [
           {
             "item": "Flussflo\u00DF",
-            "price": "11 P pro Hexfeld",
+            "price": "11 K pro Hexfeld",
             "quantity": 5
           },
           {
             "item": "Kaninchenkarren",
-            "price": "5 P pro Hexfeld",
+            "price": "5 K pro Hexfeld",
             "quantity": 1
           },
           {
             "item": "Taubenflug",
-            "price": "212 P pro Hexfeld",
+            "price": "212 K pro Hexfeld",
             "quantity": 2
           }
         ]

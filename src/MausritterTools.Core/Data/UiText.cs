@@ -506,7 +506,7 @@ public sealed record GrammarText
 
     public string DefaultFamilyName { get => field ?? ""; init; } = "";
 
-    /// <summary>A plain price, e.g. "{amount}{pip}" — "20p" in English, "20 P" in German.</summary>
+    /// <summary>A plain price, e.g. "{amount}{pip}" — "20p" in English, "20 K" in German.</summary>
     public string PricePlain { get => field ?? "{amount}{pip}"; init; } = "{amount}{pip}";
 
     /// <summary>A rate, e.g. "{amount}{pip} per {unit}".</summary>
