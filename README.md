@@ -6,7 +6,8 @@ in English and German.
 Built as a [Blazor WebAssembly](https://learn.microsoft.com/aspnet/core/blazor/hosting-models#blazor-webassembly)
 standalone app, so the whole site is static files and runs entirely in the visitor's browser.
 
-**Live site:** https://structed.github.io/mausritter-tools/
+**Live site:** https://mausritter-tools.pages.dev/
+(also served from GitHub Pages at https://structed.github.io/mausritter-tools/)
 
 ## Tools
 
@@ -203,8 +204,9 @@ they do not need a browser or an artwork-export step.
 Open Graph and Twitter/X metadata live in the initial `wwwroot/index.html`, because preview
 crawlers do not run WebAssembly. Keep their title, description and alt text in sync with the
 canonical UI copy. All languages and seeded links deliberately share one English card, rather
-than showing an individual settlement. If the public hosting URL changes, update the absolute
-`og:url`, `og:image` and `twitter:image` URLs in that file as well.
+than showing an individual settlement. The absolute `og:url`, `og:image` and `twitter:image`
+URLs name the Cloudflare Pages address, so both deployments advertise the same preview; update
+them in that file, and the matching constants in `StaticSiteAssetsTests`, if it ever changes.
 
 The Pages workflow copies the finalized HTML into `settlement/index.html` and `about/index.html`
 after rewriting the base href. Direct visits can therefore receive HTTP 200 instead of relying
@@ -342,8 +344,15 @@ A few decisions that are easy to undo by accident:
 
 ## Deployment
 
-Every push to `main` runs `.github/workflows/deploy.yml`, which publishes the app and
-deploys `publish/wwwroot` to GitHub Pages. Pull requests build the same way but do not deploy.
+The same static output is served from two places, side by side:
+
+- **Cloudflare Pages** — https://mausritter-tools.pages.dev/, built by Cloudflare from this
+  repository. It is served from a domain root, so nothing in this repository configures it and
+  the base path below does not apply to it. This is the address the README and the social
+  preview metadata advertise.
+- **GitHub Pages** — https://structed.github.io/mausritter-tools/. Every push to `main` runs
+  `.github/workflows/deploy.yml`, which publishes the app and deploys `publish/wwwroot`. Pull
+  requests build the same way but do not deploy.
 
 Two things are needed to make a Blazor WASM app work on GitHub Pages, and the workflow
 handles both:
@@ -361,7 +370,8 @@ A `.nojekyll` marker is also published so the `_framework` directory is never st
 ### One-time setup
 
 In **Settings → Pages**, set **Source** to **GitHub Actions**. Without this the deploy job
-fails with a "Pages not enabled" error.
+fails with a "Pages not enabled" error. The Cloudflare Pages project is configured in the
+Cloudflare dashboard, not here.
 
 ## Licence and attribution
 
