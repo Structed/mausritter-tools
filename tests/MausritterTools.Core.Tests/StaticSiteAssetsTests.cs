@@ -6,8 +6,11 @@ namespace MausritterTools.Core.Tests;
 
 public class StaticSiteAssetsTests
 {
-    private const string SiteUrl = "https://structed.github.io/mausritter-tools/";
-    private const string CardUrl = SiteUrl + "images/open-graph.png";
+    // The site is served side by side from Cloudflare Pages at the domain root and from
+    // GitHub Pages under a project sub-path; the previews advertise the Cloudflare address.
+    private const string CanonicalUrl = "https://mausritter-tools.pages.dev/";
+    private const string ProjectPageUrl = "https://structed.github.io/mausritter-tools/";
+    private const string CardUrl = CanonicalUrl + "images/open-graph.png";
     private static readonly XNamespace Svg = "http://www.w3.org/2000/svg";
 
     private static string WebRoot => Path.GetFullPath(Path.Combine(TestData.DataRoot, ".."));
@@ -30,7 +33,7 @@ public class StaticSiteAssetsTests
             ["og:site_name"] = copy.Title,
             ["og:title"] = copy.Title,
             ["og:description"] = copy.Description,
-            ["og:url"] = SiteUrl,
+            ["og:url"] = CanonicalUrl,
             ["og:image"] = CardUrl,
             ["og:image:type"] = "image/png",
             ["og:image:width"] = "1200",
@@ -70,7 +73,7 @@ public class StaticSiteAssetsTests
         Assert.Equal("image/svg+xml", (string?)links[1].Attribute("type"));
         Assert.Equal("any", (string?)links[1].Attribute("sizes"));
 
-        foreach (string baseUrl in new[] { "http://localhost:5023/", SiteUrl })
+        foreach (string baseUrl in new[] { "http://localhost:5023/", ProjectPageUrl, CanonicalUrl })
         {
             Uri baseUri = new(baseUrl);
             foreach (XElement link in links)
