@@ -1,40 +1,42 @@
+@using System.Globalization
 @using MausritterTools.Core.Data
 @using MausritterTools.Core.Model
 @using Structed.Inkwell.Data
 
-@* A Mausritter-style item card. Card templates and art are explicitly reusable under the
-   Mausritter Third Party Licence. *@
+@* An item card drawn to the measurements of Mausritter's own card template. The Third Party
+   Licence permits use and modification of the item card templates and item card art by name.
+   The face is laid out in item-card.css; everything decided here comes from ItemCard. *@
 
-<div class="item-card @(Shape == CardShape.Wide ? "wide" : null)">
+<div class="item-card @ShapeClass" style="--title-size: @TitleSize">
     <div class="item-name">@Entry.Item.DisplayLabel</div>
 
-    @if (Entry.Item.Qualifier is { Length: > 0 } qualifier)
+    @if (Stat is { Length: > 0 } stat)
     {
-        <div class="item-type">@qualifier</div>
-    }
-    else if (TypeLabel is { Length: > 0 })
-    {
-        <div class="item-type">@TypeLabel</div>
+        <div class="item-stat">@stat</div>
     }
 
-    @if (Entry.Item.Note is { Length: > 0 } note)
+    @if (UsageDots > 0)
     {
-        <div class="item-note">@note</div>
+        <div class="usage-dots" title="@TextTemplate.Format(Text.ItemCard.UsageDotsTitle, ("count", UsageDots.ToString()))">
+            @for (int i = 0; i < UsageDots; i++)
+            {
+                <span></span>
+            }
+        </div>
     }
 
-    <div class="item-foot">
-        <span class="item-price">@Entry.PriceText</span>
+    @if (Art is { Length: > 0 } art)
+    {
+        @* Decorative: the drawing says nothing the name and the class line do not already say.
+           Loaded eagerly because the sheet exists to be printed, and a deferred image can reach
+           the printer blank. *@
+        <img class="item-art" src="@art" alt="" aria-hidden="true" decoding="async" />
+    }
 
-        @if (UsageDots > 0)
-        {
-            <span class="usage-dots" title="@TextTemplate.Format(Text.ItemCard.UsageDotsTitle, ("count", UsageDots.ToString()))">
-                @for (int i = 0; i < UsageDots; i++)
-                {
-                    <span></span>
-                }
-            </span>
-        }
-    </div>
+    @if (ClassLine is { Length: > 0 } line)
+    {
+        <div class="item-class">@line</div>
+    }
 </div>
 
 @code {
@@ -48,11 +50,29 @@
     [Parameter]
     public string? CategoryId { get; set; }
 
-    /// <summary>Shown when the item has no qualifier of its own, e.g. the shop type.</summary>
+    /// <summary>Shown when the item says nothing about its own class, e.g. the shop type.</summary>
     [Parameter]
     public string? TypeLabel { get; set; }
 
     private CardShape Shape => ItemCard.ShapeFor(Entry.Item);
+
+    private string? ShapeClass => Shape switch
+    {
+        CardShape.Wide => "wide",
+        CardShape.Tall => "tall",
+        _ => null
+    };
+
+    /// <summary>The name's size in card units, which the stylesheet scales to the printed card.</summary>
+    private string TitleSize => ItemCard
+        .TitleSizeFor(Entry.Item.DisplayLabel, Shape)
+        .ToString(CultureInfo.InvariantCulture);
+
+    private string? Stat => ItemCard.StatFor(Entry.Item, Text);
+
+    private string? Art => ItemCard.ArtFor(Entry.Item);
+
+    private string? ClassLine => ItemCard.ClassLineFor(Entry.Item) ?? TypeLabel;
 
     private int UsageDots => ItemCard.UsageDotsFor(Entry.Item, CategoryId);
 }

@@ -41,13 +41,18 @@ $RepoRoot = Split-Path -Parent $PSScriptRoot
 $OutputDir = Join-Path $RepoRoot 'src/MausritterTools.Web/wwwroot/data/srd'
 $SourceBase = 'https://raw.githubusercontent.com/isaacwilliams/mausritter-web/master/content/srd-markdown'
 
-$SourceFiles = @(
+# Documents whose data is carried in GFM tables.
+$TableFiles = @(
     '11-useful-tables.md'
     '14-magic.md'
     '15-recruiting-help.md'
     '16-gear-and-prices.md'
     '22-hexcrawl-toolbox.md'
 )
+
+# The inventory chapter states weapon damage and armour defence as prose under headings rather
+# than in a table, so it is read line by line instead.
+$InventoryFile = '12-inventory.md'
 
 #region Markdown parsing
 
@@ -196,6 +201,75 @@ function ConvertTo-RollRange {
     throw "Could not parse '$Text' as a roll or roll range."
 }
 
+function Get-InventoryStats {
+    <#
+        Reads weapon damage and armour defence from the inventory chapter, which states them as
+        prose rather than as a table: a bold claim under each class's own heading, such as
+        "**d6/d8 damage**" or "**Prevents 1 damage**".
+
+        The headings are the weapon and armour class names — Improvised, Light, Medium, Heavy,
+        Light ranged, Heavy ranged, Light armour, Heavy armour — which are exactly the item names
+        the gear and prices table uses, and that is what lets the two chapters be joined.
+
+        Weapon classes sit one level deeper than armour, because the chapter groups them under
+        "Melee weapons" and "Ranged weapons" while armour has no such grouping.
+    #>
+    param([Parameter(Mandatory)] [AllowEmptyString()] [string[]] $Lines)
+
+    $stats = @{}
+    $section = ''
+    $item = ''
+
+    foreach ($line in $Lines) {
+        $trimmed = $line.Trim()
+
+        # A deeper heading has a '#' where these patterns require whitespace, so each level
+        # matches only itself.
+        if ($trimmed -match '^##\s+(.+)$') {
+            $section = $Matches[1].Trim()
+            $item = ''
+            continue
+        }
+
+        if ($trimmed -match '^###\s+(.+)$') {
+            $item = if ($section -eq 'Armour') { $Matches[1].Trim() } else { '' }
+            continue
+        }
+
+        if ($trimmed -match '^####\s+(.+)$') {
+            $item = if ($section -eq 'Weapons') { $Matches[1].Trim() } else { '' }
+            continue
+        }
+
+        if ($item -eq '' -or $trimmed -notmatch '^\*\*(.+)\*\*$') { continue }
+
+        $claim = $Matches[1].Trim()
+
+        if ($claim -match '^(d\d+(?:/d\d+)*)\s+damage$') {
+            $stats[$item] = @{ damage = $Matches[1] }
+        }
+        elseif ($claim -match '^Prevents\s+(\d+)\s+damage$') {
+            $stats[$item] = @{ defence = [int]$Matches[1] }
+        }
+
+        # Only the first bold claim under a heading is the stat line; the rest is rules prose.
+        $item = ''
+    }
+
+    # The join is by name, so a heading that has been renamed upstream would silently produce a
+    # card with an empty stat box rather than an error.
+    $expected = @(
+        'Improvised', 'Light', 'Medium', 'Heavy', 'Light ranged', 'Heavy ranged',
+        'Light armour', 'Heavy armour'
+    )
+    $missing = @($expected | Where-Object { -not $stats.ContainsKey($_) })
+    if ($missing.Count -gt 0) {
+        throw "No weapon or armour stat found for '$($missing -join "', '")' in $InventoryFile. The SRD layout may have changed."
+    }
+
+    return $stats
+}
+
 function ConvertTo-GearItem {
     <#
         Splits a gear row into its parts. Names are bolded, with an optional trailing qualifier
@@ -208,7 +282,8 @@ function ConvertTo-GearItem {
     #>
     param(
         [Parameter(Mandatory)] [AllowEmptyString()] [string] $ItemText,
-        [Parameter(Mandatory)] [AllowEmptyString()] [string] $PriceText
+        [Parameter(Mandatory)] [AllowEmptyString()] [string] $PriceText,
+        [hashtable] $Stats = @{}
     )
 
     $raw = $ItemText.Trim()
@@ -251,6 +326,14 @@ function ConvertTo-GearItem {
     $item = [ordered]@{ name = $name }
     if ($qualifier) { $item.qualifier = $qualifier }
     if ($note) { $item.note = $note }
+
+    # Damage and defence come from the inventory chapter, joined on the item name.
+    if ($Stats.ContainsKey($name)) {
+        $stat = $Stats[$name]
+        if ($stat.ContainsKey('damage')) { $item.damage = $stat.damage }
+        if ($stat.ContainsKey('defence')) { $item.defence = $stat.defence }
+    }
+
     $item.priceText = $price
     if ($null -ne $pips) { $item.pips = $pips }
     if ($unit) { $item.perUnit = $unit }
@@ -295,9 +378,11 @@ Write-Host 'Importing Mausritter SRD tables' -ForegroundColor Cyan
 Write-Host "  SRD version $SrdVersion" -ForegroundColor DarkGray
 
 $documents = @{}
-foreach ($file in $SourceFiles) {
+foreach ($file in $TableFiles) {
     $documents[$file] = Get-MarkdownTables -Lines (Get-SrdMarkdown -FileName $file)
 }
+
+$inventoryStats = Get-InventoryStats -Lines (Get-SrdMarkdown -FileName $InventoryFile)
 
 $hexcrawl = $documents['22-hexcrawl-toolbox.md']
 $useful = $documents['11-useful-tables.md']
@@ -443,7 +528,7 @@ foreach ($heading in $gearCategories.Keys) {
 
     $items = @()
     foreach ($row in $table.Rows) {
-        $items += ConvertTo-GearItem -ItemText $row[0] -PriceText $row[1]
+        $items += ConvertTo-GearItem -ItemText $row[0] -PriceText $row[1] -Stats $inventoryStats
     }
 
     $category = [ordered]@{
@@ -457,7 +542,7 @@ foreach ($heading in $gearCategories.Keys) {
 }
 
 Write-DataFile -Name 'gear.json' -Data ([ordered]@{
-    _source    = New-Provenance -Describes 'Gear and prices' -Files @('16-gear-and-prices.md')
+    _source    = New-Provenance -Describes 'Gear and prices' -Files @('12-inventory.md', '16-gear-and-prices.md')
     currency   = [ordered]@{
         name         = 'pip'
         abbreviation = 'p'

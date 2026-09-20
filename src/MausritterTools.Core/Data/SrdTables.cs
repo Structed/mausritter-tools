@@ -247,6 +247,22 @@ public sealed record GearItem
     /// <summary>Parenthetical detail, e.g. "dagger, needle, etc.".</summary>
     public string? Note { get; init; }
 
+    /// <summary>
+    /// The damage a weapon deals, as a dice expression, e.g. "d6" or "d6/d8".
+    /// </summary>
+    /// <remarks>
+    /// A dice expression is a key rather than prose, so it is never translated. Imported from the
+    /// SRD's inventory chapter, which states it per weapon class rather than in the gear table.
+    /// </remarks>
+    public string? Damage { get; init; }
+
+    /// <summary>How much damage a piece of armour prevents.</summary>
+    /// <remarks>
+    /// A number, so the word beside it on the card comes from the UI text and can be translated
+    /// without touching the data.
+    /// </remarks>
+    public int? Defence { get; init; }
+
     public string PriceText { get => field ?? ""; init; } = "";
 
     public int? Pips { get; init; }

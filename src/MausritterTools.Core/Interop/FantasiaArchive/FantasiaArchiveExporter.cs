@@ -441,7 +441,7 @@ public static class FantasiaArchiveExporter
             if (ItemCard.IsCardable(gear))
             {
                 features.Add(new ListEntry(
-                    ItemCard.ShapeFor(gear) == CardShape.Wide ? "2" : "1", "Inventory slots"));
+                    ItemCard.SlotsFor(gear).ToString(_culture), "Inventory slots"));
             }
 
             List<DocumentField> fields =

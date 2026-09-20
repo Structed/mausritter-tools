@@ -385,81 +385,7 @@
 
 /* ---------- Mausritter-style item cards ---------- */
 
-.card-sheet {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(10rem, 10rem));
-    gap: 0.6rem;
-}
-
-.item-card {
-    border: 2px solid var(--ink);
-    border-radius: 3px;
-    background: #fffdf7;
-    padding: 0.45rem 0.5rem;
-    min-height: 7.2rem;
-    display: flex;
-    flex-direction: column;
-    break-inside: avoid;
-}
-
-/* Mausritter items occupy inventory slots: most are 1x1, two-handed weapons and armour are
-   wider, and a few are tall. The card mirrors the slot it will take up. */
-.item-card.wide {
-    grid-column: span 2;
-}
-
-.item-card.tall {
-    min-height: 14.6rem;
-}
-
-.item-card .item-name {
-    font-weight: 700;
-    font-size: 0.9rem;
-    line-height: 1.15;
-}
-
-.item-card .item-type {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--ink-soft);
-    margin-top: 0.1rem;
-}
-
-.item-card .item-note {
-    font-size: 0.72rem;
-    color: var(--ink-soft);
-    margin-top: 0.25rem;
-    line-height: 1.25;
-}
-
-.item-card .item-foot {
-    margin-top: auto;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 0.3rem;
-    padding-top: 0.4rem;
-}
-
-.item-card .item-price {
-    font-weight: 700;
-    font-size: 0.85rem;
-    font-variant-numeric: tabular-nums;
-}
-
-.usage-dots {
-    display: flex;
-    gap: 0.15rem;
-}
-
-.usage-dots span {
-    width: 0.62rem;
-    height: 0.62rem;
-    border: 1.5px solid var(--ink);
-    border-radius: 50%;
-    display: block;
-}
+/* The card face itself is in item-card.css, drawn to the official template's measurements. */
 
 /* ---------- Map ---------- */
 
@@ -615,7 +541,6 @@
     }
 
     .shop,
-    .item-card,
     .keeper {
         background: #fff;
     }

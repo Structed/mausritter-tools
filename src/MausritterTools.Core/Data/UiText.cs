@@ -113,6 +113,8 @@ public sealed record AboutText
 
     public AboutSection Translation { get => field ?? new(); init; } = new();
 
+    public AboutSection ItemCards { get => field ?? new(); init; } = new();
+
     public AboutSection Source { get => field ?? new(); init; } = new();
 
     public AboutSection Support { get => field ?? new(); init; } = new();
@@ -425,6 +427,9 @@ public sealed record ShopText
 public sealed record ItemCardText
 {
     public string UsageDotsTitle { get => field ?? ""; init; } = "";
+
+    /// <summary>The boxed armour stat, e.g. "1 def". The number comes from the gear table.</summary>
+    public string Defence { get => field ?? ""; init; } = "";
 }
 
 public sealed record LicenceText

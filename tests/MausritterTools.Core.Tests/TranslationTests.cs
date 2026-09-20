@@ -32,7 +32,7 @@ public class TranslationTests
         "id", "shape", "terrain", "categories", "itemNames",
         "generatedBy", "sourceFiles", "url", "licenceUrl", "version", "work", "licence",
         "payment", "number", "priceText", "wagesText", "sizeRoll", "roll", "template",
-        "locale"
+        "locale", "damage"
     };
 
     /// <summary>

@@ -1,0 +1,203 @@
+/*
+ * Mausritter item cards.
+ *
+ * The Mausritter Third Party Licence permits, by name, use and modification of "the item card
+ * templates and item card art", so these cards are drawn to the same measurements as the official
+ * Item Card Studio rather than to a design of our own.
+ *
+ * Everything below is in card units: one inventory slot is a hundred units square and exactly one
+ * inch on paper, so --u is a hundredth of a slot and the numbers here read as the template's own.
+ * Resize a card by changing --card-slot; nothing else has to move.
+ *
+ * Offsets are measured from the card's outer edge, which is why the rule around it is drawn as a
+ * pseudo-element rather than a border: a real border would shift every child inwards by a unit.
+ */
+
+.card-sheet {
+    /* Comfortably larger than true size on screen, but never so wide that two slots stop fitting
+       side by side on a phone. */
+    --card-slot: min(1.6in, 40vw);
+    --u: calc(var(--card-slot) / 100);
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--card-slot));
+    grid-auto-rows: var(--card-slot);
+    /* Dense packing lets a one-slot card fall into the hole a two-slot one leaves behind. */
+    grid-auto-flow: row dense;
+    justify-content: start;
+    gap: calc(var(--u) * 8);
+}
+
+.item-card {
+    --slots-across: 1;
+    --slots-down: 1;
+
+    position: relative;
+    box-sizing: border-box;
+    width: calc(var(--card-slot) * var(--slots-across));
+    height: calc(var(--card-slot) * var(--slots-down));
+    overflow: hidden;
+    background: #fff;
+    color: #000;
+    /* Square corners: the cards are cut out, and the official template has no radius. */
+    border-radius: 0;
+    /* Keeps the artwork's multiply blend inside the card. */
+    isolation: isolate;
+    break-inside: avoid;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+}
+
+/* A weapon wielded in both paws lies across two slots side by side. */
+.item-card.wide {
+    --slots-across: 2;
+    grid-column: span 2;
+}
+
+/* Armour is worn in two slots that stack. */
+.item-card.tall {
+    --slots-down: 2;
+    grid-row: span 2;
+}
+
+/* The card's edge, over its contents so nothing crowds the cut line. */
+.item-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: calc(var(--u) * 1) solid #000;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* The rule under the item's name. */
+.item-card::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--u) * 23);
+    height: calc(var(--u) * 1);
+    background: #000;
+}
+
+.item-card .item-name {
+    position: absolute;
+    left: calc(var(--u) * 5);
+    right: calc(var(--u) * 6);
+    top: 0;
+    height: calc(var(--u) * 23);
+    display: flex;
+    align-items: flex-end;
+    /* Sits the last line's baseline where the official card puts it, just above the rule. */
+    padding-bottom: calc(var(--u) * 3.5);
+    overflow: hidden;
+    font-family: Texturina, Georgia, "Times New Roman", serif;
+    font-weight: 800;
+    /* The component works out how large the name can be and still fit; this is its ceiling. */
+    font-size: calc(var(--u) * var(--title-size, 13));
+    line-height: 1.02;
+    overflow-wrap: break-word;
+}
+
+.item-card .usage-dots {
+    position: absolute;
+    left: calc(var(--u) * 4.5);
+    top: calc(var(--u) * 29.5);
+    display: grid;
+    grid-template-columns: repeat(3, calc(var(--u) * 12));
+    grid-auto-rows: calc(var(--u) * 12);
+}
+
+/* Hollow, so a player can fill one in as the item is used up. */
+.item-card .usage-dots span {
+    box-sizing: border-box;
+    width: calc(var(--u) * 11);
+    height: calc(var(--u) * 11);
+    border: calc(var(--u) * 2) solid #000;
+    border-radius: 50%;
+    background: #fff;
+}
+
+/* A weapon's damage or a piece of armour's defence, boxed in the top right. */
+.item-card .item-stat {
+    position: absolute;
+    right: calc(var(--u) * 5);
+    top: calc(var(--u) * 28);
+    height: calc(var(--u) * 20);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    /* The official box sits closer to its text on the right than on the left. */
+    padding: 0 calc(var(--u) * 4) 0 calc(var(--u) * 6);
+    border: calc(var(--u) * 2) solid #000;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-stretch: 75%;
+    font-weight: 700;
+    font-size: calc(var(--u) * 11);
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.item-card .item-art {
+    position: absolute;
+    left: calc(var(--u) * 10);
+    top: calc(var(--u) * 35);
+    /* Sized rather than inset on all four sides: a replaced element left to size itself would
+       take its own pixel dimensions and object-fit would have nothing to fit it to. */
+    width: calc(100% - var(--u) * 20);
+    height: calc(100% - var(--u) * 45);
+    object-fit: contain;
+    /* The drawings are ink on white, so multiplying lets the dots and the stat box read through
+       them exactly as they do on the official card. */
+    mix-blend-mode: multiply;
+}
+
+/* Every drawing the official set has for a two-pawed weapon stands upright, but the card runs the
+   other way, so the weapon is laid along it rather than shrunk to a sliver down the middle. The
+   box below is the art area transposed and centred on it, so rotating a quarter turn lands it
+   exactly back on the area. Modifying the card art is within the Third Party Licence's grant. */
+.item-card.wide .item-art {
+    left: calc(var(--u) * 72.5);
+    top: calc(var(--u) * -27.5);
+    width: calc(var(--u) * 55);
+    height: calc(var(--u) * 180);
+    transform: rotate(90deg);
+}
+
+.item-card .item-class {
+    position: absolute;
+    left: calc(var(--u) * 6);
+    right: calc(var(--u) * 6);
+    bottom: 0;
+    /* Two lines at most: the SRD's example lines run longer than the official class names. */
+    max-height: calc(var(--u) * 26);
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: calc(var(--u) * 5.5);
+    overflow: hidden;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-stretch: 75%;
+    font-weight: 700;
+    font-size: calc(var(--u) * 9.5);
+    line-height: 1.05;
+    /* The line crosses the artwork, so it carries the halo the official card gives it. */
+    text-shadow:
+        calc(var(--u) * 1.5) 0 0 #fff,
+        calc(var(--u) * -1.5) 0 0 #fff,
+        0 calc(var(--u) * 1.5) 0 #fff,
+        0 calc(var(--u) * -1.5) 0 #fff,
+        calc(var(--u) * 1) calc(var(--u) * 1) 0 #fff,
+        calc(var(--u) * -1) calc(var(--u) * 1) 0 #fff,
+        calc(var(--u) * 1) calc(var(--u) * -1) 0 #fff,
+        calc(var(--u) * -1) calc(var(--u) * -1) 0 #fff;
+}
+
+@media print {
+    .card-sheet {
+        /* True size. A slot is one inch, so the cards cut out to fit a real character sheet. */
+        --card-slot: 1in;
+        /* Butted up against each other, so each card's own rule is the line to cut along. */
+        gap: 0;
+    }
+}

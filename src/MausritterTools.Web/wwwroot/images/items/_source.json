@@ -1,0 +1,31 @@
+{
+  "_source": {
+    "describes": "Official Mausritter item card illustrations",
+    "work": "Mausritter Item Card Studio",
+    "url": "https://mausritter.com/item-card-studio/",
+    "sourceUrl": "https://raw.githubusercontent.com/isaacwilliams/mausritter-web/master/src/components/generators/customItem/images",
+    "licence": "Mausritter Third Party Licence",
+    "licenceUrl": "https://mausritter.com/third-party-licence/",
+    "permission": "The licence permits, by name, use, copying and modification of the item card templates and item card art.",
+    "attribution": "Mausritter is copyright Losing Games. Mausritter Tools is an independent production by the mausritter-tools contributors and is not affiliated with Losing Games. It is published under the Mausritter Third Party Licence.",
+    "generatedBy": "tools/Import-ItemCardArt.ps1",
+    "warning": "Imported files. Do not add or edit drawings by hand; re-run the importer instead."
+  },
+  "illustrates": {
+    "item-improvised.png": "Improvised",
+    "item-light-1.png": "Light",
+    "item-light-2.png": "Needle",
+    "item-medium-2.png": "Medium",
+    "item-heavy-2.png": "Heavy",
+    "item-light-ranged.png": "Light ranged",
+    "item-heavy-ranged.png": "Heavy ranged",
+    "item-quiver.png": "Arrows",
+    "item-stones.png": "Stones",
+    "item-light-armour.png": "Light armour",
+    "item-heavy-armour.png": "Heavy armour",
+    "item-torch.png": "Torches",
+    "item-lantern.png": "Lantern",
+    "item-electric-lantern.png": "Electric lantern",
+    "item-rations.png": "Travel rations"
+  }
+}
