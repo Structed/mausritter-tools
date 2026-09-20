@@ -55,6 +55,15 @@
       ]
     },
 
+    "itemCards": {
+      "heading": "Über die Gegenstandskarten",
+      "paragraphsHtml": [
+        "Die druckbaren Gegenstandskarten übernehmen Aufbau und Zeichnungen der offiziellen Mausritter-Gegenstandskarten. Die <a href=\"https://mausritter.com/third-party\" target=\"_blank\" rel=\"noopener\">Mausritter Third Party Licence</a> erlaubt Dritten ausdrücklich, die Vorlagen und die Illustrationen der Gegenstandskarten zu verwenden, zu kopieren und zu verändern — genau das tut dieses Werkzeug. Die Zeichnungen stammen von Isaac Williams und aus dem offiziellen <a href=\"https://mausritter.com/tools/item\" target=\"_blank\" rel=\"noopener\">Item Card Studio</a>; sie sind unverändert, und eine Karte trägt nur dann eine, wenn der Gegenstand genau das ist, was die Zeichnung zeigt. Alles Übrige auf der Karte — welche Gegenstände überhaupt eine bekommen und was darauf steht — erzeugt dieses Werkzeug und ist nicht offiziell.",
+        "Gesetzt sind die Karten in <a href=\"https://fonts.google.com/specimen/Texturina\" target=\"_blank\" rel=\"noopener\">Texturina</a> und <a href=\"https://fonts.google.com/specimen/Open+Sans\" target=\"_blank\" rel=\"noopener\">Open Sans</a>, beide unter der SIL Open Font License 1.1, die mitgeliefert wird. Die offiziellen Karten verwenden Open Sans Condensed; diese Schrift wurde zurückgezogen und als schmale Schnittbreite in Open Sans überführt, weshalb dieses Werkzeug jene schmale Breite verwendet.",
+        "Die Karten sind in ganzen Inventarfeldern bemessen. Wer den Bogen in Originalgröße druckt, erhält Karten, die auf einen echten Mausritter-Charakterbogen passen."
+      ]
+    },
+
     "dataSources": {
       "heading": "Datenquellen",
       "contentColumn": "Inhalt",
@@ -119,7 +128,7 @@
       "houseRuleTitle": "Mausritter hat keine Tabelle für Dienstleistungen in Siedlungen",
       "noShops": "Hier gibt es nichts zu kaufen. Eine so kleine Siedlung handelt mit Gefälligkeiten und Schuldscheinen, nicht mit Ladentheken.",
       "itemCards": "Gegenstandskarten",
-      "itemCardsNote": "Alles Verkäufliche als Karten zum Ausschneiden. Die Punkte sind Nutzungspunkte; breite Karten belegen zwei Plätze im Gepäck.",
+      "itemCardsNote": "Alles Verkäufliche als Karten zum Ausschneiden, im Druck in Originalgröße. Die Punkte sind Nutzungspunkte; Rüstung und Waffen für beide Pfoten belegen zwei Plätze im Gepäck.",
       "officialNoticeHeading": "Was offiziell ist und was nicht.",
       "officialNoticeHtml": "Die Tabellen für Siedlung, Taverne und Nichtspielermäuse stammen aus dem Mausritter-SRD. Mausritter hat keine Tabelle für Läden oder Dienstleistungen, deshalb ist diese ganze Ebene — welche Dienste es gibt, wie die Siedlungsgröße sie freischaltet, und die Mäusenamen — eine Erfindung dieses Werkzeugs. Jeder Laden nennt unter „Woher das kommt“ die SRD-Regel, aus der er hergeleitet wurde."
     },
@@ -203,7 +212,8 @@
   },
 
   "itemCard": {
-    "usageDotsTitle": "{count} Nutzungspunkte"
+    "usageDotsTitle": "{count} Nutzungspunkte",
+    "defence": "{count} Vert."
   },
 
   "fantasiaArchive": {

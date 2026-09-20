@@ -126,6 +126,8 @@ src/MausritterTools.Core/        What is Mausritter: tables, generators, mapping
 src/MausritterTools.Web/         Blazor WebAssembly app
 tests/MausritterTools.Core.Tests/     Mausritter tests
 tools/Import-SrdTables.ps1       Regenerates the SRD data files, and checks the translations
+tools/Import-ItemCardArt.ps1     Fetches the official item card drawings
+tools/Import-CardFonts.ps1       Fetches the item card fonts and their licences
 MausritterTools.slnx             Solution
 global.json                      Pinned .NET SDK band
 ```
@@ -214,6 +216,32 @@ on the SPA's 404 fallback. Pages may redirect these directory URLs to a trailing
 parameters still carry the seed and language. Add a static entry when adding another public
 route that should support link previews, and keep `404.html` for unknown routes. Social
 platforms may cache previews, so a deployed change may not appear immediately.
+
+### Item card artwork and fonts
+
+The printable item cards reproduce the official Mausritter item card layout and drawings, which the
+[Mausritter Third Party Licence](https://mausritter.com/third-party) expressly permits: it grants the
+right to "use, copy and modify the item card templates and item card art". The card face is built to
+the geometry of the official [Item Card Studio](https://mausritter.com/tools/item) — one inventory
+slot is 100 card units and prints at one inch — but is drawn in CSS here, not transliterated from the
+Studio's source, which carries no licence of its own.
+
+```pwsh
+pwsh ./tools/Import-ItemCardArt.ps1     # drawings -> wwwroot/images/items/
+pwsh ./tools/Import-CardFonts.ps1       # fonts + OFL -> wwwroot/fonts/, generates css/card-fonts.css
+```
+
+Both write a `_source.json` recording where each file came from, and both are idempotent; pass
+`-Refresh` to re-download. `wwwroot/css/card-fonts.css` is generated — change the importer, not the
+file. The drawings are keyed by a gear item's `name`, which is the same key the three data files
+join on, so a translated card keeps its picture. `ItemCardTests` fails if the art list and the card
+rules drift apart, and if a two-pawed weapon's drawing stops being upright, because the stylesheet
+turns those a quarter turn to lie along their wider card.
+
+The official cards are set in Open Sans Condensed, which Google Fonts has since withdrawn and folded
+back into Open Sans as its `wdth 75` axis; that narrow width is used instead, so the licence of what
+ships can actually be verified. Texturina and Open Sans are both under the SIL Open Font License
+1.1, and each family's `OFL.txt` ships beside its `.woff2`.
 
 ## Data
 
@@ -384,6 +412,12 @@ Mausritter Tools is an independent production by the mausritter-tools contributo
 affiliated with Losing Games. It is published under the Mausritter Third Party Licence.
 
 Mausritter is copyright Losing Games.
+
+The printable item cards use the official item card templates and item card art, which the Third
+Party Licence expressly permits. The drawings are by Isaac Williams and ship unmodified. The cards
+are set in Texturina and Open Sans, both under the
+[SIL Open Font License 1.1](https://openfontlicense.org/); each family's `OFL.txt` ships alongside
+it in `src/MausritterTools.Web/wwwroot/fonts/`.
 
 Both notices are also shown in the site footer, because the Third Party Licence requires its text to
 appear on the website where the work is promoted, not only in the repository. The Mausritter and

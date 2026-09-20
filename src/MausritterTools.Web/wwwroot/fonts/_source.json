@@ -1,0 +1,31 @@
+{
+  "_source": {
+    "describes": "Web fonts for the item cards",
+    "generatedBy": "tools/Import-CardFonts.ps1",
+    "stylesheet": "css/card-fonts.css",
+    "subset": "latin",
+    "warning": "Imported files. Do not edit by hand; re-run the importer instead."
+  },
+  "families": [
+    {
+      "family": "Texturina",
+      "usedFor": "Item names",
+      "copyright": "Copyright 2020 The Texturina Project Authors (https://github.com/Omnibus-Type/Texturina)",
+      "licence": "SIL Open Font License 1.1",
+      "licenceFile": "texturina-OFL.txt",
+      "licenceUrl": "https://github.com/google/fonts/blob/main/ofl/texturina/OFL.txt",
+      "project": "https://github.com/Omnibus-Type/Texturina",
+      "sourceUrl": "https://fonts.googleapis.com/css2?family=Texturina:wght@800&display=swap"
+    },
+    {
+      "family": "Open Sans",
+      "usedFor": "Usage dots, stat boxes and item classes, at the condensed width",
+      "copyright": "Copyright 2020 The Open Sans Project Authors (https://github.com/googlefonts/opensans)",
+      "licence": "SIL Open Font License 1.1",
+      "licenceFile": "open-sans-OFL.txt",
+      "licenceUrl": "https://github.com/google/fonts/blob/main/ofl/opensans/OFL.txt",
+      "project": "https://github.com/googlefonts/opensans",
+      "sourceUrl": "https://fonts.googleapis.com/css2?family=Open+Sans:wdth,wght@75..100,300..800&display=swap"
+    }
+  ]
+}

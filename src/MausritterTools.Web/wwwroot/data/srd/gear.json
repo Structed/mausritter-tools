@@ -5,6 +5,7 @@
     "version": "2.3.1",
     "url": "https://mausritter.com/srd/",
     "sourceFiles": [
+      "12-inventory.md",
       "16-gear-and-prices.md"
     ],
     "licence": "CC BY 4.0",
@@ -270,36 +271,42 @@
         {
           "name": "Improvised",
           "note": "twig, rock, etc.",
+          "damage": "d6",
           "priceText": "1p",
           "pips": 1
         },
         {
           "name": "Light",
           "note": "dagger, needle, etc.",
+          "damage": "d6",
           "priceText": "10p",
           "pips": 10
         },
         {
           "name": "Medium",
           "note": "sword, axe, etc.",
+          "damage": "d6/d8",
           "priceText": "20p",
           "pips": 20
         },
         {
           "name": "Heavy",
           "note": "spear, hooklance, etc.",
+          "damage": "d10",
           "priceText": "40p",
           "pips": 40
         },
         {
           "name": "Light ranged",
           "note": "sling, hand crossbow, etc.",
+          "damage": "d6",
           "priceText": "10p",
           "pips": 10
         },
         {
           "name": "Heavy ranged",
           "note": "bow, crossbow, etc.",
+          "damage": "d8",
           "priceText": "40p",
           "pips": 40
         },
@@ -317,11 +324,13 @@
         },
         {
           "name": "Light armour",
+          "defence": 1,
           "priceText": "150p",
           "pips": 150
         },
         {
           "name": "Heavy armour",
+          "defence": 1,
           "priceText": "500p",
           "pips": 500
         },
