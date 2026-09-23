@@ -1,0 +1,160 @@
+Dice baseline. Regenerate with UPDATE_GOLDEN=1 and read the diff before committing.
+appId=structed-mausritter-tools-dice
+edges=-1,0,1
+======================================================================
+Presets
+  save parameter=score[1..20]=10 edge=True
+  attack parameter=weapon[4..12]=6 edge=True
+  spell parameter=power[1..6]=1 edge=False
+  mouse parameter=none edge=False
+======================================================================
+Reading keys
+  save/pass
+  save/fail
+  attack/damage
+  spell/cast
+  spell/usage
+  spell/miscast
+  mouse/attribute
+
+Edge keys
+  save/edge/down
+  save/edge/level
+  save/edge/up
+  attack/edge/down
+  attack/edge/level
+  attack/edge/up
+======================================================================
+save
+  1 edge=-1 -> 2d20kh1
+    seed=00000001 code=1 dice=[7* 12] total=12 read=save/fail=1 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[3* 20] total=20 read=save/fail=1 notes=[]
+    seed=0c179000 code=3cs83k dice=[16 14*] total=16 read=save/fail=1 notes=[]
+    seed=beefcafe code=1gz7oji dice=[7* 18] total=18 read=save/fail=1 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[9* 15] total=15 read=save/fail=1 notes=[]
+  1 edge= 0 -> 1d20
+    seed=00000001 code=1 dice=[7] total=7 read=save/fail=1 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[3] total=3 read=save/fail=1 notes=[]
+    seed=0c179000 code=3cs83k dice=[16] total=16 read=save/fail=1 notes=[]
+    seed=beefcafe code=1gz7oji dice=[7] total=7 read=save/fail=1 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[9] total=9 read=save/fail=1 notes=[]
+  1 edge= 1 -> 2d20kl1
+    seed=00000001 code=1 dice=[7 12*] total=7 read=save/fail=1 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[3 20*] total=3 read=save/fail=1 notes=[]
+    seed=0c179000 code=3cs83k dice=[16* 14] total=14 read=save/fail=1 notes=[]
+    seed=beefcafe code=1gz7oji dice=[7 18*] total=7 read=save/fail=1 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[9 15*] total=9 read=save/fail=1 notes=[]
+  10 edge=-1 -> 2d20kh1
+    seed=00000001 code=1 dice=[7* 12] total=12 read=save/fail=10 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[3* 20] total=20 read=save/fail=10 notes=[]
+    seed=0c179000 code=3cs83k dice=[16 14*] total=16 read=save/fail=10 notes=[]
+    seed=beefcafe code=1gz7oji dice=[7* 18] total=18 read=save/fail=10 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[9* 15] total=15 read=save/fail=10 notes=[]
+  10 edge= 0 -> 1d20
+    seed=00000001 code=1 dice=[7] total=7 read=save/pass=10 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[3] total=3 read=save/pass=10 notes=[]
+    seed=0c179000 code=3cs83k dice=[16] total=16 read=save/fail=10 notes=[]
+    seed=beefcafe code=1gz7oji dice=[7] total=7 read=save/pass=10 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[9] total=9 read=save/pass=10 notes=[]
+  10 edge= 1 -> 2d20kl1
+    seed=00000001 code=1 dice=[7 12*] total=7 read=save/pass=10 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[3 20*] total=3 read=save/pass=10 notes=[]
+    seed=0c179000 code=3cs83k dice=[16* 14] total=14 read=save/fail=10 notes=[]
+    seed=beefcafe code=1gz7oji dice=[7 18*] total=7 read=save/pass=10 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[9 15*] total=9 read=save/pass=10 notes=[]
+  20 edge=-1 -> 2d20kh1
+    seed=00000001 code=1 dice=[7* 12] total=12 read=save/pass=20 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[3* 20] total=20 read=save/pass=20 notes=[]
+    seed=0c179000 code=3cs83k dice=[16 14*] total=16 read=save/pass=20 notes=[]
+    seed=beefcafe code=1gz7oji dice=[7* 18] total=18 read=save/pass=20 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[9* 15] total=15 read=save/pass=20 notes=[]
+  20 edge= 0 -> 1d20
+    seed=00000001 code=1 dice=[7] total=7 read=save/pass=20 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[3] total=3 read=save/pass=20 notes=[]
+    seed=0c179000 code=3cs83k dice=[16] total=16 read=save/pass=20 notes=[]
+    seed=beefcafe code=1gz7oji dice=[7] total=7 read=save/pass=20 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[9] total=9 read=save/pass=20 notes=[]
+  20 edge= 1 -> 2d20kl1
+    seed=00000001 code=1 dice=[7 12*] total=7 read=save/pass=20 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[3 20*] total=3 read=save/pass=20 notes=[]
+    seed=0c179000 code=3cs83k dice=[16* 14] total=14 read=save/pass=20 notes=[]
+    seed=beefcafe code=1gz7oji dice=[7 18*] total=7 read=save/pass=20 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[9 15*] total=9 read=save/pass=20 notes=[]
+
+attack
+  4 edge=-1 -> 1d4
+    seed=00000001 code=1 dice=[3] total=3 read=attack/damage=3 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[3] total=3 read=attack/damage=3 notes=[]
+    seed=0c179000 code=3cs83k dice=[4] total=4 read=attack/damage=4 notes=[]
+    seed=beefcafe code=1gz7oji dice=[3] total=3 read=attack/damage=3 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[1] total=1 read=attack/damage=1 notes=[]
+  4 edge= 0 -> 1d4
+    seed=00000001 code=1 dice=[3] total=3 read=attack/damage=3 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[3] total=3 read=attack/damage=3 notes=[]
+    seed=0c179000 code=3cs83k dice=[4] total=4 read=attack/damage=4 notes=[]
+    seed=beefcafe code=1gz7oji dice=[3] total=3 read=attack/damage=3 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[1] total=1 read=attack/damage=1 notes=[]
+  4 edge= 1 -> 1d12
+    seed=00000001 code=1 dice=[11] total=11 read=attack/damage=11 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[7] total=7 read=attack/damage=7 notes=[]
+    seed=0c179000 code=3cs83k dice=[12] total=12 read=attack/damage=12 notes=[]
+    seed=beefcafe code=1gz7oji dice=[7] total=7 read=attack/damage=7 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[5] total=5 read=attack/damage=5 notes=[]
+  6 edge=-1 -> 1d4
+    seed=00000001 code=1 dice=[3] total=3 read=attack/damage=3 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[3] total=3 read=attack/damage=3 notes=[]
+    seed=0c179000 code=3cs83k dice=[4] total=4 read=attack/damage=4 notes=[]
+    seed=beefcafe code=1gz7oji dice=[3] total=3 read=attack/damage=3 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[1] total=1 read=attack/damage=1 notes=[]
+  6 edge= 0 -> 1d6
+    seed=00000001 code=1 dice=[5] total=5 read=attack/damage=5 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[1] total=1 read=attack/damage=1 notes=[]
+    seed=0c179000 code=3cs83k dice=[6] total=6 read=attack/damage=6 notes=[]
+    seed=beefcafe code=1gz7oji dice=[1] total=1 read=attack/damage=1 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[5] total=5 read=attack/damage=5 notes=[]
+  6 edge= 1 -> 1d12
+    seed=00000001 code=1 dice=[11] total=11 read=attack/damage=11 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[7] total=7 read=attack/damage=7 notes=[]
+    seed=0c179000 code=3cs83k dice=[12] total=12 read=attack/damage=12 notes=[]
+    seed=beefcafe code=1gz7oji dice=[7] total=7 read=attack/damage=7 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[5] total=5 read=attack/damage=5 notes=[]
+  12 edge=-1 -> 1d4
+    seed=00000001 code=1 dice=[3] total=3 read=attack/damage=3 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[3] total=3 read=attack/damage=3 notes=[]
+    seed=0c179000 code=3cs83k dice=[4] total=4 read=attack/damage=4 notes=[]
+    seed=beefcafe code=1gz7oji dice=[3] total=3 read=attack/damage=3 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[1] total=1 read=attack/damage=1 notes=[]
+  12 edge= 0 -> 1d12
+    seed=00000001 code=1 dice=[11] total=11 read=attack/damage=11 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[7] total=7 read=attack/damage=7 notes=[]
+    seed=0c179000 code=3cs83k dice=[12] total=12 read=attack/damage=12 notes=[]
+    seed=beefcafe code=1gz7oji dice=[7] total=7 read=attack/damage=7 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[5] total=5 read=attack/damage=5 notes=[]
+  12 edge= 1 -> 1d12
+    seed=00000001 code=1 dice=[11] total=11 read=attack/damage=11 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[7] total=7 read=attack/damage=7 notes=[]
+    seed=0c179000 code=3cs83k dice=[12] total=12 read=attack/damage=12 notes=[]
+    seed=beefcafe code=1gz7oji dice=[7] total=7 read=attack/damage=7 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[5] total=5 read=attack/damage=5 notes=[]
+
+spell
+  1 edge= 0 -> 1d6
+    seed=00000001 code=1 dice=[5] total=5 read=spell/cast=1 notes=[spell/usage=1]
+    seed=5eed1234 code=qc6u5w dice=[1] total=1 read=spell/cast=1 notes=[spell/usage=0]
+    seed=0c179000 code=3cs83k dice=[6] total=6 read=spell/cast=1 notes=[spell/usage=1 spell/miscast=1]
+    seed=beefcafe code=1gz7oji dice=[1] total=1 read=spell/cast=1 notes=[spell/usage=0]
+    seed=0ff1ce55 code=4f9kd1 dice=[5] total=5 read=spell/cast=1 notes=[spell/usage=1]
+  6 edge= 0 -> 6d6
+    seed=00000001 code=1 dice=[5 6 2 1 5 5] total=24 read=spell/cast=6 notes=[spell/usage=4 spell/miscast=1]
+    seed=5eed1234 code=qc6u5w dice=[1 4 2 1 5 3] total=16 read=spell/cast=6 notes=[spell/usage=2]
+    seed=0c179000 code=3cs83k dice=[6 2 4 2 2 4] total=20 read=spell/cast=6 notes=[spell/usage=3 spell/miscast=1]
+    seed=beefcafe code=1gz7oji dice=[1 6 6 2 5 1] total=21 read=spell/cast=6 notes=[spell/usage=3 spell/miscast=2]
+    seed=0ff1ce55 code=4f9kd1 dice=[5 1 2 4 4 4] total=20 read=spell/cast=6 notes=[spell/usage=4]
+
+mouse
+  0 edge= 0 -> 3d6kh2
+    seed=00000001 code=1 dice=[5 6 2*] total=11 read=mouse/attribute=11 notes=[]
+    seed=5eed1234 code=qc6u5w dice=[1* 4 2] total=6 read=mouse/attribute=6 notes=[]
+    seed=0c179000 code=3cs83k dice=[6 2* 4] total=10 read=mouse/attribute=10 notes=[]
+    seed=beefcafe code=1gz7oji dice=[1* 6 6] total=12 read=mouse/attribute=12 notes=[]
+    seed=0ff1ce55 code=4f9kd1 dice=[5 1* 2] total=7 read=mouse/attribute=7 notes=[]

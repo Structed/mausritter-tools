@@ -111,6 +111,30 @@ public class JsonDefaultsTests
         Assert.Empty(hosts.Shapes);
     }
 
+    [Theory]
+    [InlineData("{}")]
+    [InlineData("{\"dice\":null}")]
+    [InlineData("{\"dice\":{}}")]
+    [InlineData("{\"dice\":{\"presets\":null,\"readings\":null,\"heading\":null}}")]
+    public void AbsentDiceWordingBecomesEmptyRatherThanNull(string json)
+    {
+        // The dice page looks every label up by id. A null dictionary here would not blank a
+        // button, it would throw on the first render of the page.
+        UiText text = Deserialize(json, GameDataJsonContext.Default.UiText);
+
+        Assert.Equal("", text.Dice.Heading);
+        Assert.Equal("", text.Dice.PageTitle);
+        Assert.Equal("", text.Dice.LeadHtml);
+        Assert.NotNull(text.Dice.Presets);
+        Assert.Empty(text.Dice.Presets);
+        Assert.NotNull(text.Dice.Parameters);
+        Assert.Empty(text.Dice.Parameters);
+        Assert.NotNull(text.Dice.Readings);
+        Assert.Empty(text.Dice.Readings);
+        Assert.NotNull(text.Dice.Edges);
+        Assert.Empty(text.Dice.Edges);
+    }
+
     private static T Deserialize<T>(string json, System.Text.Json.Serialization.Metadata.JsonTypeInfo<T> typeInfo)
     {
         T? value = JsonSerializer.Deserialize(json, typeInfo);

@@ -13,6 +13,7 @@
     "menuTitle": "Navigationsmenü",
     "home": "Start",
     "settlement": "Siedlungsgenerator",
+    "dice": "Würfeltisch",
     "about": "Über",
     "languageLabel": "Sprache"
   },
@@ -23,6 +24,7 @@
     "noServerHtml": "Alles läuft vollständig in deinem Browser — es gibt keinen Server, und nichts wird hochgeladen.",
     "toolsHeading": "Werkzeuge",
     "settlementItemHtml": "<a href=\"settlement\"><strong>Siedlungsgenerator</strong></a> — würfelt eine ganze Mäusesiedlung aus: wer sie regiert, womit sie handelt, was gerade geschieht, wenn die Spielenden eintreffen, dazu jeden Laden mit Inhaberin, Eigenheiten und Preisen. Sperre, was dir gefällt, würfle den Rest neu, und teile das Ergebnis als Link oder drucke es aus.",
+    "diceItemHtml": "<a href=\"dice\"><strong>Würfeltisch</strong></a> — würfle so, dass die ganze Gruppe zusieht: Rettungswürfe auf oder unter einen Wert, Waffenschaden, Zauber als Handvoll W6, und alles Weitere in gewohnter Schreibweise. Die Würfel gehen direkt von Browser zu Browser, niemand betreibt also einen Server — schließe den Tab, und der Tisch ist fort.",
     "aboutLinkText": "Wie das funktioniert, und was offiziell ist"
   },
 
@@ -61,6 +63,15 @@
         "Die druckbaren Gegenstandskarten übernehmen Aufbau und Zeichnungen der offiziellen Mausritter-Gegenstandskarten. Die <a href=\"https://mausritter.com/third-party\" target=\"_blank\" rel=\"noopener\">Mausritter Third Party Licence</a> erlaubt Dritten ausdrücklich, die Vorlagen und die Illustrationen der Gegenstandskarten zu verwenden, zu kopieren und zu verändern — genau das tut dieses Werkzeug. Die Zeichnungen stammen von Isaac Williams und aus dem offiziellen <a href=\"https://mausritter.com/tools/item\" target=\"_blank\" rel=\"noopener\">Item Card Studio</a>; sie sind unverändert, und eine Karte trägt nur dann eine, wenn der Gegenstand genau das ist, was die Zeichnung zeigt. Alles Übrige auf der Karte — welche Gegenstände überhaupt eine bekommen und was darauf steht — erzeugt dieses Werkzeug und ist nicht offiziell.",
         "Gesetzt sind die Karten in <a href=\"https://fonts.google.com/specimen/Texturina\" target=\"_blank\" rel=\"noopener\">Texturina</a> und <a href=\"https://fonts.google.com/specimen/Open+Sans\" target=\"_blank\" rel=\"noopener\">Open Sans</a>, beide unter der SIL Open Font License 1.1, die mitgeliefert wird. Die offiziellen Karten verwenden Open Sans Condensed; diese Schrift wurde zurückgezogen und als schmale Schnittbreite in Open Sans überführt, weshalb dieses Werkzeug jene schmale Breite verwendet.",
         "Die Karten sind in ganzen Inventarfeldern bemessen. Wer den Bogen in Originalgröße druckt, erhält Karten, die auf einen echten Mausritter-Charakterbogen passen."
+      ]
+    },
+
+    "diceTable": {
+      "heading": "Über den Würfeltisch",
+      "paragraphsHtml": [
+        "Der Würfeltisch verbindet die Browser an eurem Tisch unmittelbar miteinander, verschlüsselt, ohne Server dazwischen und ohne dass irgendwo etwas aufgeschrieben wird. Ein Tischcode ist kein Konto: Er ist der Name, unter dem eure Browser einander finden, und wer ihn hat, kann mithören — gib ihn also so weiter, wie du einen Haustürschlüssel weitergibst. Schließe den Tab, und der Tisch hört auf zu bestehen.",
+        "Jeder benannte Wurf ist eine Regel aus dem Mausritter-SRD, keine Hausregel: Ein Rettungswurf ist ein W20 auf oder unter den Wert, ein Angriff trifft immer und würfelt die Waffenwürfel, ein Zauber ist ein W6 je Machtpunkt, wobei jede 4, 5 oder 6 eine Nutzung markiert und jede 6 ein Fehlschlag ist, und der Wert einer neuen Maus sind 3W6, von denen die besten zwei zählen. Würfe, die das Buch nicht kennt, werden nicht angeboten — es gibt hier keinen kritischen Treffer, keinen Moralwurf und keinen Reaktionswurf, weil Mausritter sie nicht hat. Für alles Übrige an eurem Tisch gibt es das Freifeld.",
+        "Nichts entscheidet, was ein Ergebnis für dein Blatt bedeutet. Ein Fehlschlag wird gezählt, nie angewandt, und eine Nutzung wird angesagt, nie eingetragen. Jeder Wurf trägt den Startwert, aus dem er entstanden ist, sodass ein Wurf jemandem geschickt werden kann, dessen Browser den Tisch nicht erreicht, und dort genau nachgebaut wird."
       ]
     },
 
@@ -180,6 +191,87 @@
       "importFailed": "Diese Datei konnte nicht importiert werden. {message}",
       "readFailed": "Diese Datei konnte nicht gelesen werden. {message}",
       "languageChanged": "Auf {language} umgestellt. Derselbe Startwert, dieselbe Siedlung."
+    }
+  },
+
+  "dice": {
+    "pageTitle": "Würfeltisch",
+    "heading": "Würfeltisch",
+    "leadHtml": "Würfle so, dass die ganze Gruppe zusieht. Die Würfel gehen direkt von einem Browser zum anderen — es gibt keinen Server, und nichts wird aufbewahrt.",
+    "tableHeading": "Der Tisch",
+    "playerLabel": "Dein Name",
+    "playerPlaceholder": "Wer würfelt",
+    "tableLabel": "Tischcode",
+    "tablePlaceholder": "abcd-efgh-jkmn",
+    "startTable": "Tisch eröffnen",
+    "joinTable": "Beitreten",
+    "leaveTable": "Verlassen",
+    "copyInvite": "Einladung kopieren",
+    "copied": "Kopiert",
+    "statusAway": "An keinem Tisch — diese Würfe stehen nur auf diesem Bildschirm.",
+    "statusJoining": "Tisch wird eröffnet …",
+    "statusSearching": "Suche nach den anderen …",
+    "statusOpen": "Am Tisch",
+    "statusFailed": "Dieser Browser wollte keine Verbindung aufbauen. Würfeln geht hier weiterhin; es bleibt nur hier.",
+    "peersNone": "noch niemand sonst",
+    "peersOne": "1 weitere Person",
+    "peersOther": "weitere Personen",
+    "whoHeading": "Wer ist da",
+    "you": "(du)",
+    "whoWaiting": "sagt noch guten Tag",
+    "anonymous": "Jemand",
+    "notationLabel": "Etwas anderes",
+    "notationPlaceholder": "2d6+1",
+    "roll": "Würfeln",
+    "edgeLabel": "Wie die Chancen stehen",
+    "rollPrivately": "Verdeckt würfeln",
+    "rollsHeading": "Würfe",
+    "clearRolls": "Liste leeren",
+    "emptyLog": "Noch nichts gewürfelt.",
+    "privately": "verdeckt gewürfelt",
+    "privateMine": "verdeckt",
+    "dropped": "verworfen",
+    "seedTitle": "Startwert",
+    "nameNeeded": "Trag zuerst einen Namen ein, damit der Rest des Tisches weiß, wessen Würfel das waren.",
+    "notationBad": "Das ist kein Wurf, den das hier versteht. Versuch es mit d20, 2d6+1 oder 3d6kh2, um die besten zwei von drei zu behalten.",
+    "tableBad": "Das ist kein Tischcode.",
+    "inviteHint": "Wer diesen Link hat, sitzt mit am Tisch. Wer diesen Code hat, kann mithören — gib ihn also so weiter, wie du einen Haustürschlüssel weitergibst.",
+    "secretHint": "Ein verdeckter Wurf verrät dem Tisch, dass du gewürfelt hast, und sonst nichts. Die Würfel verlassen diesen Browser nie.",
+    "edgeHint": "Ein Rettungswurf mit Vorteil würfelt zwei W20 und behält den niedrigeren, denn niedrig ist hier gut; Nachteil behält den höheren. Ein beeinträchtigter Angriff würfelt W4, ein verbesserter W12, ganz gleich welche Waffe. Mausritter kennt je eine Stufe davon, es gibt also nichts zu stapeln.",
+    "spellHint": "Das Zaubern meldet, was die Würfel zeigen, nicht was daraus folgt: eine Nutzung je 4, 5 oder 6 und einen Fehlschlag je 6. Lies die Wirkung deines Zaubers mit [DICE] als der Zahl der eingesetzten Würfel und [SUM] als deren Summe. Die Punkte eintragen musst du weiterhin selbst.",
+    "privacyHint": "Würfe gehen unmittelbar von Browser zu Browser, verschlüsselt, ohne Server dazwischen und ohne dass irgendwo etwas gespeichert wird. Schließe den Tab, und der Tisch ist fort.",
+    "reachHint": "Manche Netze lassen zwei Browser nicht direkt miteinander sprechen, und es gibt keinen Vermittler als Rückfallebene. Taucht jemand nie auf, schick ihm den Startwert neben einem Wurf — er baut überall dieselben Würfel nach.",
+
+    "presets": {
+      "save": "Rettungswurf",
+      "attack": "Angriff",
+      "spell": "Zaubern",
+      "mouse": "Maus erschaffen"
+    },
+
+    "parameters": {
+      "score": "Wert",
+      "weapon": "Waffenwürfel",
+      "power": "Macht"
+    },
+
+    "readings": {
+      "save/pass": "Auf {count} oder darunter — es hält.",
+      "save/fail": "Über {count} — es hält nicht.",
+      "attack/damage": "Schaden, vor Rüstung.",
+      "spell/cast": "[DICE] ist {count}, [SUM] die Summe.",
+      "spell/usage": "Nutzungspunkte: {count}",
+      "spell/miscast": "Fehlschläge: {count} — je W6 Schaden auf WIL, dann ein WIL-Rettungswurf oder Entkräftet",
+      "mouse/attribute": "Wert — würfle erneut für STR, DEX und WIL."
+    },
+
+    "edges": {
+      "save/edge/down": "Nachteil",
+      "save/edge/level": "Gerade",
+      "save/edge/up": "Vorteil",
+      "attack/edge/down": "Beeinträchtigt",
+      "attack/edge/level": "Gerade",
+      "attack/edge/up": "Verbessert"
     }
   },
 

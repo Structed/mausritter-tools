@@ -117,12 +117,56 @@ Some things that are easy to get wrong here, all covered by `FantasiaArchiveExpo
 Fantasia Archive is GPL-3.0. Only the identifiers needed to write a file it accepts are re-derived
 here; no blueprint source, tooltip or value list is copied.
 
+### Dice table
+
+A shared dice table at `/dice`. Open it, press **Start a table**, send someone the link, and both
+browsers roll into the same log. There is no server in the middle: the page opens a peer-to-peer
+connection and the rolls travel directly between the browsers, which is the same reason everything
+else here works offline.
+
+Four buttons, because Mausritter asks for these four rolls constantly:
+
+| Roll | Dice | What it reads |
+| --- | --- | --- |
+| **Save** | d20 against an attribute | Passed or failed, at or under the score |
+| **Attack** | the weapon's die | The damage, before the defender's armour |
+| **Cast a spell** | a d6 per point of power | The usage dots marked, and any miscasts |
+| **Make a mouse** | 3d6 keeping the best two | The attribute |
+
+Advantage on a save is a second d20 with the **lowest** kept, because low is good here. An impaired
+attack rolls d4 and an enhanced one d12, *replacing* the weapon's die rather than adjusting it, so a
+mouse swinging a d10 blade in a cramped tunnel rolls d4. Anything else goes in the notation box:
+`2d6+1`, `4d6kh3`, `1d100`.
+
+Three rolls that other games' versions of this tool offer are deliberately missing: Mausritter has
+no natural-1 or natural-20 critical, no morale roll and no reaction roll. Adding one would be a
+house rule, and an unlabelled house rule is the thing this repository is most careful not to ship.
+
+Nothing here decides what a result *does*. A miscast is counted, not applied; a usage dot is
+announced, not filled in. The player has the sheet.
+
+- **Every roll is reproducible.** Each one shows its seed code, and that code re-rolls exactly those
+  dice. The dice a keep rule threw away are shown struck through rather than hidden, so a 3d6-keep-2
+  is auditable at a glance.
+- **A private roll stays private.** Tick the box and the other browsers are told only that you
+  rolled. The faces never leave this machine — not in the log, not in the bytes on the wire — and
+  `WireFormatTests` asserts the absence rather than trusting it.
+- **A peer cannot lie about a reading.** The receiving browser re-derives the usage dots and the
+  miscasts from the faces it was sent instead of believing the sender's summary.
+- **The table code is spoken aloud.** Twelve characters from an alphabet with no `i`, `l`, `o` or
+  `u` in it, since those are the ones that get misheard across a table.
+
+The rules are one file, `Core/Dice/MausritterRolls.cs`, and `EngineBoundaryTests` keeps it that way.
+Everything else — the dice arithmetic, the seeding, the peer connection, the roster, the roll log —
+is `Structed.Inkwell` and `Structed.Inkwell.Party.Blazor`, shared with the other tools built on the
+same engine.
+
 ## Repository layout
 
 ```
 .github/github-app.yml           GitHub Copilot app scripts and project instructions
 .github/workflows/deploy.yml     Build + deploy to GitHub Pages
-src/MausritterTools.Core/        What is Mausritter: tables, generators, mapping, rendering
+src/MausritterTools.Core/        What is Mausritter: tables, generators, mapping, rendering, the dice rules
 src/MausritterTools.Web/         Blazor WebAssembly app
 tests/MausritterTools.Core.Tests/     Mausritter tests
 tools/Import-SrdTables.ps1       Regenerates the SRD data files, and checks the translations
@@ -139,8 +183,15 @@ not code in this repository.
 **`Structed.Inkwell`** is the engine, and knows nothing about any particular game: the PCG32
 generator and its per-field streams, dice expressions, seed encoding, the JSON data loader and its
 translation overlays, provenance and licensing, name assembly, map generation, the hand-inked SVG
-renderer, and the versioned envelope a generated document is shared in. It is asked for a map of a
-given silhouette and scale; it has never heard of a settlement.
+renderer, the versioned envelope a generated document is shared in, and the shared dice table's
+rolls, readings and wire format. It is asked for a map of a given silhouette and scale, or for
+`3d6kh2`; it has never heard of a settlement or of a save.
+
+**`Structed.Inkwell.Party.Blazor`** is the browser-to-browser transport the dice table runs on:
+signalling, the peer connection, the table code, the roster and the roll log. It is separate from
+the engine because it is the only part that needs a browser, and it is referenced by
+`MausritterTools.Web` rather than by Core for the same reason — Core has to stay testable without
+one.
 
 **`Structed.Inkwell.FantasiaArchive`** writes and reads Fantasia Archive v1 projects. It is a
 separate package rather than part of the engine because it is an integration with somebody else's
@@ -148,9 +199,10 @@ application rather than part of generating anything, and a tool that does not wa
 carry it.
 
 **`MausritterTools.Core`** is everything that is actually Mausritter: the tables, the settlement
-generator, what a mouse name is made of, which silhouette a settlement of a given size sits in, and
-how a settlement becomes Fantasia Archive documents. Two adapters — `SettlementMapper` and
-`SettlementMapRenderer` — are the whole of what the engine is told about settlements.
+generator, what a mouse name is made of, which silhouette a settlement of a given size sits in, how
+a settlement becomes Fantasia Archive documents, and the four rolls the dice table offers. Two
+adapters — `SettlementMapper` and `SettlementMapRenderer` — are the whole of what the engine is told
+about settlements, and `MausritterRolls` is the whole of what it is told about Mausritter's rules.
 
 **`MausritterTools.Web`** is a thin Blazor layer over Core, so the generators can be tested without
 a browser. Put logic in Core, not in a `.razor` file.
@@ -369,6 +421,16 @@ A few decisions that are easy to undo by accident:
   unless the whole ICU dataset is bundled, which costs well over a megabyte of download. The only
   thing that needs a culture here is the thousands separator in a shopkeeper's purse, so that one
   number is formatted explicitly against `Locale.FormatCulture` instead.
+- **The dice table's app id is a load-bearing string too.** Two browsers only find each other if
+  their app ids match exactly, and `structed-mausritter-tools-dice` is what every table code anyone
+  has written down was handed out under. Changing it raises no error at either end; the far side
+  simply never arrives. `WireFormatTests` pins it, along with the exact bytes of a roll and a
+  greeting, because those are the compatibility contract between two copies of this site loaded
+  weeks apart — and an engine upgrade is the only thing that can break them.
+- **A private roll is proved private, not promised.** `Ghost()` strips the faces, the total, the
+  seed and the reading before a secret roll is sent, and the test asserts the damage key and the
+  notation are absent from the serialised bytes. Checking the rendered log would only prove the
+  other browser chose not to display them.
 
 ## Deployment
 

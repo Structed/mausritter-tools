@@ -1,0 +1,568 @@
+@page "/dice"
+@using System.Globalization
+@using MausritterTools.Core.Data
+@using MausritterTools.Core.Dice
+@using MausritterTools.Web.Components
+@using MausritterTools.Web.Services
+@using Structed.Inkwell.Data
+@using Structed.Inkwell.Dice
+@using Structed.Inkwell.Party
+@using Structed.Inkwell.Party.Blazor
+@using Structed.Inkwell.Randomness
+@implements IAsyncDisposable
+@inject BrowserInterop Browser
+@inject NavigationManager Navigation
+@inject IJSRuntime Js
+
+<PageTitle>@TextTemplate.Format(Text.App.PageTitlePattern, ("page", Text.Dice.PageTitle))</PageTitle>
+
+<div class="settlement-tool">
+    <h1>@Text.Dice.Heading</h1>
+
+    <p class="lead">@((MarkupString)Text.Dice.LeadHtml)</p>
+
+    <section class="dice-table">
+        <h2 class="dice-heading">@Text.Dice.TableHeading</h2>
+
+        <div class="dice-identity">
+            <label class="dice-field">
+                <span class="field-label">@Text.Dice.PlayerLabel</span>
+                <input type="text"
+                       maxlength="@RollMessage.MaximumNameLength"
+                       placeholder="@Text.Dice.PlayerPlaceholder"
+                       value="@_player"
+                       @onchange="OnPlayerChanged" />
+            </label>
+
+            @if (_channel.IsJoined)
+            {
+                <p class="dice-code">
+                    <span class="field-label">@Text.Dice.TableLabel</span>
+                    <code>@TableCode.Group(_channel.Code)</code>
+                </p>
+
+                <button type="button" class="btn-quiet" @onclick="CopyInvite">
+                    @(_copied ? Text.Dice.Copied : Text.Dice.CopyInvite)
+                </button>
+
+                <button type="button" class="btn-quiet" @onclick="Leave">@Text.Dice.LeaveTable</button>
+            }
+            else
+            {
+                <label class="dice-field">
+                    <span class="field-label">@Text.Dice.TableLabel</span>
+                    <input type="text"
+                           spellcheck="false"
+                           autocomplete="off"
+                           placeholder="@Text.Dice.TablePlaceholder"
+                           value="@_code"
+                           @onchange="OnCodeChanged" />
+                </label>
+
+                <button type="button" class="btn-quiet" @onclick="Join">@Text.Dice.JoinTable</button>
+                <button type="button" class="btn-ink" @onclick="Start">@Text.Dice.StartTable</button>
+            }
+        </div>
+
+        <p class="dice-status dice-status-@_channel.Status.ToString().ToLowerInvariant()" role="status">
+            @StatusText@(_channel.IsJoined ? $" — {PeerText}." : "")
+        </p>
+
+        @if (_channel.IsJoined)
+        {
+            <div class="dice-present">
+                <span class="field-label" id="dice-who">@Text.Dice.WhoHeading</span>
+
+                <ul class="dice-roster" aria-labelledby="dice-who">
+                    <li class="dice-seat dice-seat-mine">
+                        @MyName <span class="dice-you">@Text.Dice.You</span>
+                    </li>
+
+                    @foreach (Seat seat in _channel.Roster.Seats)
+                    {
+                        <li class="dice-seat" @key="seat.Peer">@seat.Name</li>
+                    }
+
+                    @if (Waiting > 0)
+                    {
+                        <li class="dice-seat dice-seat-waiting">@Text.Dice.WhoWaiting</li>
+                    }
+                </ul>
+            </div>
+        }
+
+        @if (NoticeText is { Length: > 0 } notice)
+        {
+            <p class="notice" role="alert">@notice</p>
+        }
+
+        @if (_channel.IsJoined)
+        {
+            <p class="dice-hint">@Text.Dice.InviteHint</p>
+        }
+    </section>
+
+    <section class="dice-controls">
+        <div class="dice-rolls">
+            @foreach (RollPreset preset in MausritterRolls.All)
+            {
+                string id = preset.Id;
+
+                <div class="dice-roll dice-preset">
+                    <span class="dice-preset-name">@PresetName(preset)</span>
+
+                    @if (preset.Parameter is { } parameter)
+                    {
+                        <label class="dice-field dice-field-number">
+                            <span class="field-label">@ParameterName(parameter)</span>
+                            <input type="number"
+                                   min="@parameter.Minimum"
+                                   max="@parameter.Maximum"
+                                   value="@Parameter(preset)"
+                                   @onchange="@(args => OnParameterChanged(id, args))" />
+                        </label>
+                    }
+
+                    @if (preset.HasEdge)
+                    {
+                        <div class="dice-edge" role="group" aria-label="@Text.Dice.EdgeLabel">
+                            @foreach (int step in MausritterRolls.Edges)
+                            {
+                                <button type="button"
+                                        class="dice-edge-step @(Edge(preset) == step ? "is-on" : "")"
+                                        aria-pressed="@(Edge(preset) == step ? "true" : "false")"
+                                        @onclick="@(() => OnEdgeChanged(id, step))">
+                                    @EdgeName(preset, step)
+                                </button>
+                            }
+                        </div>
+                    }
+
+                    @* The dice are shown before they are rolled, so the controls above can be
+                       checked against what they will actually produce. *@
+                    <span class="dice-preview">@preset.Dice(Parameter(preset), Edge(preset)).Text</span>
+
+                    <button type="button" class="btn-ink" @onclick="@(() => RollPresetAsync(preset))">
+                        @PresetName(preset)
+                    </button>
+                </div>
+            }
+
+            <div class="dice-roll dice-freehand">
+                <label class="dice-field">
+                    <span class="field-label">@Text.Dice.NotationLabel</span>
+                    <input type="text"
+                           spellcheck="false"
+                           autocomplete="off"
+                           maxlength="@DiceNotation.MaximumLength"
+                           placeholder="@Text.Dice.NotationPlaceholder"
+                           value="@_notation"
+                           @onchange="OnNotationChanged"
+                           @onkeydown="OnNotationKey" />
+                </label>
+
+                <button type="button" class="btn-quiet" @onclick="RollNotationAsync">@Text.Dice.Roll</button>
+            </div>
+        </div>
+
+        <label class="dice-secret">
+            <input type="checkbox" checked="@_secret" @onchange="OnSecretChanged" />
+            <span>@Text.Dice.RollPrivately</span>
+        </label>
+
+        @if (_secret)
+        {
+            <p class="dice-hint">@Text.Dice.SecretHint</p>
+        }
+    </section>
+
+    <section class="dice-log">
+        <div class="dice-log-head">
+            <h2 class="dice-heading">@Text.Dice.RollsHeading</h2>
+
+            @if (_channel.Log.Entries.Count > 0)
+            {
+                <button type="button" class="btn-quiet" @onclick="ClearLog">@Text.Dice.ClearRolls</button>
+            }
+        </div>
+
+        @if (_channel.Log.Entries.Count == 0)
+        {
+            <p class="dice-empty">@Text.Dice.EmptyLog</p>
+        }
+        else
+        {
+            <ol class="dice-entries">
+                @foreach (RollEntry entry in _channel.Log.Entries)
+                {
+                    RollMessage roll = entry.Message;
+
+                    @* A private roll is a secret from the table, not from the person who made it.
+                       Only somebody else's private roll arrives hollow; this player's own keeps
+                       its dice. *@
+                    bool hidden = roll.Secret && !entry.IsMine;
+
+                    <li class="dice-entry @(entry.IsMine ? "dice-entry-mine" : "") @(roll.Secret ? "dice-entry-secret" : "")"
+                        @key="roll.Id">
+                        <span class="dice-who">@Who(roll)</span>
+
+                        @if (hidden)
+                        {
+                            <span class="dice-private">@Text.Dice.Privately</span>
+                        }
+                        else
+                        {
+                            @if (roll.Secret)
+                            {
+                                <span class="dice-private">@Text.Dice.PrivateMine</span>
+                            }
+
+                            <span class="dice-notation">@roll.Notation</span>
+
+                            <span class="dice-faces">
+                                @for (int index = 0; index < roll.Faces.Count; index++)
+                                {
+                                    bool kept = index >= roll.Kept.Count || roll.Kept[index];
+
+                                    <span class="die @(kept ? "" : "die-dropped")"
+                                          title="@(kept ? null : Text.Dice.Dropped)">@roll.Faces[index]</span>
+                                }
+                            </span>
+
+                            <span class="dice-total">@roll.Total</span>
+
+                            @if (Reading(roll.ReadingKey, roll.ReadingValue) is { Length: > 0 } reading)
+                            {
+                                <span class="dice-reading">@reading</span>
+                            }
+
+                            @foreach (RollReading note in Notes(roll))
+                            {
+                                <span class="dice-note">@Reading(note.Key, note.Value)</span>
+                            }
+
+                            <span class="dice-seed" title="@Text.Dice.SeedTitle">@SeedOf(roll)</span>
+                        }
+                    </li>
+                }
+            </ol>
+        }
+    </section>
+
+    <section class="dice-notes">
+        <p>@Text.Dice.EdgeHint</p>
+        <p>@Text.Dice.SpellHint</p>
+        <p>@Text.Dice.PrivacyHint</p>
+        <p>@Text.Dice.ReachHint</p>
+    </section>
+
+    <LicenceFooter ShowHouseRuleNote="false" />
+</div>
+
+@code {
+    private const string PlayerKey = "mausritter.dice.player";
+    private const string TableKey = "mausritter.dice.table";
+
+    [CascadingParameter]
+    private UiText Text { get; set; } = new();
+
+    private PartyChannel _channel = default!;
+
+    private readonly Dictionary<string, int> _parameters = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, int> _edges = new(StringComparer.Ordinal);
+
+    private string _player = "";
+    private string _code = "";
+    private string _notation = "";
+    private Notice _notice;
+    private bool _secret;
+    private bool _copied;
+
+    /// <summary>
+    /// What went wrong, as something to look up rather than something already said.
+    /// </summary>
+    /// <remarks>
+    /// The same rule the roll log follows, and for a second reason besides re-wording on a language
+    /// switch: a notice can be raised from <c>OnAfterRenderAsync</c>, which runs while the layout is
+    /// still cascading an empty <see cref="UiText"/>. Storing the sentence at that moment stores an
+    /// empty one, and the warning silently never appears.
+    /// </remarks>
+    private enum Notice
+    {
+        None,
+        NameNeeded,
+        TableBad,
+        NotationBad
+    }
+
+    private string NoticeText => _notice switch
+    {
+        Notice.NameNeeded => Text.Dice.NameNeeded,
+        Notice.TableBad => Text.Dice.TableBad,
+        Notice.NotationBad => Text.Dice.NotationBad,
+        _ => ""
+    };
+
+    protected override void OnInitialized()
+    {
+        _channel = new PartyChannel(Js, MausritterRolls.PartyAppId);
+        _channel.Changed += OnChannelChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        _player = await Browser.ReadStorageAsync(PlayerKey) ?? "";
+        _channel.Player = _player;
+
+        string invited = await Browser.GetQueryParameterAsync("t") ?? "";
+
+        if (invited.Length > 0)
+        {
+            _code = invited;
+            await JoinCode(invited);
+        }
+        else
+        {
+            _code = await Browser.ReadStorageAsync(TableKey) ?? "";
+        }
+
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Rolls arrive from JavaScript, which is not where Blazor expects to be told to redraw.
+    /// </summary>
+    private void OnChannelChanged() => _ = InvokeAsync(StateHasChanged);
+
+    private string StatusText => _channel.Status switch
+    {
+        PartyStatus.Joining => Text.Dice.StatusJoining,
+        PartyStatus.Searching => Text.Dice.StatusSearching,
+        PartyStatus.Open => Text.Dice.StatusOpen,
+        PartyStatus.Failed => Text.Dice.StatusFailed,
+        _ => Text.Dice.StatusAway
+    };
+
+    private string PeerText => _channel.Peers switch
+    {
+        0 => Text.Dice.PeersNone,
+        1 => Text.Dice.PeersOne,
+        _ => $"{_channel.Peers} {Text.Dice.PeersOther}"
+    };
+
+    /// <summary>This player, as the rest of the table sees them.</summary>
+    private string MyName => _player is { Length: > 0 } name ? name : Text.Dice.Anonymous;
+
+    /// <summary>
+    /// How many people are connected but have not said what they are called yet.
+    /// </summary>
+    /// <remarks>
+    /// A connection is made a moment before the hail crossing it arrives, and a peer on an older
+    /// build never sends one at all. Either way the count and the list would disagree, and saying
+    /// so is better than quietly showing a shorter table than the line above it claims.
+    /// </remarks>
+    private int Waiting => Math.Max(_channel.Peers - _channel.Roster.Count, 0);
+
+    /// <summary>What to call whoever rolled, when they did not say.</summary>
+    private string Who(RollMessage roll) =>
+        roll.Player is { Length: > 0 } name ? name : Text.Dice.Anonymous;
+
+    private string PresetName(RollPreset preset) =>
+        Text.Dice.Presets.TryGetValue(preset.Id, out string? name) ? name : preset.Id;
+
+    private string ParameterName(RollParameter parameter) =>
+        Text.Dice.Parameters.TryGetValue(parameter.Id, out string? name) ? name : parameter.Id;
+
+    private string EdgeName(RollPreset preset, int step) =>
+        Text.Dice.Edges.TryGetValue(MausritterRolls.EdgeKey(preset.Id, step), out string? name) ? name : "";
+
+    /// <summary>
+    /// What a reading key means, in the language showing now.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Every roll in the log carries a key and a number rather than a sentence, so switching
+    /// language re-words rolls that were made minutes ago instead of leaving them stranded in the
+    /// old one.
+    /// </para>
+    /// <para>
+    /// The number goes into a named slot rather than being appended, because where it belongs in
+    /// the sentence is a property of the language: "At or under 10" and "Auf 10 oder darunter" put
+    /// it in different places, and a reading that does not want it simply has no slot.
+    /// </para>
+    /// </remarks>
+    private string Reading(string? key, int value) =>
+        key is { Length: > 0 } && Text.Dice.Readings.TryGetValue(key, out string? said)
+            ? TextTemplate.Format(said, ("count", value.ToString(CultureInfo.InvariantCulture)))
+            : "";
+
+    private static string SeedOf(RollMessage roll) => SeedCodec.Encode(roll.Seed);
+
+    private int Parameter(RollPreset preset) =>
+        preset.Parameter is null
+            ? 0
+            : _parameters.TryGetValue(preset.Id, out int value) ? value : preset.Parameter.Default;
+
+    private void OnParameterChanged(string id, ChangeEventArgs args)
+    {
+        RollPreset preset = MausritterRolls.All.First(candidate => candidate.Id == id);
+
+        _parameters[id] = int.TryParse(args.Value as string, out int typed)
+            ? preset.Settle(typed)
+            : preset.Parameter?.Default ?? 0;
+    }
+
+    private int Edge(RollPreset preset) =>
+        _edges.TryGetValue(preset.Id, out int edge) ? edge : 0;
+
+    private void OnEdgeChanged(string id, int step) => _edges[id] = step;
+
+    private async Task OnPlayerChanged(ChangeEventArgs args)
+    {
+        _player = (args.Value as string ?? "").Trim();
+
+        if (_player.Length > RollMessage.MaximumNameLength)
+        {
+            _player = _player[..RollMessage.MaximumNameLength];
+        }
+
+        _notice = Notice.None;
+
+        await Browser.WriteStorageAsync(PlayerKey, _player);
+        await _channel.RenameAsync(_player);
+    }
+
+    private void OnCodeChanged(ChangeEventArgs args)
+    {
+        _code = args.Value as string ?? "";
+        _notice = Notice.None;
+    }
+
+    private void OnNotationChanged(ChangeEventArgs args) => _notation = args.Value as string ?? "";
+
+    private void OnSecretChanged(ChangeEventArgs args) => _secret = args.Value is true;
+
+    private async Task OnNotationKey(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            await RollNotationAsync();
+        }
+    }
+
+    private Task Start() => JoinCode(TableCode.Create());
+
+    private Task Join() => JoinCode(_code);
+
+    /// <summary>
+    /// Joins, then makes the address bar into the invitation.
+    /// </summary>
+    /// <remarks>
+    /// The link is the share mechanism, exactly as it is on the settlement page. Replacing the URL
+    /// rather than pushing it keeps the back button meaning what it meant before.
+    /// </remarks>
+    private async Task JoinCode(string code)
+    {
+        if (!TableCode.TryParse(code, out string parsed))
+        {
+            _notice = Notice.TableBad;
+            return;
+        }
+
+        if (_player.Length == 0)
+        {
+            _notice = Notice.NameNeeded;
+            return;
+        }
+
+        _notice = Notice.None;
+        _copied = false;
+        _code = parsed;
+
+        await Browser.WriteStorageAsync(TableKey, parsed);
+        await _channel.JoinAsync(parsed);
+        await Browser.ReplaceUrlAsync(Invite);
+    }
+
+    private async Task Leave()
+    {
+        await _channel.LeaveAsync();
+        await Browser.ReplaceUrlAsync($"{Navigation.BaseUri}dice");
+    }
+
+    private string Invite => $"{Navigation.BaseUri}dice?t={_channel.Code}";
+
+    private async Task CopyInvite() => _copied = await Browser.CopyTextAsync(Invite);
+
+    private async Task RollPresetAsync(RollPreset preset)
+    {
+        int value = Parameter(preset);
+        RollOutcome outcome = preset.Roll(value, Edge(preset));
+
+        await Announce(outcome, preset.Read(outcome, value), preset.Id);
+    }
+
+    private async Task RollNotationAsync()
+    {
+        if (!DiceNotation.TryParse(_notation, out DiceNotation notation))
+        {
+            _notice = Notice.NotationBad;
+            return;
+        }
+
+        _notice = Notice.None;
+        _notation = notation.Text;
+
+        await Announce(DiceRolls.Roll(notation), null, "");
+    }
+
+    /// <summary>
+    /// Works out what else a roll showed, from the dice rather than from what was said about them.
+    /// </summary>
+    /// <remarks>
+    /// The sender says only which preset they used. The usage marks and miscasts are read again
+    /// here, from faces that have already been checked, so a peer cannot announce a clean cast they
+    /// did not roll. The nastiest thing they can do is claim a preset, and the dice beside it will
+    /// disagree.
+    /// </remarks>
+    private static IReadOnlyList<RollReading> Notes(RollMessage roll)
+    {
+        RollPreset? preset =
+            MausritterRolls.All.FirstOrDefault(candidate => candidate.Id == roll.Preset);
+
+        if (preset?.Notes is null || roll.Faces.Count == 0)
+        {
+            return [];
+        }
+
+        // No parameter is passed, because nothing a note reports depends on one: the faces say it
+        // all, and taking the sender's number would be trusting the very thing being re-checked.
+        return preset.Note(roll.Faces, null);
+    }
+
+    private async Task Announce(RollOutcome outcome, RollReading? reading, string preset)
+    {
+        if (_player.Length == 0)
+        {
+            _notice = Notice.NameNeeded;
+            return;
+        }
+
+        await _channel.RollAsync(outcome, reading, _secret, preset);
+    }
+
+    /// <summary>Empties this screen's copy of the log, and nobody else's.</summary>
+    private void ClearLog() => _channel.Log.Clear();
+
+    public async ValueTask DisposeAsync()
+    {
+        _channel.Changed -= OnChannelChanged;
+
+        await _channel.DisposeAsync();
+    }
+}

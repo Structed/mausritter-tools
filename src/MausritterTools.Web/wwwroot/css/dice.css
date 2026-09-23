@@ -1,0 +1,341 @@
+/* Styling for the shared dice table.
+
+   Same ink-on-cream palette as the settlement generator, whose custom properties this relies on
+   being defined already — settlement.css is linked first and owns :root. */
+
+.dice-heading {
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0;
+}
+
+/* ---------- The table ---------- */
+
+.dice-table {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 2px;
+    padding: 0.9rem 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.dice-identity {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    align-items: flex-end;
+    margin-top: 0.75rem;
+}
+
+.dice-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.dice-field input {
+    border: 1px solid var(--rule);
+    background: #fff;
+    border-radius: 2px;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.92rem;
+    min-width: 10rem;
+}
+
+.dice-field-number input {
+    min-width: 4.5rem;
+    width: 4.5rem;
+}
+
+.dice-table .field-label,
+.dice-controls .field-label,
+.dice-present .field-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    font-weight: 700;
+}
+
+.dice-code {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin: 0;
+}
+
+.dice-code code {
+    font-size: 1.05rem;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    /* Selectable in one go: the code is meant to be read out or pasted. */
+    user-select: all;
+}
+
+.dice-status {
+    margin: 0.75rem 0 0;
+    font-size: 0.87rem;
+    color: var(--ink-soft);
+}
+
+.dice-status-open {
+    color: var(--ink);
+    font-weight: 700;
+}
+
+.dice-status-failed {
+    color: var(--accent);
+}
+
+.dice-present {
+    margin-top: 0.75rem;
+}
+
+.dice-roster {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding: 0;
+    margin: 0.25rem 0 0;
+}
+
+.dice-seat {
+    border: 1px solid var(--rule);
+    background: var(--paper-deep);
+    border-radius: 2px;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.87rem;
+}
+
+.dice-seat-mine {
+    border-color: var(--ink);
+}
+
+.dice-seat-waiting {
+    color: var(--ink-soft);
+    font-style: italic;
+}
+
+.dice-you {
+    color: var(--ink-soft);
+    font-size: 0.75rem;
+}
+
+.dice-hint {
+    margin: 0.75rem 0 0;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+}
+
+/* ---------- Rolling ---------- */
+
+.dice-controls {
+    margin-bottom: 1.5rem;
+}
+
+.dice-rolls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+/* Each way to roll is framed on its own. Separating them by a gap alone reads as one long row of
+   unrelated controls, and it stops being obvious which number box belongs to which button. */
+.dice-roll {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: flex-end;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    background: var(--paper);
+    padding: 0.6rem 0.75rem;
+}
+
+.dice-preset-name {
+    flex-basis: 100%;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    font-weight: 700;
+}
+
+.dice-preview {
+    font-size: 0.87rem;
+    color: var(--ink-soft);
+    padding-bottom: 0.35rem;
+    min-width: 4rem;
+}
+
+.dice-edge {
+    display: flex;
+    gap: 0;
+}
+
+.dice-edge-step {
+    border: 1px solid var(--rule);
+    background: #fff;
+    color: var(--ink-soft);
+    padding: 0.3rem 0.5rem;
+    font-size: 0.78rem;
+    cursor: pointer;
+}
+
+.dice-edge-step + .dice-edge-step {
+    border-left: none;
+}
+
+.dice-edge-step:first-child {
+    border-radius: 2px 0 0 2px;
+}
+
+.dice-edge-step:last-child {
+    border-radius: 0 2px 2px 0;
+}
+
+.dice-edge-step.is-on {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+    font-weight: 700;
+}
+
+.dice-freehand input {
+    min-width: 8rem;
+}
+
+.dice-secret {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+}
+
+/* ---------- The log ---------- */
+
+.dice-log-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.35rem;
+    margin-bottom: 0.5rem;
+}
+
+.dice-empty {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+}
+
+.dice-entries {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dice-entry {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--rule);
+}
+
+.dice-entry-mine {
+    /* A rule down the left rather than a background, so a long log does not become striped. */
+    border-left: 3px solid var(--ink);
+    padding-left: 0.5rem;
+}
+
+.dice-entry-secret {
+    border-left-color: var(--locked);
+}
+
+.dice-who {
+    font-weight: 700;
+}
+
+.dice-private {
+    color: var(--locked);
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+.dice-notation {
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+}
+
+.dice-faces {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+}
+
+.die {
+    display: inline-block;
+    min-width: 1.5rem;
+    text-align: center;
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    background: #fff;
+    font-size: 0.85rem;
+    padding: 0.05rem 0.2rem;
+}
+
+/* A dropped die is shown rather than hidden: watching the one you had to throw away is most of the
+   point of rolling three and keeping two. */
+.die-dropped {
+    border-color: var(--rule);
+    color: var(--ink-soft);
+    text-decoration: line-through;
+}
+
+.dice-total {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.dice-reading {
+    font-size: 0.87rem;
+}
+
+.dice-note {
+    border: 1px solid var(--rule);
+    background: var(--paper-deep);
+    border-radius: 2px;
+    padding: 0.05rem 0.4rem;
+    font-size: 0.78rem;
+}
+
+.dice-seed {
+    margin-left: auto;
+    color: var(--ink-soft);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    user-select: all;
+}
+
+.dice-notes {
+    margin-top: 1.5rem;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+}
+
+.dice-notes p {
+    margin-bottom: 0.5rem;
+}
+
+@media print {
+    .dice-table,
+    .dice-controls,
+    .dice-notes {
+        display: none;
+    }
+}

@@ -137,6 +137,20 @@ export async function rasteriseSvg(svgText, scale) {
     }
 }
 
+// Rewrites the address bar without navigating.
+//
+// replaceState rather than pushState: joining a dice table turns the URL into the invitation, and
+// that is a change of address rather than a change of page. Pushing it would make the back button
+// undo the join instead of leaving the site, which is not what pressing it means.
+export function replaceUrl(url) {
+    try {
+        window.history.replaceState(window.history.state, '', url);
+    } catch {
+        // A cross-origin or otherwise rejected URL is not worth breaking the page over; the table
+        // still works, it just cannot be shared by copying the address bar.
+    }
+}
+
 // The language the visitor's browser asks for, used only to choose a default they can override.
 export function browserLanguage() {
     return navigator.language || (navigator.languages && navigator.languages[0]) || '';
