@@ -43,6 +43,8 @@ public sealed record UiText
 
     public SettlementText Settlement { get => field ?? new(); init; } = new();
 
+    public DiceText Dice { get => field ?? new(); init; } = new();
+
     public FieldRowText FieldRow { get => field ?? new(); init; } = new();
 
     public ShopText Shop { get => field ?? new(); init; } = new();
@@ -81,6 +83,8 @@ public sealed record NavText
 
     public string Settlement { get => field ?? ""; init; } = "";
 
+    public string Dice { get => field ?? ""; init; } = "";
+
     public string About { get => field ?? ""; init; } = "";
 
     public string LanguageLabel { get => field ?? ""; init; } = "";
@@ -98,6 +102,8 @@ public sealed record HomeText
 
     public string SettlementItemHtml { get => field ?? ""; init; } = "";
 
+    public string DiceItemHtml { get => field ?? ""; init; } = "";
+
     public string AboutLinkText { get => field ?? ""; init; } = "";
 }
 
@@ -114,6 +120,8 @@ public sealed record AboutText
     public AboutSection Translation { get => field ?? new(); init; } = new();
 
     public AboutSection ItemCards { get => field ?? new(); init; } = new();
+
+    public AboutSection DiceTable { get => field ?? new(); init; } = new();
 
     public AboutSection Source { get => field ?? new(); init; } = new();
 
@@ -371,6 +379,164 @@ public sealed record StatusText
 
     /// <summary>Shown after switching language, since the sheet is rebuilt in the new one.</summary>
     public string LanguageChanged { get => field ?? ""; init; } = "";
+}
+
+/// <summary>
+/// Everything the shared dice table says.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Mostly fixed prose, which is typed, plus four dictionaries where the key is not known here:
+/// which presets exist, what each asks for, how each reading is worded and what the steps of the
+/// edge control are called. Those keys are minted by <c>MausritterRolls</c>, so a typed property
+/// for each would have to be kept in step with it by hand.
+/// </para>
+/// <para>
+/// The keys of all four are ids, never translated. A missing one is not an exception: it renders as
+/// a blank space mid-sentence, which is exactly the sort of fault that survives review, so
+/// <c>DiceWordingTests</c> walks every id in every language.
+/// </para>
+/// </remarks>
+public sealed record DiceText
+{
+    public string PageTitle { get => field ?? ""; init; } = "";
+
+    public string Heading { get => field ?? ""; init; } = "";
+
+    public string LeadHtml { get => field ?? ""; init; } = "";
+
+    public string TableHeading { get => field ?? ""; init; } = "";
+
+    public string PlayerLabel { get => field ?? ""; init; } = "";
+
+    public string PlayerPlaceholder { get => field ?? ""; init; } = "";
+
+    public string TableLabel { get => field ?? ""; init; } = "";
+
+    /// <summary>
+    /// The shape of a table code, shown in the empty box.
+    /// </summary>
+    /// <remarks>
+    /// Not a translatable sentence but a sample of the alphabet the code is drawn from, so it stays
+    /// the same in every language. Translating it would advertise letters a code never contains.
+    /// </remarks>
+    public string TablePlaceholder { get => field ?? ""; init; } = "";
+
+    public string StartTable { get => field ?? ""; init; } = "";
+
+    public string JoinTable { get => field ?? ""; init; } = "";
+
+    public string LeaveTable { get => field ?? ""; init; } = "";
+
+    public string CopyInvite { get => field ?? ""; init; } = "";
+
+    public string Copied { get => field ?? ""; init; } = "";
+
+    public string StatusAway { get => field ?? ""; init; } = "";
+
+    public string StatusJoining { get => field ?? ""; init; } = "";
+
+    public string StatusSearching { get => field ?? ""; init; } = "";
+
+    public string StatusOpen { get => field ?? ""; init; } = "";
+
+    public string StatusFailed { get => field ?? ""; init; } = "";
+
+    public string PeersNone { get => field ?? ""; init; } = "";
+
+    public string PeersOne { get => field ?? ""; init; } = "";
+
+    /// <summary>The tail of "3 other players", which the count is put in front of.</summary>
+    public string PeersOther { get => field ?? ""; init; } = "";
+
+    public string WhoHeading { get => field ?? ""; init; } = "";
+
+    public string You { get => field ?? ""; init; } = "";
+
+    public string WhoWaiting { get => field ?? ""; init; } = "";
+
+    /// <summary>What to call somebody who rolled without giving a name.</summary>
+    public string Anonymous { get => field ?? ""; init; } = "";
+
+    public string NotationLabel { get => field ?? ""; init; } = "";
+
+    /// <summary>A sample roll. Notation, so it is not translated.</summary>
+    public string NotationPlaceholder { get => field ?? ""; init; } = "";
+
+    public string Roll { get => field ?? ""; init; } = "";
+
+    /// <summary>Names the edge row for a screen reader; the steps name themselves.</summary>
+    public string EdgeLabel { get => field ?? ""; init; } = "";
+
+    public string RollPrivately { get => field ?? ""; init; } = "";
+
+    public string RollsHeading { get => field ?? ""; init; } = "";
+
+    public string ClearRolls { get => field ?? ""; init; } = "";
+
+    public string EmptyLog { get => field ?? ""; init; } = "";
+
+    /// <summary>Shown in place of somebody else's private dice.</summary>
+    public string Privately { get => field ?? ""; init; } = "";
+
+    /// <summary>Shown beside this player's own private dice, which they can still see.</summary>
+    public string PrivateMine { get => field ?? ""; init; } = "";
+
+    public string Dropped { get => field ?? ""; init; } = "";
+
+    public string SeedTitle { get => field ?? ""; init; } = "";
+
+    public string NameNeeded { get => field ?? ""; init; } = "";
+
+    public string NotationBad { get => field ?? ""; init; } = "";
+
+    public string TableBad { get => field ?? ""; init; } = "";
+
+    public string InviteHint { get => field ?? ""; init; } = "";
+
+    public string SecretHint { get => field ?? ""; init; } = "";
+
+    public string EdgeHint { get => field ?? ""; init; } = "";
+
+    public string SpellHint { get => field ?? ""; init; } = "";
+
+    public string PrivacyHint { get => field ?? ""; init; } = "";
+
+    public string ReachHint { get => field ?? ""; init; } = "";
+
+    /// <summary>The label on each preset's roll button, keyed by preset id.</summary>
+    public IReadOnlyDictionary<string, string> Presets
+    {
+        get => field ?? new Dictionary<string, string>();
+        init;
+    }
+
+    /// <summary>The label over each preset's number box, keyed by parameter id.</summary>
+    public IReadOnlyDictionary<string, string> Parameters
+    {
+        get => field ?? new Dictionary<string, string>();
+        init;
+    }
+
+    /// <summary>What each reading and note means, keyed by the key the roll carries.</summary>
+    public IReadOnlyDictionary<string, string> Readings
+    {
+        get => field ?? new Dictionary<string, string>();
+        init;
+    }
+
+    /// <summary>
+    /// The three steps of the edge control, keyed per preset.
+    /// </summary>
+    /// <remarks>
+    /// Per preset because Mausritter uses two different pairs of words for the same idea: a save is
+    /// made with advantage or disadvantage, an attack is enhanced or impaired.
+    /// </remarks>
+    public IReadOnlyDictionary<string, string> Edges
+    {
+        get => field ?? new Dictionary<string, string>();
+        init;
+    }
 }
 
 public sealed record FieldRowText

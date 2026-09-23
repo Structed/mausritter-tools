@@ -118,6 +118,26 @@ public sealed class BrowserInterop(IJSRuntime jsRuntime) : IAsyncDisposable
         }
     }
 
+    /// <summary>
+    /// Rewrites the address bar without navigating.
+    /// </summary>
+    /// <remarks>
+    /// Replaces rather than pushes, so the back button still leaves the page rather than undoing
+    /// the join it appears to have nothing to do with.
+    /// </remarks>
+    public async Task ReplaceUrlAsync(string url)
+    {
+        try
+        {
+            IJSObjectReference module = await ModuleAsync();
+            await module.InvokeVoidAsync("replaceUrl", url);
+        }
+        catch (JSException)
+        {
+            // An address bar that has stopped agreeing is not worth breaking the page over.
+        }
+    }
+
     /// <summary>The language the browser asks for, used only as a first guess.</summary>
     public async Task<string?> GetBrowserLanguageAsync()
     {

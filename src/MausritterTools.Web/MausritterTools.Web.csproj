@@ -10,6 +10,11 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.11" PrivateAssets="all" />
+
+    <!-- Brings the party channel and, with it, the vendored Trystero bundle served from
+         _content/Structed.Inkwell.Party.Blazor/js/. The dice table's peer connections are the
+         engine's problem, not this repository's. -->
+    <PackageReference Include="Structed.Inkwell.Party.Blazor" Version="0.2.0" />
   </ItemGroup>
 
   <ItemGroup>

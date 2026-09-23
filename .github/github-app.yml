@@ -8,8 +8,10 @@ instructions: |
   The code is in three layers, split by whether it knows what Mausritter is. Structed.Inkwell
   is the game-agnostic engine: randomness, dice, data loading and translation
   overlays, name assembly, map generation, SVG rendering, the export envelope. It must never
-  learn about settlements. Structed.Inkwell.FantasiaArchive is
-  interop with someone else's app, kept separate so a tool can opt out. Both are NuGet
+  learn about settlements. Structed.Inkwell.Party.Blazor is the browser-to-browser transport
+  the dice table runs on, referenced by Web rather than Core because Core must stay testable
+  without a browser. Structed.Inkwell.FantasiaArchive is
+  interop with someone else's app, kept separate so a tool can opt out. All are NuGet
   packages built from github.com/structed/inkwell, not code in this repository: fix the
   engine there and release a version, never by bending it around a Mausritter problem.
   MausritterTools.Core
@@ -29,7 +31,7 @@ instructions: |
 
   The app ships in English and German. English is canonical; a translation is an overlay
   deep-merged onto the canonical JSON before it is deserialised, so generators never know
-  about languages. Six things are easy to break by accident:
+  about languages. Seven things are easy to break by accident:
 
   - Mausritter has no shops or services table, so that whole layer is an unofficial house
     rule. Keep it labelled as such in the UI, and keep each service's srdBasis honest about
@@ -57,6 +59,13 @@ instructions: |
   - Anything whose order or numbering the player can see must be keyed off ids, not names:
     a shop's position is its map number and part of its lock's field path, so sorting it by
     a translated name would renumber the map and move every lock on a language switch.
+  - The dice table's rules live in exactly one file, Core/Dice/MausritterRolls.cs, and
+    EngineBoundaryTests keeps it that way. Its PartyAppId is load-bearing in the same way a
+    field path is: two browsers only meet if their app ids match, so changing it orphans
+    every table code already written down, silently. Mausritter has no crit, no morale roll
+    and no reaction roll; adding one would be an unlabelled house rule. WireFormatTests pins
+    the app id and the exact bytes of a roll, which are the contract between two copies of
+    this site loaded weeks apart.
 
   The CC BY 4.0 attribution and the Mausritter Third Party Licence notice must stay visible
   on the site itself, not only in the repository. Do not use the Mausritter or Losing Games
