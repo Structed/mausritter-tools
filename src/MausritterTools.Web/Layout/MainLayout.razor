@@ -11,24 +11,22 @@
    every one of them changes language at the same moment. *@
 
 <CascadingValue Value="_text">
-    <div class="page">
-        <div class="sidebar">
-            <NavMenu />
-        </div>
+    @* A masthead puts the whole of the navigation ahead of the content, so there has to be a way
+       past it. *@
+    <a class="skip-link" href="#content">@_text.Nav.SkipToContent</a>
 
-        <main>
-            <div class="top-row px-4">
-                <a href="https://github.com/Structed/mausritter-tools" target="_blank" rel="noopener">GitHub</a>
-            </div>
+    <SiteHeader />
 
-            <article class="content px-4">
-                @Body
+    <main id="content" class="content">
+        @Body
+    </main>
 
-                @* The licence notices are chrome, not page content: rendering them here is what
-                   makes "every page carries them" true of pages nobody has written yet. *@
-                <LicenceFooter />
-            </article>
-        </main>
+    @* The licence notices are chrome, not page content: rendering them here is what makes "every
+       page carries them" true of pages nobody has written yet. Kept a sibling of <main> rather
+       than a child so it stays a contentinfo landmark, which is how somebody looking for the
+       licence finds it. *@
+    <div class="site-footer-row">
+        <LicenceFooter />
     </div>
 </CascadingValue>
 

@@ -496,8 +496,6 @@
 .site-footer {
     margin-top: 3rem;
     padding: 1rem 0 2rem;
-    /* Rendered by the layout rather than inside .settlement-tool, so it carries its own measure. */
-    max-width: 62rem;
     border-top: 1px solid var(--rule);
     font-size: 0.78rem;
     color: var(--ink-soft);
@@ -516,20 +514,21 @@
     }
 
     /* The app chrome is navigation, not content. */
-    .sidebar,
-    .top-row,
+    .site-header,
+    .skip-link,
     .generator-bar,
     .field-actions,
     .no-print {
         display: none !important;
     }
 
-    html, body, .page, main, .content {
+    html, body, main, .content, .site-footer-row {
         background: #fff !important;
         margin: 0 !important;
         padding: 0 !important;
         display: block !important;
         width: auto !important;
+        max-width: none !important;
     }
 
     .settlement-tool {

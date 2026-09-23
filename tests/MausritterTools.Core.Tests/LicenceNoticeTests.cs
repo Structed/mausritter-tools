@@ -105,12 +105,17 @@ public sealed class LicenceNoticeTests
     [Fact]
     public void PrintingASettlementKeepsTheNotices()
     {
-        string css = File.ReadAllText(
-            Path.Combine(WebRoot, "wwwroot", "css", "settlement.css"));
-        int print = css.IndexOf("@media print", StringComparison.Ordinal);
+        string printBlock = PrintBlock(File.ReadAllText(
+            Path.Combine(WebRoot, "wwwroot", "css", "settlement.css")));
 
-        Assert.True(print >= 0, "settlement.css no longer has a print block.");
-        Assert.DoesNotContain(".site-footer", css[print..], StringComparison.Ordinal);
+        // Every selector printing hides, so that neither the footer nor the row it sits in can
+        // quietly join the chrome that a printed settlement drops.
+        string[] hidden = [.. Hides.Matches(printBlock)
+            .SelectMany(rule => rule.Groups[1].Value.Split(','))
+            .Select(selector => selector.Trim())];
+
+        Assert.DoesNotContain(".site-footer", hidden);
+        Assert.DoesNotContain(".site-footer-row", hidden);
         Assert.DoesNotContain(
             "no-print",
             File.ReadAllText(Path.Combine(WebRoot, "Components", "LicenceFooter.razor")),
@@ -118,6 +123,37 @@ public sealed class LicenceNoticeTests
     }
 
     private static readonly Regex Renders = new(@"<LicenceFooter\b", RegexOptions.Compiled);
+
+    /// <summary>A rule that takes something off the printed page, and the selectors it takes.</summary>
+    private static readonly Regex Hides =
+        new(@"([^{}]+)\{[^{}]*display:\s*none[^{}]*\}", RegexOptions.Compiled);
+
+    /// <summary>The body of the <c>@media print</c> block, matched brace for brace.</summary>
+    private static string PrintBlock(string css)
+    {
+        int start = css.IndexOf("@media print", StringComparison.Ordinal);
+        Assert.True(start >= 0, "settlement.css no longer has a print block.");
+
+        int open = css.IndexOf('{', start);
+        int depth = 0;
+
+        for (int i = open; i < css.Length; i++)
+        {
+            depth += css[i] switch { '{' => 1, '}' => -1, _ => 0 };
+
+            if (depth == 0)
+            {
+                // Comments come out, so that a selector explained by one above it is still read as
+                // the first selector in its list rather than as part of the prose.
+                return Comments.Replace(css[(open + 1)..i], "");
+            }
+        }
+
+        throw new InvalidOperationException("The print block in settlement.css is not closed.");
+    }
+
+    private static readonly Regex Comments =
+        new(@"/\*.*?\*/", RegexOptions.Compiled | RegexOptions.Singleline);
 
     private static readonly Regex Routes =
         new(@"^@page\s", RegexOptions.Compiled | RegexOptions.Multiline);

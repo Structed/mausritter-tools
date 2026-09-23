@@ -1,0 +1,184 @@
+/* The masthead.
+
+   Tokens come from the :root block in wwwroot/css/settlement.css, which dice.css already borrows
+   from: ink on paper, 2px rules, 2px corners. Nothing here introduces a colour of its own. */
+
+.site-header {
+    background: var(--paper);
+    border-bottom: 3px solid var(--ink);
+    padding: 0.8rem 1.5rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Held to the same measure as .settlement-tool so the wordmark lines up with the page heading
+   underneath it instead of drifting off to the edge of the viewport. */
+.header-inner {
+    max-width: 62rem;
+    margin: 0 auto;
+}
+
+.header-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem 1.25rem;
+    margin-bottom: 0.7rem;
+}
+
+/* ---------- Brand ---------- */
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: var(--ink);
+}
+
+.brand-mark {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    flex: none;
+}
+
+.brand-name {
+    font-family: 'Texturina', Georgia, 'Times New Roman', serif;
+    font-weight: 800;
+    font-size: 1.45rem;
+    line-height: 1;
+}
+
+.brand:hover .brand-name,
+.brand:focus-visible .brand-name {
+    color: var(--accent);
+}
+
+.brand:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+/* ---------- Language and source ---------- */
+
+.header-utility {
+    margin-left: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 1rem;
+}
+
+.language {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.language > span,
+.source-link {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    color: var(--ink-soft);
+}
+
+.language select {
+    border: 1px solid var(--rule);
+    background: #fff;
+    border-radius: 2px;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.85rem;
+    font-family: inherit;
+    color: var(--ink);
+}
+
+.language select:hover {
+    border-color: var(--ink);
+}
+
+.source-link {
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1px;
+}
+
+.source-link:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+/* ---------- Tabs ---------- */
+
+/* Pulled down over the header's ink rule so the active tab can break it, the way a tab on a folder
+   breaks the edge of the folder. */
+.tab-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-bottom: -3px;
+    position: relative;
+}
+
+.tab-row ::deep .tab {
+    display: inline-block;
+    padding: 0.45rem 0.9rem calc(0.45rem + 3px);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--ink-soft);
+    text-decoration: none;
+    background: transparent;
+    border: 2px solid transparent;
+    border-bottom: none;
+    border-radius: 2px 2px 0 0;
+}
+
+.tab-row ::deep .tab:hover {
+    color: var(--ink);
+    background: var(--paper-deep);
+}
+
+/* The active tab is a piece of the same paper as the band, so its fill covers the rule beneath it
+   and the page reads as continuing up into the tab. */
+.tab-row ::deep .tab.active {
+    color: var(--ink);
+    background: var(--paper);
+    border-color: var(--ink);
+    border-top-color: var(--accent);
+}
+
+.tab-row ::deep .tab.active:hover {
+    background: var(--paper);
+}
+
+.tab-row ::deep .tab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+}
+
+/* ---------- Narrow screens ---------- */
+
+/* No disclosure button: four destinations wrap onto a second line more cheaply than a menu that
+   has to be opened. The language and source links drop below the wordmark. */
+@media (max-width: 640.98px) {
+    .site-header {
+        padding: 0.7rem 1rem 0;
+        position: static;
+    }
+
+    .header-utility {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .brand-name {
+        font-size: 1.25rem;
+    }
+}

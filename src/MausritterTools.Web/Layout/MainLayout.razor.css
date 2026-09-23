@@ -1,77 +1,55 @@
-.page {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
+/* The shell is now a single column: masthead, then page. The 250px the template spent on a sidebar
+   goes back to the shop grid, the map and the item cards, which are the widest things on the
+   site. */
 
+/* Held to the same measure as the masthead's inner row and .settlement-tool, so the page heading
+   sits directly under the wordmark. */
 main {
-    flex: 1;
+    display: block;
+    width: 100%;
+    max-width: calc(62rem + 3rem);
+    margin: 0 auto;
+    padding: 1.6rem 1.5rem 0;
 }
 
-.sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+/* The licence footer sits outside <main> so it keeps its contentinfo landmark, which costs it the
+   measure and gutter <main> would have lent it. Same numbers, so the notices line up with the page
+   above them and with the wordmark above that. */
+.site-footer-row {
+    width: 100%;
+    max-width: calc(62rem + 3rem);
+    margin: 0 auto;
+    padding: 0 1.5rem;
 }
 
-.top-row {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
-    justify-content: flex-end;
-    height: 3.5rem;
-    display: flex;
-    align-items: center;
+/* Visible only once it has focus, which is the only time it is of use to anyone. */
+.skip-link {
+    position: absolute;
+    left: -100vw;
+    top: 0;
+    z-index: 20;
+    background: var(--paper);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    border-radius: 0 0 2px 0;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    text-decoration: none;
 }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
-
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
-
-    .top-row ::deep a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.skip-link:focus {
+    left: 0;
+}
 
 @media (max-width: 640.98px) {
-    .top-row {
-        justify-content: space-between;
+    main {
+        padding: 1.2rem 1rem 0;
     }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        margin-left: 0;
-    }
-}
-
-@media (min-width: 641px) {
-    .page {
-        flex-direction: row;
-    }
-
-    .sidebar {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
-    }
-
-    .top-row {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-    }
-
-    .top-row.auth ::deep a:first-child {
-        flex: 1;
-        text-align: right;
-        width: 0;
-    }
-
-    .top-row, article {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
+    .site-footer-row {
+        padding: 0 1rem;
     }
 }
