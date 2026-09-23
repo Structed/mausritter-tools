@@ -481,6 +481,8 @@ are set in Texturina and Open Sans, both under the
 [SIL Open Font License 1.1](https://openfontlicense.org/); each family's `OFL.txt` ships alongside
 it in `src/MausritterTools.Web/wwwroot/fonts/`.
 
-Both notices are also shown in the site footer, because the Third Party Licence requires its text to
-appear on the website where the work is promoted, not only in the repository. The Mausritter and
-Losing Games logos are deliberately not used anywhere in this project.
+Both notices are shown in the site footer, which `MainLayout` renders once for every page, because
+the Third Party Licence requires its text to appear on the website where the work is promoted, not
+only in the repository. The footer also carries the house-rule note and, in a translation, the
+notice declaring it as one. The Mausritter and Losing Games logos are deliberately not used anywhere
+in this project.

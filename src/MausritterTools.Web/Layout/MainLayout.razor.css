@@ -12,6 +12,16 @@ main {
     padding: 1.6rem 1.5rem 0;
 }
 
+/* The licence footer sits outside <main> so it keeps its contentinfo landmark, which costs it the
+   measure and gutter <main> would have lent it. Same numbers, so the notices line up with the page
+   above them and with the wordmark above that. */
+.site-footer-row {
+    width: 100%;
+    max-width: calc(62rem + 3rem);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
 /* Visible only once it has focus, which is the only time it is of use to anyone. */
 .skip-link {
     position: absolute;
@@ -37,5 +47,9 @@ main {
 @media (max-width: 640.98px) {
     main {
         padding: 1.2rem 1rem 0;
+    }
+
+    .site-footer-row {
+        padding: 0 1rem;
     }
 }

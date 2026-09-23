@@ -1,17 +1,17 @@
 @using MausritterTools.Core.Data
 
 @* Both licence notices. The Mausritter Third Party Licence requires its text to appear on the
-   website where the work is promoted, not only inside the repository. *@
+   website where the work is promoted, not only inside the repository.
+
+   Rendered once by MainLayout, so there is no per-page switch: the house-rule note is a statement
+   about this tool rather than about one of its pages, and the alternative is a page that quietly
+   ships without a notice it needed. *@
 
 <footer class="site-footer">
     <p>@((MarkupString)Text.Licence.BasedOnHtml)</p>
     <p>@((MarkupString)Text.Licence.IndependentHtml)</p>
     <p>@((MarkupString)Text.Licence.CopyrightHtml)</p>
-
-    @if (ShowHouseRuleNote)
-    {
-        <p>@Text.Licence.HouseRuleNote</p>
-    }
+    <p>@Text.Licence.HouseRuleNote</p>
 
     @* Present only in a translation: CC BY 4.0 requires a modification to be declared, and a
        translation is one. *@
@@ -24,7 +24,4 @@
 @code {
     [CascadingParameter]
     private UiText Text { get; set; } = new();
-
-    [Parameter]
-    public bool ShowHouseRuleNote { get; set; } = true;
 }
