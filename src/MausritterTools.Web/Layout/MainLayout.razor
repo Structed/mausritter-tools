@@ -1,5 +1,6 @@
 @inherits LayoutComponentBase
 @using MausritterTools.Core.Data
+@using MausritterTools.Web.Components
 @using MausritterTools.Web.Services
 @using Structed.Inkwell.Data
 @implements IDisposable
@@ -22,6 +23,10 @@
 
             <article class="content px-4">
                 @Body
+
+                @* The licence notices are chrome, not page content: rendering them here is what
+                   makes "every page carries them" true of pages nobody has written yet. *@
+                <LicenceFooter />
             </article>
         </main>
     </div>

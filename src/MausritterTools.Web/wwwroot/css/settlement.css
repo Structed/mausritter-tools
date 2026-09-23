@@ -496,6 +496,8 @@
 .site-footer {
     margin-top: 3rem;
     padding: 1rem 0 2rem;
+    /* Rendered by the layout rather than inside .settlement-tool, so it carries its own measure. */
+    max-width: 62rem;
     border-top: 1px solid var(--rule);
     font-size: 0.78rem;
     color: var(--ink-soft);
