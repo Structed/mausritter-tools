@@ -1,0 +1,100 @@
+@using MausritterTools.Core.Data
+@using MausritterTools.Web.Services
+@using Structed.Inkwell.Data
+@implements IDisposable
+@inject LocaleState Languages
+@inject NavigationManager Navigation
+
+@* The masthead. It is a band of paper with the tools written on tabs along its lower edge, so the
+   chrome reads as the same object as the sheet below it rather than as an application frame.
+
+   The emblem is this site's own mouse mark, served from favicon.svg. No Mausritter or Losing Games
+   logo appears anywhere: the Third Party Licence forbids it. *@
+
+<header class="site-header">
+    <div class="header-inner">
+        <div class="header-row">
+            <a class="brand" href="">
+                <img class="brand-mark" src="favicon.svg" alt="" aria-hidden="true" width="32" height="32" />
+                <span class="brand-name">@Text.Nav.Brand</span>
+            </a>
+
+            <div class="header-utility">
+                @* Choosing a language is a plain select rather than a menu, because it is a
+                   two-item choice and a select is the control a screen reader already knows. *@
+                <label class="language">
+                    <span>@Text.Nav.LanguageLabel</span>
+                    <select @onchange="OnLanguageChanged">
+                        @foreach (Locale option in MausritterLocales.All)
+                        {
+                            <option value="@option.Code" selected="@(option.Code == Languages.Current.Code)">
+                                @option.NativeName
+                            </option>
+                        }
+                    </select>
+                </label>
+
+                <a class="source-link"
+                   href="https://github.com/Structed/mausritter-tools"
+                   target="_blank"
+                   rel="noopener">GitHub</a>
+            </div>
+        </div>
+
+        <nav class="tab-row" aria-label="@Text.Nav.MenuTitle">
+            <NavLink class="tab" href="" Match="NavLinkMatch.All" aria-current="@Current("")">
+                @Text.Nav.Home
+            </NavLink>
+            <NavLink class="tab" href="settlement" aria-current="@Current("settlement")">
+                @Text.Nav.Settlement
+            </NavLink>
+            <NavLink class="tab" href="dice" aria-current="@Current("dice")">
+                @Text.Nav.Dice
+            </NavLink>
+            <NavLink class="tab" href="about" aria-current="@Current("about")">
+                @Text.Nav.About
+            </NavLink>
+        </nav>
+    </div>
+</header>
+
+@code {
+    [CascadingParameter]
+    private UiText Text { get; set; } = new();
+
+    private string _path = "";
+
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += OnLocationChanged;
+        ReadPath();
+    }
+
+    /// <summary>
+    /// NavLink only toggles a CSS class, which tells a mouse where it is but tells assistive
+    /// technology nothing, so the current page is marked here as well.
+    /// </summary>
+    private string? Current(string href) =>
+        string.Equals(_path, href, StringComparison.OrdinalIgnoreCase) ? "page" : null;
+
+    private void ReadPath()
+    {
+        string relative = Navigation.ToBaseRelativePath(Navigation.Uri);
+
+        // A settlement is shared as a seeded query string, and the fragment is how the skip link
+        // moves; neither changes which tab the reader is standing on.
+        int cut = relative.IndexOfAny(['?', '#']);
+        _path = (cut < 0 ? relative : relative[..cut]).Trim('/');
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs args)
+    {
+        ReadPath();
+        StateHasChanged();
+    }
+
+    private Task OnLanguageChanged(ChangeEventArgs args) =>
+        Languages.SetAsync(MausritterLocales.FromCode(args.Value?.ToString()));
+
+    public void Dispose() => Navigation.LocationChanged -= OnLocationChanged;
+}

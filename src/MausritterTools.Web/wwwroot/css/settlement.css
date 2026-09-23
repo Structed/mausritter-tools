@@ -514,20 +514,21 @@
     }
 
     /* The app chrome is navigation, not content. */
-    .sidebar,
-    .top-row,
+    .site-header,
+    .skip-link,
     .generator-bar,
     .field-actions,
     .no-print {
         display: none !important;
     }
 
-    html, body, .page, main, .content {
+    html, body, main, .content {
         background: #fff !important;
         margin: 0 !important;
         padding: 0 !important;
         display: block !important;
         width: auto !important;
+        max-width: none !important;
     }
 
     .settlement-tool {

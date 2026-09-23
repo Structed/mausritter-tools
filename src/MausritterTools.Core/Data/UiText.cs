@@ -77,6 +77,7 @@ public sealed record NavText
 {
     public string Brand { get => field ?? ""; init; } = "";
 
+    /// <summary>Names the navigation landmark for assistive technology.</summary>
     public string MenuTitle { get => field ?? ""; init; } = "";
 
     public string Home { get => field ?? ""; init; } = "";
@@ -88,6 +89,9 @@ public sealed record NavText
     public string About { get => field ?? ""; init; } = "";
 
     public string LanguageLabel { get => field ?? ""; init; } = "";
+
+    /// <summary>Label of the link that jumps past the masthead to the page content.</summary>
+    public string SkipToContent { get => field ?? ""; init; } = "";
 }
 
 public sealed record HomeText
