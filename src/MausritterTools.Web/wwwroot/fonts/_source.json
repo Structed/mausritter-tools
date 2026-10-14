@@ -3,7 +3,7 @@
     "describes": "Web fonts for the item cards",
     "generatedBy": "tools/Import-CardFonts.ps1",
     "stylesheet": "css/card-fonts.css",
-    "subset": "latin",
+    "subset": "latin, latin-ext",
     "warning": "Imported files. Do not edit by hand; re-run the importer instead."
   },
   "families": [

@@ -1,0 +1,299 @@
+{
+  "_source": {
+    "describes": "Tabele mysich osad",
+    "work": "Mausritter System Reference Document",
+    "version": "2.3.1",
+    "url": "https://mausritter.com/srd/",
+    "sourceFiles": [
+      "22-hexcrawl-toolbox.md"
+    ],
+    "licence": "CC BY 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "Ten utwór opiera się na Mausritter (https://mausritter.com), grze Losing Games i Isaaca Williamsa, i jest udostępniany na licencji Creative Commons Uznanie autorstwa 4.0 Międzynarodowe (CC BY 4.0).",
+    "generatedBy": "tools/Import-SrdTables.ps1",
+    "warning": "Ręcznie utrzymywane tłumaczenie. Zachowaj kolejność wierszy i identyfikatory z oryginału.",
+    "translationNote": "Polskie brzmienie tabel osad na podstawie oficjalnego polskiego wydania Mausritter, s. 28–29. Nazwy gospód odmieniono na potrzeby generatora. Integracja z narzędziem jest nieoficjalna."
+  },
+  "sizeRoll": "2d6, use the lowest value",
+  "sizes": [
+    {
+      "roll": 1,
+      "sizeValue": 1,
+      "name": "Gospodarstwo",
+      "population": "1–3 rodziny",
+      "hasTavern": false,
+      "featureCount": 1,
+      "industryCount": 1
+    },
+    {
+      "roll": 2,
+      "sizeValue": 2,
+      "name": "Przysiółek",
+      "population": "3–5 rodzin",
+      "hasTavern": false,
+      "featureCount": 1,
+      "industryCount": 1
+    },
+    {
+      "roll": 3,
+      "sizeValue": 3,
+      "name": "Wioska",
+      "population": "50–150 myszy",
+      "hasTavern": true,
+      "featureCount": 1,
+      "industryCount": 1
+    },
+    {
+      "roll": 4,
+      "sizeValue": 4,
+      "name": "Duża wieś",
+      "population": "150–300 myszy",
+      "hasTavern": true,
+      "featureCount": 1,
+      "industryCount": 1
+    },
+    {
+      "roll": 5,
+      "sizeValue": 5,
+      "name": "Małe miasto",
+      "population": "300–1000 myszy",
+      "hasTavern": true,
+      "featureCount": 1,
+      "industryCount": 2
+    },
+    {
+      "roll": 6,
+      "sizeValue": 6,
+      "name": "Duże miasto",
+      "population": "1000+ myszy",
+      "hasTavern": true,
+      "featureCount": 2,
+      "industryCount": 2
+    }
+  ],
+  "governanceRoll": "k6 + rozmiar osady",
+  "governance": [
+    {
+      "rollMin": 2,
+      "rollMax": 3,
+      "text": "Kierowana przez starszych wioski"
+    },
+    {
+      "rollMin": 4,
+      "rollMax": 5,
+      "text": "Administrowana przez rycerza lub pomniejszego lorda"
+    },
+    {
+      "rollMin": 6,
+      "rollMax": 7,
+      "text": "Zarządzana przez władze cechu"
+    },
+    {
+      "rollMin": 8,
+      "rollMax": 9,
+      "text": "Wolna osada rządzona przez rajców"
+    },
+    {
+      "rollMin": 10,
+      "rollMax": 11,
+      "text": "Bezpośrednia zwierzchność wysoko postawionego feudała"
+    },
+    {
+      "rollMin": 12,
+      "rollMax": 12,
+      "text": "Siedziba baronii"
+    }
+  ],
+  "inhabitants": [
+    "Na futrach wygalają skomplikowane wzory",
+    "Odurzają się niezwykłymi roślinami",
+    "Nie robią interesów z obcymi",
+    "Ciekawi wieści z dalekich stron",
+    "Wierzą, że czyszczenie futerka przynosi zawsze pecha",
+    "Noszą misternie haftowane ubrania",
+    "Sycą miód pitny z gorzkimi ziołami",
+    "Skrywają się pod głębokimi kapturami",
+    "Biedni. Płacą daninę kociemu lordowi",
+    "Rytualnie przycinają swoje ogony",
+    "Dzielni łowcy wielkich bestii",
+    "Wszyscy pochodzą od jednej matki",
+    "Pieką wspaniałe tarty z jagodami",
+    "Zbiegowie z laboratorium, dość naiwni",
+    "Całymi dniami wylegują się nad strumieniem i nic nie robią",
+    "Z dawien dawna zwaśnieni z sąsiednią osadą",
+    "Drążą imponujące tunele pod kuratelą cechu",
+    "Noszą wielkie kapelusze z szerokim rondem",
+    "Prawa i obyczaje niezrozumiałe dla gości",
+    "W pokojowych stosunkach z drapieżnikiem"
+  ],
+  "notableFeatures": [
+    "Labirynt zabezpieczony licznymi pułapkami",
+    "Wygodna i dobrze utrzymana gospoda",
+    "Kapliczka wyciosana z czarnego drewna",
+    "Grzybowy ogród medytacyjny",
+    "Krowia czaszka będąca siedzibą cechu",
+    "Slumsy",
+    "Malownicze wiszące drewniane domki",
+    "Ozdobna brama strzeżona przez posągi",
+    "Tajemna świątynia kultu nietoperza",
+    "Tor do wyścigów chrząszczy",
+    "Magazyn pełen zapasów",
+    "Ukryta przystań dla łodzi",
+    "Ruiny marmurowego pałacu starożytnych mysich przodków",
+    "Przywrócona do użytku ludzka maszyna",
+    "Drewniany most łączący dwie części osady",
+    "Niepokojąco wysoka i poskręcana wieża",
+    "Piękny kwiatowy ogród",
+    "Stajnia gołębi wierzchowych",
+    "Obrośnięty zielskiem posąg dawnego mysiego bohatera",
+    "Spiralna klatka schodowa, która wiedzie głęboko w dół"
+  ],
+  "industries": [
+    "Rolnicy, uprawiają pola",
+    "Drwale z piłami i uprzężą",
+    "Szorstcy w obyciu i pokiereszowani rybacy z sieciami oraz tratwami",
+    "Ciemne i zatęchłe uprawy grzybów",
+    "Ziarna, które są suszone niemalże wszędzie",
+    "Długodojrzewające wonne sery",
+    "Ogrody rzadkich ziół. Strzeżone suszarki z ziołami",
+    "Ule doglądane przez szczelnie osłoniętych mysich pszczelarzy",
+    "Kupcy i handlarze, potrzebują ochrony",
+    "Kamieniarze i pobliski kamieniołom",
+    "Młyn rzeczny z dużym kołem",
+    "Głęboka kopalnia żelaza, srebra lub cyny",
+    "Hodują jedwabniki i tkają delikatne tkaniny",
+    "Zaprawieni grotołazi i badacze tuneli",
+    "Wypalają ceramikę z barwnym szkliwem",
+    "Przędzalnia wełny udrapowana mnóstwem kolorowych szmatek",
+    "Elitarna szkoła, krnąbrni uczniowie",
+    "Tłoczny, dobrze zaopatrzony rynek",
+    "Śmierdząca sterta przebranych śmieci",
+    "Piękne meble z rzeźbionego i wypolerowanego na błysk drewna"
+  ],
+  "events": [
+    "Katastrofa, wszyscy pakują się do wyjazdu",
+    "Ślub, ulice ozdobione kwiatami",
+    "Przygotowania do wielkiej uczty",
+    "Osada padła ofiarą choroby",
+    "Plaga szkodników w magazynie",
+    "Dzień targowy, rolnicy ściągają do miasta",
+    "Myszy drą ze sobą koty",
+    "Formowanie oddziału, aby pokonać bestię",
+    "Zaginięcie kilkorga dzieci",
+    "Pewien szlachcic ma irracjonalne żądania",
+    "Przybycie wędrownej trupy aktorskiej",
+    "Pogrzeb, ulice gęste od dymu",
+    "Oszust knuje niedorzeczny plan",
+    "Oswojony chrząszcz oszalał i atakuje myszy",
+    "Elfi posłaniec przybywa od swojego władcy z nierealnym żądaniem",
+    "W okolicy rośnie dziwna, szybko rozrastająca się roślina",
+    "Skradziono cenną pamiątkę rodzinną",
+    "Koci lord żąda wysokiej daniny",
+    "Obrzęd inicjacji młodych myszy",
+    "Przybycie żółwia z wieżą maga na grzbiecie"
+  ],
+  "nameSeeds": {
+    "note": "Rzuć dwukrotnie k12. Wybierz pierwszy i drugi człon. Przestawiaj i odmieniaj, aż uzyskasz dobrze brzmiącą nazwę.",
+    "startA": [
+      "Babi-",
+      "Barani-",
+      "Brzęczy-",
+      "Burczy-",
+      "Dolny-",
+      "Dudni-",
+      "Jary-",
+      "Kozi-",
+      "Krasny-",
+      "Krężna-",
+      "Kruche-",
+      "Łyse-"
+    ],
+    "startB": [
+      "Dębowa-",
+      "Mniejsza-",
+      "Mokra-",
+      "Pod-",
+      "Polny-",
+      "Rady-",
+      "Rybi-",
+      "Skrzeczy",
+      "Sucha-",
+      "Szumi-",
+      "Wielki-",
+      "Wilcze-"
+    ],
+    "endA": [
+      "Bór",
+      "Dół",
+      "Drapy",
+      "Gałąź",
+      "Góra",
+      "Gród",
+      "Kosy",
+      "Krzów",
+      "Las",
+      "Łąka",
+      "Łęg",
+      "Miechy"
+    ],
+    "endB": [
+      "Norka",
+      "Ostrów",
+      "Pień",
+      "Pole",
+      "Potok",
+      "Ruda",
+      "Sienniki",
+      "Spichrz",
+      "Staw",
+      "Stóg",
+      "Targ",
+      "Wola"
+    ]
+  },
+  "taverns": {
+    "note": "W niemal każdej większej bądź mniejszej osadzie znajdzie się gościnna gospoda lub oberża chętna obsłużyć miejscowe i przyjezdne myszy.",
+    "nameA": [
+      "Białym",
+      "Zielonym",
+      "Czarnym",
+      "Czerwonym",
+      "Srebrnym",
+      "Krzywym",
+      "Gościnnym",
+      "Ukrytym",
+      "Chytrym",
+      "Szklanym",
+      "Ciernistym",
+      "Złamanym"
+    ],
+    "nameB": [
+      "Rojem Pszczół",
+      "Lisem",
+      "Rożkiem",
+      "Ziarnem",
+      "Szczurem",
+      "Serem",
+      "Orłem",
+      "Robakiem",
+      "Rojem Pszczół",
+      "Światłem Latarni",
+      "Kwiatem Róży",
+      "Rycerzem"
+    ],
+    "specialtyMeals": [
+      "Pieczona marchewka na ostro",
+      "Rosół z dżdżownic",
+      "Ciasto jeżynowe",
+      "Stary ostry ser",
+      "Jęczmienna polewka",
+      "Dobrze wysmażony filet z rzecznej ryby",
+      "Pieczone jabłko",
+      "Smażone paluszki z owadzich nóg",
+      "Świeży chleb z masłem",
+      "Zrabowana landrynka",
+      "Nasiona pieczone w miodzie",
+      "Grzybowy gulasz"
+    ]
+  }
+}

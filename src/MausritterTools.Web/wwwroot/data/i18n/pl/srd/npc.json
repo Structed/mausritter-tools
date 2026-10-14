@@ -1,0 +1,181 @@
+{
+  "_source": {
+    "describes": "Tabele mysich postaci niezależnych",
+    "work": "Mausritter System Reference Document",
+    "version": "2.3.1",
+    "url": "https://mausritter.com/srd/",
+    "sourceFiles": [
+      "11-useful-tables.md"
+    ],
+    "licence": "CC BY 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "Ten utwór opiera się na Mausritter (https://mausritter.com), grze Losing Games i Isaaca Williamsa, i jest udostępniany na licencji Creative Commons Uznanie autorstwa 4.0 Międzynarodowe (CC BY 4.0).",
+    "generatedBy": "tools/Import-SrdTables.ps1",
+    "warning": "Ręcznie utrzymywane tłumaczenie. Zachowaj kolejność wierszy i identyfikatory z oryginału.",
+    "translationNote": "Nieoficjalne tłumaczenie fanowskie na język polski autorstwa współtwórców mausritter-tools. Nie jest to oficjalne polskie wydanie Mausritter; nie korzystano z oficjalnego tłumaczenia."
+  },
+  "socialPositions": [
+    {
+      "roll": 1,
+      "name": "Biedota",
+      "payment": "d6p"
+    },
+    {
+      "roll": 2,
+      "name": "Pospólstwo",
+      "payment": "d6 x 10p"
+    },
+    {
+      "roll": 3,
+      "name": "Pospólstwo",
+      "payment": "d6 x 10p"
+    },
+    {
+      "roll": 4,
+      "name": "Mieszczaństwo",
+      "payment": "d6 x 50p"
+    },
+    {
+      "roll": 5,
+      "name": "Cech",
+      "payment": "d4 x 100p"
+    },
+    {
+      "roll": 6,
+      "name": "Szlachta",
+      "payment": "d4 x 1000p"
+    }
+  ],
+  "birthsigns": [
+    {
+      "roll": 1,
+      "name": "Gwiazda",
+      "disposition": "Odwaga / Brawura",
+      "virtue": "Odwaga",
+      "vice": "Brawura"
+    },
+    {
+      "roll": 2,
+      "name": "Koło",
+      "disposition": "Pracowitość / Brak wyobraźni",
+      "virtue": "Pracowitość",
+      "vice": "Brak wyobraźni"
+    },
+    {
+      "roll": 3,
+      "name": "Żołądź",
+      "disposition": "Dociekliwość / Upór",
+      "virtue": "Dociekliwość",
+      "vice": "Upór"
+    },
+    {
+      "roll": 4,
+      "name": "Burza",
+      "disposition": "Hojność / Gniew",
+      "virtue": "Hojność",
+      "vice": "Gniew"
+    },
+    {
+      "roll": 5,
+      "name": "Księżyc",
+      "disposition": "Mądrość / Tajemniczość",
+      "virtue": "Mądrość",
+      "vice": "Tajemniczość"
+    },
+    {
+      "roll": 6,
+      "name": "Matka",
+      "disposition": "Opiekuńczość / Zamartwianie się",
+      "virtue": "Opiekuńczość",
+      "vice": "Zamartwianie się"
+    }
+  ],
+  "appearance": [
+    "Oczy pełne wyrazu",
+    "Jaskrawe, połatane ubrania",
+    "Wianek ze stokrotek",
+    "Brudne ubrania",
+    "Wielki, miękki kapelusz",
+    "Kieszenie pełne nasion",
+    "Laska z wygiętej gałązki",
+    "Zardzewiały miecz ze szpilki",
+    "Długie, dzikie futro",
+    "Bardzo, bardzo podeszły wiek",
+    "Zabandażowany ogon",
+    "Ogon przewiązany kokardą",
+    "Brak jednego ucha",
+    "Długie wąsy",
+    "Błyszczące oczy",
+    "Ogromny, ciężki, czarny płaszcz",
+    "Stare blizny po bitwach",
+    "Bardzo młody wiek",
+    "Wygolone futro",
+    "Futro zaplecione w warkoczyki"
+  ],
+  "quirk": [
+    "Ciągle pielęgnuje futro",
+    "Ma obsesję na punkcie pogody",
+    "Tryska energią",
+    "Dużo podróżuje i wiele wie",
+    "Ciąży na niej klątwa czarodzieja",
+    "Łatwo się płoszy",
+    "Wstydzi się dawnych występków",
+    "Uwielbia rywalizację",
+    "Pije ostentacyjnie i bez umiaru",
+    "Jest niezwykle uprzejma",
+    "Jest bezwarunkowo szczera",
+    "Mówi powoli i ostrożnie",
+    "Mówi szybko i chaotycznie",
+    "Potajemnie służy kotu",
+    "Wychowały ją szczury",
+    "Wygnano ją z domu",
+    "Trzyma wiele oswojonych owadów",
+    "Nie znosi otwartej przestrzeni",
+    "Jest miejscową bohaterką",
+    "Ma bardzo ruchliwe wąsy"
+  ],
+  "wants": [
+    "wolności",
+    "bezpieczeństwa",
+    "ucieczki",
+    "emocji",
+    "władzy",
+    "sensu",
+    "zdrowia",
+    "bogactwa",
+    "ochrony",
+    "miłości",
+    "chronić innych",
+    "jedzenia",
+    "przyjaźni",
+    "odpoczynku",
+    "wiedzy",
+    "dzikości",
+    "piękna",
+    "zemsty",
+    "służyć innym",
+    "zabawy"
+  ],
+  "relationship": [
+    "Rodzic i dziecko",
+    "Rodzeństwo",
+    "Kuzynostwo",
+    "Dalsze kuzynostwo",
+    "Dziadek lub babcia i wnuczę",
+    "Są spokrewnieni, ale o tym nie wiedzą",
+    "Małżeństwo",
+    "Dawni kochankowie",
+    "Nieodwzajemniona miłość",
+    "Towarzysze od kieliszka",
+    "Dług do spłacenia",
+    "Długa i burzliwa znajomość",
+    "Zaprzysięgli wrogowie",
+    "Towarzysze z cechu",
+    "Przyjaciele z dzieciństwa",
+    "Jedno okradło drugie",
+    "Razem pracowali",
+    "Razem dorastali",
+    "Służą temu samemu panu",
+    "Nigdy wcześniej się nie spotkali"
+  ]
+}

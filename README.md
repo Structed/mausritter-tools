@@ -341,12 +341,12 @@ official generator are not published under a licence that permits reuse.
 
 ## Languages
 
-The tools are published in English and German. A visitor's first arrival follows their browser; a
-picker in the navigation overrides that and the choice is remembered, and a shared link carries
+The tools are published in English, German and Polish. A visitor's first arrival follows their
+browser; a picker in the navigation overrides that and the choice is remembered, and a shared link carries
 `?lang=` so a settlement written up in German opens in German for whoever it is sent to.
 
 **Changing language does not change the settlement.** Every table is translated row for row, so the
-same seed lands on the same rows in both languages and a link shared between a German and an English
+same seed lands on the same rows in every language and a link shared between players using different languages
 player shows the same place — same size, same host, same shops in the same order, same map. Only the
 words differ.
 
@@ -374,9 +374,18 @@ A few things translations must respect, all of them guarded by `TranslationTests
   singular ending after a definite article is `-en` for every gender: only `Zum` versus `Zur`
   varies, so no declension code is needed anywhere.
 
-The German text is an **unofficial fan translation by the mausritter-tools contributors**. It is not
-the official German edition of Mausritter, and no official translation was used as a source. CC BY
-4.0 permits translation provided the change is declared, which the data files and the site both do.
+Polish hosts carry complete prepositional phrases as well. Tavern and shop sign nouns use the
+instrumental case after `Pod`, with masculine or neuter head nouns so every adjective uses the same
+ending. For example, `Pod Białym Żukiem` and `Pod Srebrnym Kwiatem Róży` need no runtime declension.
+
+The German and Polish texts are **unofficial fan translations by the mausritter-tools contributors**.
+The tool is not an official German or Polish edition of Mausritter. The Polish settlement and spell
+tables use wording from pages 28–29 and 13 of the official Polish book, supplied in photographs.
+Tavern names are inflected for the generator; spells retain the book's Polish notation and metric
+units. Equipment terminology from pages 8–9 and hireling names and recruitment wording also follow
+the official Polish book photographs. Other Polish text and all German text are fan translations.
+CC BY 4.0 permits translation provided the change is declared, which the data files and the site
+both do.
 
 To add a language, add it to `Locale.All`, copy `data/ui.json` and the two table directories into
 `data/i18n/<code>/`, and translate. The tests will tell you what you have missed.

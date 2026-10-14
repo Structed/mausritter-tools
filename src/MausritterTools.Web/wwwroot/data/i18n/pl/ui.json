@@ -1,0 +1,338 @@
+{
+  "locale": "pl",
+  "app": {
+    "title": "Mausritter Tools",
+    "description": "Narzędzia do gry fabularnej Mausritter działające w przeglądarce.",
+    "socialImageAlt": "Autorski mysi emblemat, ręcznie rysowana mapa i kości obok napisu Mausritter Tools.",
+    "pageTitlePattern": "{page} — Mausritter Tools"
+  },
+  "nav": {
+    "brand": "Mausritter Tools",
+    "menuTitle": "Menu nawigacji",
+    "home": "Strona główna",
+    "settlement": "Generator osad",
+    "dice": "Stół z kośćmi",
+    "about": "O projekcie",
+    "languageLabel": "Język",
+    "skipToContent": "Przejdź do treści"
+  },
+  "home": {
+    "heading": "Mausritter Tools",
+    "leadHtml": "Zestaw narzędzi przeglądarkowych do prowadzenia i grania w <a href=\"https://mausritter.com/\" target=\"_blank\" rel=\"noopener\">Mausritter</a>.",
+    "noServerHtml": "Wszystko działa w twojej przeglądarce — bez serwera i bez przesyłania danych.",
+    "toolsHeading": "Narzędzia",
+    "settlementItemHtml": "<a href=\"settlement\"><strong>Generator osad</strong></a> — losuje całą mysią osadę: jej władze, handel, wydarzenia w chwili przybycia graczy oraz wszystkie sklepy z właścicielami, osobliwościami i wycenionym towarem. Zablokuj to, co ci się podoba, wylosuj resztę ponownie, a potem udostępnij link lub wydrukuj osadę.",
+    "diceItemHtml": "<a href=\"dice\"><strong>Stół z kośćmi</strong></a> — rzucaj tak, by cała drużyna widziała wynik: testy cech, obrażenia broni, zaklęcia rzucane garścią d6 i dowolne inne rzuty w zwykłej notacji. Wyniki trafiają bezpośrednio między przeglądarkami. Zamknij kartę, a stół zniknie.",
+    "aboutLinkText": "Jak to działa i co jest oficjalne"
+  },
+  "about": {
+    "heading": "O projekcie",
+    "leadHtml": "Mausritter Tools to niewielki zestaw narzędzi przeglądarkowych do <a href=\"https://mausritter.com/\" target=\"_blank\" rel=\"noopener\">Mausritter</a>, gry fabularnej o odważnych myszach autorstwa Isaaca Williamsa.",
+    "howItWorks": {
+      "heading": "Jak to działa",
+      "paragraphsHtml": [
+        "Cała aplikacja jest statyczną stroną działającą w przeglądarce. Nie ma serwera, kont ani analityki, a wygenerowane dane nie są nigdzie przesyłane. Osada powstaje wyłącznie na podstawie ziarna losowania, więc ten sam link zawsze odtwarza tę samą osadę.",
+        "Zablokowanie wartości utrwala ją, tak aby ponowne losowanie pozostałych danych jej nie zmieniało. Ręczna edycja również blokuje wartość. Aby link nie był zbyt długi, pasek adresu zawiera tylko ziarno i ustawienia generatora. Pełny stan przenosi eksport JSON i przechowuje pamięć lokalna przeglądarki między wizytami."
+      ]
+    },
+    "official": {
+      "heading": "Co jest oficjalne, a co nie",
+      "paragraphsHtml": [
+        "Tabele osad, karczm, mysich postaci niezależnych, cen wyposażenia, najemników i zaklęć pochodzą z SRD Mausritter, udostępnionego na licencji CC BY 4.0. Są importowane bezpośrednio ze źródeł SRD; polska wersja jest nieoficjalnym tłumaczeniem tego tekstu.",
+        "<strong>Mausritter nie ma tabel sklepów ani usług.</strong> SRD mówi tylko, że karczmy pojawiają się w przysiółkach i większych osadach, oddziały można rekrutować w miasteczkach lub miastach, ludzkie przedmioty są dostępne w pobliżu ludzi, bank pobiera 1% wartości przy odbiorze depozytu, naprawa kosztuje 10% ceny przedmiotu za kropkę zużycia, a wielkość osady określa rodzaje dostępnych najemników — bez wyjaśnienia szczegółów. Wszystko inne dotyczące sklepów w tym narzędziu, w tym dostępne usługi, progi wielkości, towar, osobliwości i nazwy, to <strong>nieoficjalne zasady domowe opracowane dla tego projektu</strong>. Każdy sklep pokazuje zasadę z SRD, na której się opiera.",
+        "Mysie imiona też są autorskie. SRD nie zawiera tabel imion, a listy oficjalnego generatora nie mają licencji pozwalającej na ich ponowne wykorzystanie."
+      ]
+    },
+    "translation": {
+      "heading": "O polskiej wersji",
+      "paragraphsHtml": [
+        "Polska wersja tego narzędzia jest <strong>nieoficjalną wersją przygotowaną przez współtwórców mausritter-tools</strong>. Nie jest oficjalnym polskim wydaniem gry ani produktem zatwierdzonym przez Losing Games. Tabele osad (s. 28–29), zaklęć (s. 13), terminologia wyposażenia (s. 8–9) oraz nazwy i zasady rekrutacji najemników wykorzystują oficjalne polskie wydanie Mausritter, na podstawie zdjęć dostarczonych przez użytkownika. Nazwy gospód dostosowano do gramatyki generatora, a zaklęcia zachowują polską notację i jednostki z książki. Pozostałe teksty są tłumaczeniem fanowskim.",
+        "Zmiana języka nie zmienia osady. Każda tabela jest tłumaczona wiersz po wierszu, więc to samo ziarno tworzy to samo miejsce w każdym języku. Link udostępniony graczom korzystającym z różnych języków pokazuje tę samą osadę — zmieniają się tylko słowa."
+      ]
+    },
+    "itemCards": {
+      "heading": "O kartach przedmiotów",
+      "paragraphsHtml": [
+        "Karty do druku wykorzystują układ i ilustracje oficjalnych kart przedmiotów Mausritter. <a href=\"https://mausritter.com/third-party\" target=\"_blank\" rel=\"noopener\">Licencja Mausritter dla twórców zewnętrznych</a> wyraźnie pozwala używać, kopiować i modyfikować szablony i ilustracje kart. Rysunki autorstwa Isaaca Williamsa pochodzą z oficjalnego <a href=\"https://mausritter.com/tools/item\" target=\"_blank\" rel=\"noopener\">Item Card Studio</a>. Pozostają niezmienione i pojawiają się tylko na kartach przedstawiających odpowiadający im przedmiot. Pozostała treść kart, wybór przedmiotów i ich opisy są generowane przez to narzędzie i nie są oficjalne.",
+        "Karty używają krojów <a href=\"https://fonts.google.com/specimen/Texturina\" target=\"_blank\" rel=\"noopener\">Texturina</a> i <a href=\"https://fonts.google.com/specimen/Open+Sans\" target=\"_blank\" rel=\"noopener\">Open Sans</a>, dostępnych na licencji SIL Open Font License 1.1, dołączonej do plików. Oficjalne karty używają Open Sans Condensed, który został włączony do Open Sans jako wąski wariant. Narzędzie korzysta właśnie z tego wariantu.",
+        "Rozmiary kart odpowiadają całym polom ekwipunku. Wydruk w skali 100% pasuje do prawdziwej karty postaci Mausritter."
+      ]
+    },
+    "diceTable": {
+      "heading": "O stole z kośćmi",
+      "paragraphsHtml": [
+        "Stół łączy przeglądarki graczy bezpośrednio, przez szyfrowane połączenie, bez serwera pośredniczącego i bez zapisywania danych. Kod stołu nie jest kontem: pozwala przeglądarkom odnaleźć się wzajemnie. Każdy, kto go zna, może odbierać wyniki, więc udostępniaj go tak ostrożnie jak klucz do drzwi. Zamknięcie karty kończy działanie stołu.",
+        "Każdy nazwany rzut odpowiada zasadzie z SRD Mausritter: test to d20 z wynikiem nieprzekraczającym cechy, atak zawsze trafia i używa kości broni, zaklęcie to d6 za każdy punkt mocy ze zużyciem przy 4, 5 lub 6 i nieudanym czarowaniem przy każdej 6, a cecha nowej myszy to 3d6 z zachowaniem dwóch najwyższych wyników. Nie ma tu trafień krytycznych, testów morale ani reakcji, bo Mausritter ich nie definiuje. Pole notacji pozwala wykonać pozostałe rzuty.",
+        "Narzędzie nie rozstrzyga skutków dla twojej postaci. Liczy nieudane czarowania i zgłasza zużycie, ale nie stosuje ich automatycznie. Każdy rzut zawiera ziarno losowania, więc można je przesłać osobie, która nie mogła połączyć się ze stołem, i dokładnie odtworzyć wynik."
+      ]
+    },
+    "dataSources": {
+      "heading": "Źródła danych",
+      "contentColumn": "Treść",
+      "sourceColumn": "Źródło",
+      "licenceColumn": "Licencja",
+      "originalSource": "Autorskie materiały tego projektu",
+      "originalLicence": "Utwór autorski"
+    },
+    "source": {
+      "heading": "Kod źródłowy",
+      "paragraphsHtml": [
+        "Kod, zaimportowane tabele i skrypt importujący są dostępne na <a href=\"https://github.com/Structed/mausritter-tools\" target=\"_blank\" rel=\"noopener\">GitHubie</a>."
+      ]
+    },
+    "support": {
+      "heading": "Wesprzyj Mausritter",
+      "paragraphsHtml": [
+        "To narzędzie nie zastępuje gry. Cyfrowe Mausritter jest dostępne za dowolną kwotę i warto je mieć: <a href=\"https://mausritter.com/\" target=\"_blank\" rel=\"noopener\">mausritter.com</a>."
+      ]
+    }
+  },
+  "notFound": {
+    "heading": "Nie znaleziono strony",
+    "message": "Strona, której szukasz, nie istnieje.",
+    "backLink": "Wróć do narzędzi"
+  },
+  "settlement": {
+    "pageTitle": "Generator osad",
+    "heading": "Generator osad",
+    "leadHtml": "Wylosuj całą mysią osadę: jej władze, handel, dzisiejsze wydarzenia i wszystkie sklepy z właścicielami oraz towarem. Zablokuj to, co ci się podoba, i wylosuj resztę ponownie.",
+    "loadErrorHeading": "Nie udało się wczytać tabel Mausritter.",
+    "loading": "Wczytywanie tabel Mausritter…",
+    "controls": {
+      "seedLabel": "Ziarno losowania",
+      "sizeLabel": "Wielkość",
+      "sizeRollOption": "Losowa (2d6, niższy wynik)",
+      "terrainLabel": "Teren",
+      "terrainAnyOption": "Dowolny",
+      "terrainOptions": [
+        "Wieś i pola",
+        "Las",
+        "Rzeka",
+        "Ludzkie miasto"
+      ],
+      "nearHumanLabel": "W pobliżu ludzkiego miasta",
+      "nearHumanTitle": "SRD uzależnia dostępność ludzkich przedmiotów od położenia, a nie wielkości osady",
+      "rollNew": "Wylosuj nową osadę",
+      "rerollUnlocked": "Przelosuj odblokowane",
+      "copyLink": "Kopiuj link",
+      "exportJson": "Eksportuj JSON",
+      "importJson": "Importuj JSON",
+      "importJsonTitle": "Otwórz plik JSON osady lub projekt Fantasia Archive",
+      "print": "Drukuj"
+    },
+    "sections": {
+      "seedTag": "ziarno {seed}",
+      "settlement": "Osada",
+      "tavern": "Karczma",
+      "shops": "Sklepy i usługi",
+      "houseRuleTag": "Zasada domowa",
+      "houseRuleTitle": "Mausritter nie ma tabeli usług w osadach",
+      "noShops": "Nic nie jest tu na sprzedaż. Tak mała osada handluje przysługami i obietnicami, bez sklepów.",
+      "itemCards": "Karty przedmiotów",
+      "itemCardsNote": "Wszystkie towary jako karty do wycięcia, drukowane w rzeczywistym rozmiarze. Kropki oznaczają zużycie; pancerze i broń dwuręczna zajmują dwa pola ekwipunku.",
+      "officialNoticeHeading": "Co jest oficjalne, a co nie.",
+      "officialNoticeHtml": "Tabele osad, karczm i mysich postaci niezależnych pochodzą z SRD Mausritter. Gra nie ma tabel sklepów ani usług, więc ta warstwa, w tym dostępne usługi, progi wielkości i mysie imiona, powstała na potrzeby tego narzędzia. Każdy sklep podaje zasadę z SRD, na której się opiera, w sekcji „Skąd to pochodzi”."
+    },
+    "labels": {
+      "name": "Nazwa",
+      "size": "Wielkość",
+      "built": "Zabudowa",
+      "governance": "Władza",
+      "inhabitants": "Mieszkańcy",
+      "feature": "Cecha szczególna",
+      "features": "Cechy szczególne",
+      "industry": "Przemysł",
+      "industries": "Gałęzie przemysłu",
+      "rightNow": "W tej chwili",
+      "sign": "Szyld",
+      "specialty": "Specjalność",
+      "landlord": "Karczmarz",
+      "builtValue": "{host} — {description}",
+      "governanceValue": "{governance} (d6 + wielkość = {roll})",
+      "keeperValue": "{name} — {appearance}. {quirk}. Pragnienia: {wants}."
+    },
+    "map": {
+      "heading": "Mapa",
+      "redrawTitle": "Narysuj mapę ponownie",
+      "downloadTitle": "Pobierz mapę jako SVG",
+      "caption": "{host}. Numerowane budynki opisano poniżej.",
+      "ariaLabel": "Mapa osady, {host}"
+    },
+    "status": {
+      "mapRedrawn": "Mapa została narysowana ponownie. Osada się nie zmieniła.",
+      "mapDownloaded": "Mapa pobrana.",
+      "rolledNewKeepingLocks": "Wylosowano nową osadę, zachowując zablokowane wpisy.",
+      "rerolledExceptOne": "Przelosowano wszystko oprócz 1 zablokowanego wpisu.",
+      "rerolledExceptMany": "Przelosowano wszystko oprócz zablokowanych wpisów: {count}.",
+      "invalidSeed": "„{seed}” nie jest poprawnym ziarnem losowania.",
+      "unlocked": "Odblokowano.",
+      "locked": "Zablokowano. Ponowne losowanie nie zmieni tej wartości.",
+      "edited": "Zmieniono i zablokowano, aby ponowne losowanie nie nadpisało wartości.",
+      "linkCopied": "Link skopiowany.",
+      "clipboardFailed": "Nie udało się uzyskać dostępu do schowka. Skopiuj adres z paska przeglądarki.",
+      "exported": "Wyeksportowano.",
+      "exportedFantasiaArchive": "Wyeksportowano do Fantasia Archive. Rozpakuj plik, a potem scal folder — instrukcja znajduje się w dołączonej notatce.",
+      "imported": "Zaimportowano {file}.",
+      "importedFantasiaArchive": "Zaimportowano osadę z {file}.",
+      "importedFantasiaArchiveFirstOfMany": "Plik {file} zawiera {count} osad. Otwarto pierwszą.",
+      "importFailed": "Nie udało się zaimportować pliku. {message}",
+      "readFailed": "Nie udało się odczytać pliku. {message}",
+      "languageChanged": "Wybrano język: {language}. To samo ziarno, ta sama osada."
+    }
+  },
+  "dice": {
+    "pageTitle": "Stół z kośćmi",
+    "heading": "Stół z kośćmi",
+    "leadHtml": "Rzucaj tak, by cała drużyna widziała wynik. Wyniki trafiają bezpośrednio między przeglądarkami — bez serwera i bez zapisywania danych.",
+    "tableHeading": "Stół",
+    "playerLabel": "Twoje imię",
+    "playerPlaceholder": "Kto rzuca",
+    "tableLabel": "Kod stołu",
+    "tablePlaceholder": "abcd-efgh-jkmn",
+    "startTable": "Utwórz stół",
+    "joinTable": "Dołącz",
+    "leaveTable": "Opuść",
+    "copyInvite": "Kopiuj zaproszenie",
+    "copied": "Skopiowano",
+    "statusAway": "Poza stołem — te rzuty widać tylko na tym ekranie.",
+    "statusJoining": "Otwieranie stołu…",
+    "statusSearching": "Szukanie innych graczy…",
+    "statusOpen": "Przy stole",
+    "statusFailed": "Przeglądarka nie nawiązała połączenia. Rzuty nadal działają lokalnie.",
+    "peersNone": "jeszcze nikogo nie ma",
+    "peersOne": "1 inny gracz",
+    "peersOther": "innych graczy",
+    "whoHeading": "Kto jest przy stole",
+    "you": "(ty)",
+    "whoWaiting": "trwa powitanie",
+    "anonymous": "Ktoś",
+    "notationLabel": "Dowolny rzut",
+    "notationPlaceholder": "2d6+1",
+    "roll": "Rzuć",
+    "edgeLabel": "Modyfikacja szans",
+    "rollPrivately": "Rzuć prywatnie",
+    "rollsHeading": "Rzuty",
+    "clearRolls": "Wyczyść historię",
+    "emptyLog": "Jeszcze nie wykonano żadnego rzutu.",
+    "privately": "wykonano prywatny rzut",
+    "privateMine": "prywatnie",
+    "dropped": "odrzucono",
+    "seedTitle": "Ziarno losowania",
+    "nameNeeded": "Najpierw wpisz imię, aby pozostali wiedzieli, kto rzuca.",
+    "notationBad": "Nie rozpoznano tego rzutu. Spróbuj d20, 2d6+1 lub 3d6kh2, aby zachować dwa najwyższe wyniki z trzech.",
+    "tableBad": "To nie jest poprawny kod stołu.",
+    "inviteHint": "Każdy z tym linkiem może dołączyć. Każdy z kodem może odbierać wyniki, więc udostępniaj go tak ostrożnie jak klucz do drzwi.",
+    "secretHint": "Prywatny rzut informuje stół tylko o tym, że rzucono. Wyniki nie opuszczają tej przeglądarki.",
+    "edgeHint": "Test z przewagą to dwa d20 z zachowaniem niższego wyniku, bo niski wynik oznacza sukces. Utrudnienie zachowuje wyższy. Osłabiony atak używa d4, a wzmocniony d12, niezależnie od broni. Mausritter ma jeden stopień każdego efektu; nie kumulują się.",
+    "spellHint": "Czarowanie pokazuje wyniki: jedno zużycie za każdą 4, 5 lub 6 i nieudane czarowanie za każdą 6. W opisie zaklęcia [MOC] (także [MOCY]) oznacza liczbę użytych kości, a [SUMA] (także [SUMĘ]) sumę wyników. Kropki zużycia zaznaczasz samodzielnie.",
+    "privacyHint": "Wyniki są przesyłane bezpośrednio między przeglądarkami, przez szyfrowane połączenie, bez serwera pośredniczącego i bez zapisywania danych. Zamknij kartę, a stół zniknie.",
+    "reachHint": "Niektóre sieci blokują bezpośrednie połączenia przeglądarek; nie ma serwera przekazującego dane. Jeśli ktoś się nie pojawia, prześlij mu ziarno widoczne obok rzutu — pozwala odtworzyć te same kości wszędzie.",
+    "presets": {
+      "save": "Test cechy",
+      "attack": "Atak",
+      "spell": "Rzuć zaklęcie",
+      "mouse": "Stwórz mysz"
+    },
+    "parameters": {
+      "score": "Cecha",
+      "weapon": "Kość broni",
+      "power": "Moc"
+    },
+    "readings": {
+      "save/pass": "Wynik do {count} włącznie — sukces.",
+      "save/fail": "Wynik ponad {count} — porażka.",
+      "attack/damage": "Obrażenia przed uwzględnieniem pancerza.",
+      "spell/cast": "[MOC] to {count}, a [SUMA] to suma wyników.",
+      "spell/usage": "Znaczniki zużycia: {count}",
+      "spell/miscast": "Nieudane czarowania: {count} — każde zadaje d6 obrażeń WOL, następnie test WOL lub stan Osłabienie",
+      "mouse/attribute": "Wartość cechy — rzuć osobno dla SIŁ, ZRĘ i WOL."
+    },
+    "edges": {
+      "save/edge/down": "Utrudnienie",
+      "save/edge/level": "Zwykły",
+      "save/edge/up": "Przewaga",
+      "attack/edge/down": "Osłabiony",
+      "attack/edge/level": "Zwykły",
+      "attack/edge/up": "Wzmocniony"
+    }
+  },
+  "fieldRow": {
+    "lockTitle": "Zablokuj, aby ponowne losowanie nie zmieniało wartości",
+    "unlockTitle": "Odblokuj, aby ponownie losować",
+    "editTitle": "Edytuj ręcznie",
+    "rerollTitle": "Przelosuj tylko tę wartość"
+  },
+  "shop": {
+    "mapKeyTitle": "Numer na mapie: {index}",
+    "quirk": "Osobliwość",
+    "terms": "Warunki",
+    "repairs": "Naprawy",
+    "repairsText": "Usuwa kropkę zużycia za 10% pierwotnej ceny przedmiotu.",
+    "spells": "Zaklęcia",
+    "spellsText": "Kupuje w pełni naładowane zaklęcie za d6 × 100p. Wyczerpane jest warte połowę.",
+    "keeperMeta": "{position} · w sakiewce: {purse} · znak urodzenia: {birthsign} ({disposition})",
+    "wants": "Pragnienia: {wants}.",
+    "inStock": "Na sprzedaż",
+    "quantity": "Ilość",
+    "price": "Cena",
+    "lookingForWork": "Szukają pracy",
+    "number": "Liczba",
+    "perDay": "Za dzień",
+    "priceAbove": "Ceny są tu o {percent}% wyższe od podanych stawek.",
+    "priceBelow": "Ceny są tu o {percent}% niższe od podanych stawek.",
+    "whereThisComesFrom": "Skąd to pochodzi"
+  },
+  "itemCard": {
+    "usageDotsTitle": "Liczba kropek zużycia: {count}",
+    "defence": "{count} obr."
+  },
+  "fantasiaArchive": {
+    "exportLabel": "Eksportuj do Fantasia Archive",
+    "exportTitle": "Pobierz osadę jako spakowany folder projektu Fantasia Archive",
+    "readMeTitle": "Importowanie osady do Fantasia Archive",
+    "readMeSteps": [
+      "Rozpakuj plik. Wewnątrz znajduje się folder {folder}.",
+      "Otwórz projekt Fantasia Archive, do którego chcesz dodać osadę.",
+      "Najpierw zapisz projekt: Project → Save current project. Scalania nie można cofnąć.",
+      "Wybierz Project → Advanced → Merge another project into the current one.",
+      "Wybierz sam folder {folder}, a nie znajdujące się w nim pliki."
+    ],
+    "readMeWarning": "Nie dodawaj innych plików do folderu {folder}. Fantasia Archive traktuje każdy plik w nim jako bazę danych, więc dodatkowa notatka lub zrzut ekranu uniemożliwi import. Dlatego ta instrukcja znajduje się poza folderem.",
+    "readMeNote": "Osada pojawi się jako lokalizacja (Location), z karczmą i sklepami jako budynkami, ponumerowanymi tak jak na mapie. Właściciele pojawią się jako postacie (Characters), a towar jako przedmioty (Items), z powiązaniami między nimi. Osada zachowuje też ziarno losowania: aby ją odzyskać, zapisz projekt w Fantasia Archive i zaimportuj jego folder do generatora osad.",
+    "readMeMapNote": "Mapa jest już dołączona. Znajduje się w opisie osady, nad informacją licencyjną, a pod nią zapisano numerowaną legendę. Nie trzeba nic robić, aby ją zobaczyć.",
+    "readMeMapFileNote": "Obok tej notatki znajduje się {map}, ta sama mapa jako plik graficzny. Eksport PDF Fantasia Archive nie zawiera osadzonej kopii. Aby dodać mapę do PDF, edytuj opis osady, kliknij przycisk obrazu na pasku narzędzi, wybierz „Local image” i wskaż {map} w miejscu rozpakowania. Plik może pozostać tam lub trafić gdzie indziej — poza folder {folder}.",
+    "readMeVersionNote": "Zapisano w formacie Fantasia Archive v1, odczytywanym przez wszystkie wydane wersje."
+  },
+  "licence": {
+    "basedOnHtml": "Ten utwór opiera się na <a href=\"https://mausritter.com\" target=\"_blank\" rel=\"noopener\">Mausritter</a>, grze Losing Games i Isaaca Williamsa, i jest udostępniany na licencji <a href=\"https://creativecommons.org/licenses/by/4.0/\" target=\"_blank\" rel=\"noopener\">Creative Commons Uznanie autorstwa 4.0 Międzynarodowe (CC BY 4.0)</a>.",
+    "independentHtml": "Mausritter Tools to niezależny projekt współtwórców mausritter-tools, niezwiązany z Losing Games. Jest publikowany na licencji Mausritter dla twórców zewnętrznych.",
+    "copyrightHtml": "Prawa autorskie do Mausritter należą do Losing Games.",
+    "houseRuleNote": "Sklepy, usługi i mysie imiona to nieoficjalne zasady domowe opracowane dla tego narzędzia. Mausritter nie ma tabeli usług w osadach.",
+    "translationNote": "Nieoficjalna polska wersja narzędzia autorstwa współtwórców mausritter-tools. Tabele osad i zaklęć oraz terminologia wyposażenia i najemników wykorzystują oficjalne polskie wydanie Mausritter; pozostałe teksty są tłumaczeniem fanowskim."
+  },
+  "error": {
+    "unhandled": "Wystąpił nieobsłużony błąd.",
+    "reload": "Odśwież"
+  },
+  "grammar": {
+    "summaryWithPopulation": "{size}, liczba mieszkańców: {population}, {host}.",
+    "summaryWithoutPopulation": "{size}, {host}.",
+    "sizeWithPopulation": "{name} ({population})",
+    "relationshipSummary": "{other}: {kind}",
+    "lowercaseInlineNouns": false,
+    "tavernLegendDetail": "Karczma — {meal}",
+    "shopLegendDetail": "{service} — {keeper}",
+    "tavernNamePattern": "Pod {adjective} {noun}",
+    "defaultTavernName": "Karczma",
+    "unnamedSettlement": "Bez nazwy",
+    "defaultGivenName": "Mysz",
+    "defaultFamilyName": "Bez Nazwiska",
+    "pricePlain": "{amount}{pip}",
+    "pricePerUnit": "{amount}{pip} za {unit}",
+    "pricePerHex": "{amount}{pip} za heks",
+    "articles": {
+      "indefiniteNominative": {},
+      "dativeDefinite": {}
+    }
+  }
+}

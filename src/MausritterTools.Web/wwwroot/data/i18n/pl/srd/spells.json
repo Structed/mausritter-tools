@@ -1,0 +1,126 @@
+{
+  "_source": {
+    "describes": "Zaklęcia",
+    "work": "Mausritter System Reference Document",
+    "version": "2.3.1",
+    "url": "https://mausritter.com/srd/",
+    "sourceFiles": [
+      "14-magic.md"
+    ],
+    "licence": "CC BY 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "Ten utwór opiera się na Mausritter (https://mausritter.com), grze Losing Games i Isaaca Williamsa, i jest udostępniany na licencji Creative Commons Uznanie autorstwa 4.0 Międzynarodowe (CC BY 4.0).",
+    "generatedBy": "tools/Import-SrdTables.ps1",
+    "warning": "Ręcznie utrzymywane tłumaczenie. Zachowaj kolejność wierszy i identyfikatory z oryginału.",
+    "translationNote": "Polskie nazwy, efekty i ładowanie zaklęć na podstawie oficjalnego polskiego wydania Mausritter, s. 13 (zdjęcie dostarczone przez użytkownika). Zachowano polską notację i jednostki z książki. Integracja z narzędziem jest nieoficjalna."
+  },
+  "roll": "2d8",
+  "saleValue": "W pełni naładowane zaklęcie można zwykle sprzedać w osadzie za d6 × 100p. Wyczerpane zaklęcie jest warte połowę tej kwoty.",
+  "spells": [
+    {
+      "rollMin": 2,
+      "rollMax": 2,
+      "name": "Kula ognia",
+      "effect": "Wystrzel kulę ognia do 60 cm od siebie. Wszystkie istoty w promieniu 15 cm otrzymują [SUMĘ] + [MOC] obrażeń.",
+      "recharge": "Wypalaj w szalejącym ogniu przez trzy dni i trzy noce."
+    },
+    {
+      "rollMin": 3,
+      "rollMax": 3,
+      "name": "Bądź zdrów!",
+      "effect": "Ulecz [SUMĘ] obrażeń SF i usuń celowi stan Ranna.",
+      "recharge": "Skalecz się za k6 obrażeń w SF i skrop zaklęcie własną krwią."
+    },
+    {
+      "rollMin": 4,
+      "rollMax": 4,
+      "name": "Magiczny pocisk",
+      "effect": "Zadaj istocie w zasięgu wzroku obrażenia równe [SUMA] + [MOC].",
+      "recharge": "Upuść z wysokości co najmniej 10 m. Dotknij zaklęcie przed upływem 1 tury."
+    },
+    {
+      "rollMin": 5,
+      "rollMax": 5,
+      "name": "Strach",
+      "effect": "Nałóż stan Przerażony liczbie istot równej [MOCY].",
+      "recharge": "Wroga istota musi nałożyć na ciebie stan Przerażony, kiedy masz przy sobie to zaklęcie."
+    },
+    {
+      "rollMin": 6,
+      "rollMax": 6,
+      "name": "Ciemność",
+      "effect": "Stwórz sferę całkowitej ciemności o średnicy [SUMA]×5 cm na [MOC] tur.",
+      "recharge": "Zostaw odsłoniętą tabliczkę w miejscu pozbawionym światła na trzy dni."
+    },
+    {
+      "rollMin": 7,
+      "rollMax": 7,
+      "name": "Głowa do góry!",
+      "effect": "Usuń [MOC]+1 istotom stan Wyczerpany i Przerażony.",
+      "recharge": "Zakop na trzy dni w spokojnym miejscu: na polu lub nad brzegiem rzeki."
+    },
+    {
+      "rollMin": 8,
+      "rollMax": 8,
+      "name": "Zrozum mnie!",
+      "effect": "[MOC] istot innego gatunku przez [MOC] tur rozumie to, co mówisz.",
+      "recharge": "Dobrowolnie oddaj zaklęcie istocie z innego gatunku."
+    },
+    {
+      "rollMin": 9,
+      "rollMax": 9,
+      "name": "Widmowy chrząszcz",
+      "effect": "Stwórz widmowego chrząszcza, który potrafi przenieść ciężar równy 6 miejscom ekwipunku przez [MOC]×6 tur.",
+      "recharge": "Zakop na trzy noce gdzieś na cmentarzysku chrząszczy."
+    },
+    {
+      "rollMin": 10,
+      "rollMax": 10,
+      "name": "Światło",
+      "effect": "[MOC] istot musi zdać test SW, żeby nie zostały oszołomione; lub stwórz światło jasne jak pochodnia na [SUMĘ] tur.",
+      "recharge": "Złap pierwszy promień wschodzącego słońca i ostatni zachodzącego. Powtarzaj przez trzy dni."
+    },
+    {
+      "rollMin": 11,
+      "rollMax": 11,
+      "name": "Niewidzialny krąg",
+      "effect": "Tworzy niewidzialny i nieprzesuwalny krąg mocy o średnicy [MOC]×15 cm. Trwa przez [MOC] tur.",
+      "recharge": "Wykonaj żelazny pierścień tej samej średnicy, co ostatnio rzucone zaklęcie. Przełóż przez niego tabliczkę. Ładowanie rozpuszcza pierścień."
+    },
+    {
+      "rollMin": 12,
+      "rollMax": 12,
+      "name": "Puk, puk!",
+      "effect": "Otwórz drzwi lub pojemnik z SF równą 10+[MOC]×4.",
+      "recharge": "Zamknij w pudełku, które zamkniesz w innym pudełku, które zamkniesz w kolejnym. Zostaw na trzy dni."
+    },
+    {
+      "rollMin": 13,
+      "rollMax": 13,
+      "name": "Tłusta plama",
+      "effect": "Pokryj teren wielkości [MOC]×15 cm śliskim i łatwopalnym tłuszczem. Istoty na tym terenie muszą zdać test ZR, żeby się nie przewrócić.",
+      "recharge": "Dokładnie wysmaruj rozgrzanym łojem. Pozostaw do skrzepnięcia."
+    },
+    {
+      "rollMin": 14,
+      "rollMax": 14,
+      "name": "Rośnij!",
+      "effect": "Zwiększasz rozmiar istoty razy [MOC]+1 na jedną turę.",
+      "recharge": "Umieść na trzy dni na najwyższej gałęzi wysokiego drzewa."
+    },
+    {
+      "rollMin": 15,
+      "rollMax": 15,
+      "name": "Niewidzialność",
+      "effect": "Uczyń istotę niewidzialną na [MOC] tur. Ruch skraca czas działania zaklęcia o 1 turę.",
+      "recharge": "Przez cały dzień nie otwieraj oczu, cały czas trzymając zaklęcie w łapce."
+    },
+    {
+      "rollMin": 16,
+      "rollMax": 16,
+      "name": "Kocimiętka",
+      "effect": "Dowolny przedmiot staje się przynętą, której koty nie są w stanie się oprzeć. Efekt utrzymuje się przez [MOC] tur.",
+      "recharge": "Podaruj kotu coś, czego pragnie z całego serca."
+    }
+  ]
+}

@@ -1,0 +1,515 @@
+{
+  "_source": {
+    "describes": "Usługi i sklepy w osadach",
+    "status": "Zasada domowa. Autorskie materiały tego projektu, niepochodzące z Mausritter.",
+    "rationale": "Mausritter nie ma tabel sklepów, usług ani dostępności według wielkości osady. SRD dostarcza tylko pojedynczych wskazówek, wskazanych w polu srdBasis każdej pozycji. Pozostałe treści są pomysłem tego projektu i nie są oficjalnymi materiałami Mausritter.",
+    "licence": "Autorska praca twórców mausritter-tools, udostępniona wraz z repozytorium.",
+    "warning": "Ręcznie utrzymywane tłumaczenie. Zachowaj kolejność wierszy i identyfikatory z oryginału.",
+    "translationNote": "Nieoficjalne tłumaczenie fanowskie na język polski autorstwa współtwórców mausritter-tools. Nie jest to oficjalne polskie wydanie Mausritter; nie korzystano z oficjalnego tłumaczenia."
+  },
+  "priceVariancePercent": 15,
+  "priceVarianceNote": "Każdy sklep zmienia ceny w obie strony maksymalnie o tę wartość, więc ten sam przedmiot kosztuje nieco inaczej w różnych osadach. Myszy i tak zwykle handlują wymiennie lub na kredyt.",
+  "shopCountBySize": [
+    {
+      "sizeValue": 1,
+      "name": "Gospodarstwo/dwór",
+      "min": 0,
+      "max": 1
+    },
+    {
+      "sizeValue": 2,
+      "name": "Rozdroże",
+      "min": 1,
+      "max": 2
+    },
+    {
+      "sizeValue": 3,
+      "name": "Przysiółek",
+      "min": 2,
+      "max": 4
+    },
+    {
+      "sizeValue": 4,
+      "name": "Wieś",
+      "min": 3,
+      "max": 6
+    },
+    {
+      "sizeValue": 5,
+      "name": "Miasteczko",
+      "min": 6,
+      "max": 9
+    },
+    {
+      "sizeValue": 6,
+      "name": "Miasto",
+      "min": 9,
+      "max": 14
+    }
+  ],
+  "services": [
+    {
+      "id": "general-store",
+      "name": "Sklep wielobranżowy",
+      "keeperTitle": "sprzedawca",
+      "minSize": 1,
+      "weight": 100,
+      "allowDuplicates": false,
+      "requiresHumanTown": false,
+      "priceModifierPercent": 0,
+      "stock": {
+        "categories": [
+          "tools-mouse-made"
+        ],
+        "minItems": 6,
+        "maxItems": 10
+      },
+      "signNouns": [
+        "Drobiazgiem",
+        "Wózkiem",
+        "Koszem",
+        "Korcem",
+        "Kredensem",
+        "Spichlerzem",
+        "Spiżarnianym Regałem"
+      ],
+      "srdBasis": "Narzędzia mysiej produkcji są dostępne w większości mysich osad.",
+      "blurb": "Liny, posłania, wiadra i kreda, piętrzące się aż po krokwie."
+    },
+    {
+      "id": "victualler",
+      "name": "Skład żywności",
+      "keeperTitle": "dostawca żywności",
+      "minSize": 1,
+      "weight": 85,
+      "allowDuplicates": false,
+      "requiresHumanTown": false,
+      "priceModifierPercent": 0,
+      "stock": {
+        "categories": [
+          "lodging-and-food"
+        ],
+        "minItems": 3,
+        "maxItems": 6
+      },
+      "signNouns": [
+        "Stołem",
+        "Chochlowym Trzonkiem",
+        "Bochenkiem",
+        "Okruszkiem",
+        "Półmiskiem",
+        "Maselniczym Dzbankiem",
+        "Rusztem"
+      ],
+      "srdBasis": "SRD podaje ceny posiłków, wystawnych posiłków i racji podróżnych oraz koszt tygodnia jedzenia i noclegu: 20p.",
+      "blurb": "Racje zawinięte w woskowany liść i garnek czegoś gorącego."
+    },
+    {
+      "id": "smith",
+      "name": "Kuźnia i płatnerz",
+      "keeperTitle": "kowal",
+      "minSize": 3,
+      "weight": 80,
+      "allowDuplicates": false,
+      "requiresHumanTown": false,
+      "priceModifierPercent": 0,
+      "stock": {
+        "categories": [
+          "weapons-and-armour"
+        ],
+        "minItems": 4,
+        "maxItems": 8
+      },
+      "signNouns": [
+        "Kuźniczym Dachem",
+        "Kowadłem",
+        "Młotem",
+        "Igielnym Uchem",
+        "Zbiornikiem Hartowniczym",
+        "Miechem",
+        "Żarem"
+      ],
+      "srdBasis": "Liczba dostępnych płatnerzy/kowali wynosi d2. SRD wycenia naprawy na 10% ceny przedmiotu za każdą kropkę zużycia.",
+      "blurb": "Iskry, zaostrzone igły i usuwanie zużycia za 10% ceny przedmiotu za kropkę.",
+      "offersRepairs": true
+    },
+    {
+      "id": "chandler",
+      "name": "Świecarnia",
+      "keeperTitle": "świecarz",
+      "minSize": 3,
+      "weight": 55,
+      "allowDuplicates": false,
+      "requiresHumanTown": false,
+      "priceModifierPercent": 0,
+      "stock": {
+        "categories": [
+          "light-sources"
+        ],
+        "minItems": 3,
+        "maxItems": 5
+      },
+      "signNouns": [
+        "Knotem",
+        "Ognikiem",
+        "Lampionem",
+        "Płomieniem",
+        "Łojem",
+        "Iskrzącym Węglem"
+      ],
+      "srdBasis": "SRD wymienia pochodnie, latarnie, olej, latarnie elektryczne i baterie jako dostępne do zakupu źródła światła.",
+      "blurb": "Pęczki pochodni i latarnia, która widziała lepsze tunele."
+    },
+    {
+      "id": "hireling-hall",
+      "name": "Dom najemników",
+      "keeperTitle": "werbownik",
+      "minSize": 3,
+      "weight": 60,
+      "allowDuplicates": false,
+      "requiresHumanTown": false,
+      "priceModifierPercent": 0,
+      "stock": {
+        "categories": [
+          "hired-help"
+        ],
+        "minItems": 3,
+        "maxItems": 6
+      },
+      "signNouns": [
+        "Zaciągiem",
+        "Spisem",
+        "Uściskiem",
+        "Stołkiem",
+        "Przejazdem",
+        "Dziedzińcem"
+      ],
+      "srdBasis": "W mysiej osadzie można spędzić dzień na szukaniu myszy potrzebujących pracy. Wielkość osady określa dostępne rodzaje najemników. SRD nie podaje szczegółów; zastosowane tutaj progi wielkości są zasadą domową.",
+      "blurb": "Myszy czekają z nadzieją na propozycję pracy. Rekrutacja wymaga testu WOL lub 20p.",
+      "offersHirelings": true
+    },
+    {
+      "id": "scavengers-stall",
+      "name": "Stragan zbieracza",
+      "keeperTitle": "zbieracz",
+      "minSize": 2,
+      "weight": 90,
+      "allowDuplicates": false,
+      "requiresHumanTown": true,
+      "priceModifierPercent": 10,
+      "stock": {
+        "categories": [
+          "tools-human-made"
+        ],
+        "minItems": 4,
+        "maxItems": 8
+      },
+      "signNouns": [
+        "Odzyskiem",
+        "Łupem",
+        "Znaleziskiem",
+        "Skarbem",
+        "Złomem",
+        "Darem Losu"
+      ],
+      "srdBasis": "Narzędzia ludzkiej produkcji są dostępne w mysich osadach w pobliżu ludzi. Dostępność tej usługi zależy od położenia, a nie wielkości osady.",
+      "blurb": "Ludzkie odpadki przytaszczone do domu i optymistycznie wycenione."
+    },
+    {
+      "id": "clothier",
+      "name": "Sklep odzieżowy",
+      "keeperTitle": "krawiec",
+      "minSize": 4,
+      "weight": 55,
+      "allowDuplicates": false,
+      "requiresHumanTown": false,
+      "priceModifierPercent": 0,
+      "stock": {
+        "categories": [
+          "clothing"
+        ],
+        "minItems": 3,
+        "maxItems": 5
+      },
+      "signNouns": [
+        "Naparstkiem",
+        "Zwojem",
+        "Wrzecionem",
+        "Ściegiem",
+        "Płaszczem",
+        "Ostrzem Nożyc"
+      ],
+      "srdBasis": "SRD podaje ceny ubogiej, zwykłej i szlacheckiej odzieży oraz płaszczy zimowych i nieprzemakalnych.",
+      "blurb": "Woskowane płaszcze na drogę i jeden szlachecki strój, na który nikogo tu nie stać."
+    },
+    {
+      "id": "bank",
+      "name": "Bank i skrytki",
+      "keeperTitle": "bankier",
+      "minSize": 4,
+      "weight": 50,
+      "allowDuplicates": false,
+      "requiresHumanTown": false,
+      "priceModifierPercent": 0,
+      "stock": {
+        "categories": [],
+        "minItems": 0,
+        "maxItems": 0
+      },
+      "signNouns": [
+        "Sejfem",
+        "Skarbcem",
+        "Zamkiem",
+        "Kufrem",
+        "Pękiem Kluczy"
+      ],
+      "srdBasis": "W mysiej osadzie pestki i przedmioty można przechowywać w banku lub skrytce. Przy odbiorze mysz płaci 1% wartości depozytu.",
+      "blurb": "Pestki i pamiątki rodowe pod ochroną. Odbiór kosztuje 1% wartości.",
+      "serviceOnly": true,
+      "serviceTerms": "Przechowywanie jest bezpłatne. Odbiór kosztuje 1% wartości depozytu."
+    },
+    {
+      "id": "stables",
+      "name": "Stajnie i przewozy",
+      "keeperTitle": "woźnica",
+      "minSize": 4,
+      "weight": 45,
+      "allowDuplicates": false,
+      "requiresHumanTown": false,
+      "priceModifierPercent": 0,
+      "stock": {
+        "categories": [
+          "transport-hire"
+        ],
+        "minItems": 1,
+        "maxItems": 3
+      },
+      "signNouns": [
+        "Rzemieniem",
+        "Lejcem",
+        "Kołem",
+        "Siodłem",
+        "Kantarem",
+        "Postronkiem"
+      ],
+      "srdBasis": "SRD podaje ceny króliczych wozów, rzecznych tratw i lotów na gołębiach za mysz i za heks.",
+      "blurb": "Zrzędliwy królik, tratwa i stawki za heks.",
+      "pricesPerHex": true
+    },
+    {
+      "id": "apothecary",
+      "name": "Apteka",
+      "keeperTitle": "aptekarz",
+      "minSize": 4,
+      "weight": 45,
+      "allowDuplicates": false,
+      "requiresHumanTown": false,
+      "priceModifierPercent": 20,
+      "stock": {
+        "categories": [
+          "tools-mouse-made"
+        ],
+        "itemNames": [
+          "Bottle",
+          "Waterskin",
+          "Perfume",
+          "Grease",
+          "Glue",
+          "Cookpots",
+          "Hourglass",
+          "Bellows"
+        ],
+        "minItems": 3,
+        "maxItems": 5
+      },
+      "signNouns": [
+        "Moździerzem",
+        "Tłuczkiem",
+        "Okładem",
+        "Wyciągiem",
+        "Listkiem",
+        "Ziołowym Pęczkiem"
+      ],
+      "srdBasis": "Oparte na pozycji o ogrodach rzadkich ziół i strzeżonych suszarniach w tabeli przemysłu oraz cenach perfum i mydła. Mausritter nie ma zasad aptekarstwa; towar służy budowaniu atmosfery.",
+      "blurb": "Pęczki suszących się ziół i rady, o które nikt nie prosił."
+    },
+    {
+      "id": "scriptorium",
+      "name": "Skryptorium mędrca",
+      "keeperTitle": "mędrzec",
+      "minSize": 5,
+      "weight": 35,
+      "allowDuplicates": false,
+      "requiresHumanTown": false,
+      "priceModifierPercent": 0,
+      "stock": {
+        "categories": [
+          "tools-mouse-made"
+        ],
+        "itemNames": [
+          "Book",
+          "Chalk",
+          "Hourglass",
+          "Bottle",
+          "Mirror"
+        ],
+        "minItems": 2,
+        "maxItems": 4
+      },
+      "signNouns": [
+        "Piórem",
+        "Tomem",
+        "Rejestrem",
+        "Marginesem",
+        "Kałamarzem",
+        "Kodeksem"
+      ],
+      "srdBasis": "Liczba dostępnych uczonych wynosi d2. SRD podaje cenę pustej książki 300p i książki do czytania 600p.",
+      "blurb": "Książki za 300p puste i za 600p zapisane oraz uczony, który je przeczyta."
+    },
+    {
+      "id": "jeweller",
+      "name": "Jubiler",
+      "keeperTitle": "jubiler",
+      "minSize": 5,
+      "weight": 30,
+      "allowDuplicates": false,
+      "requiresHumanTown": false,
+      "priceModifierPercent": 0,
+      "stock": {
+        "categories": [],
+        "minItems": 0,
+        "maxItems": 0
+      },
+      "signNouns": [
+        "Szlifem",
+        "Kastem",
+        "Blaskiem",
+        "Zatrzaskiem",
+        "Filigranem"
+      ],
+      "srdBasis": "Oparte na wartościach skarbów w SRD: złoty pierścień 500p, wysadzany kamieniami wisiorek 400p, oszlifowany diament 1000p, sznur pereł 1500p.",
+      "blurb": "Kupuje skarby tanio, a odsprzedaje jeszcze drożej.",
+      "buysTreasure": true,
+      "serviceOnly": true,
+      "serviceTerms": "Skupuje odzyskane skarby, zwykle za około połowę ich podanej wartości."
+    },
+    {
+      "id": "curio-dealer",
+      "name": "Sklep osobliwości",
+      "keeperTitle": "handlarz",
+      "minSize": 5,
+      "weight": 20,
+      "allowDuplicates": false,
+      "requiresHumanTown": false,
+      "priceModifierPercent": 50,
+      "stock": {
+        "categories": [
+          "tools-mouse-made"
+        ],
+        "itemNames": [
+          "Mirror",
+          "Musical instrument",
+          "Hourglass",
+          "Set of loaded dice",
+          "Perfume",
+          "Horn",
+          "Lockpicks"
+        ],
+        "minItems": 2,
+        "maxItems": 4
+      },
+      "signNouns": [
+        "Dziwem",
+        "Cudem",
+        "Zabytkiem",
+        "Osobliwym Przedmiotem",
+        "Starociem"
+      ],
+      "srdBasis": "Niechciane, w pełni naładowane zaklęcie można zwykle sprzedać w osadzie za d6 × 100p; wyczerpane jest warte połowę. SRD opisuje tylko sprzedaż zaklęć, więc handlarz oferujący je do zakupu jest zasadą domową. Towar ograniczono do mysich osobliwości, bo ludzkie przedmioty wymagają bliskości ludzkiego miasta.",
+      "blurb": "Kupi od ciebie zaklęcie za d6 × 100p. Odsprzedaż to już inna sprawa.",
+      "buysSpells": true
+    }
+  ],
+  "shopSignPatterns": [
+    {
+      "id": "the-adjective-noun",
+      "template": "Pod {adjective} {noun}",
+      "weight": 40
+    },
+    {
+      "id": "family-possessive",
+      "template": "Pod {noun} — {family}",
+      "weight": 35
+    },
+    {
+      "id": "noun-and-noun",
+      "template": "Pod {noun} i {noun2}",
+      "weight": 10
+    },
+    {
+      "id": "the-noun",
+      "template": "Pod {noun}",
+      "weight": 10
+    },
+    {
+      "id": "family-and-daughters",
+      "template": "{family} i Córki",
+      "weight": 5
+    }
+  ],
+  "shopSignAdjectives": [
+    "Krzywym",
+    "Miedzianym",
+    "Wygiętym",
+    "Złoconym",
+    "Skromnym",
+    "Ciernistym",
+    "Wesołym",
+    "Cichym",
+    "Solidnym",
+    "Połatanym",
+    "Jasnym",
+    "Małym",
+    "Wielkim",
+    "Ukrytym",
+    "Wędrownym",
+    "Uczciwym",
+    "Upartym",
+    "Gwiżdżącym",
+    "Nakrapianym",
+    "Zardzewiałym",
+    "Życzliwym",
+    "Zwietrzałym",
+    "Szczęśliwym",
+    "Przechylonym",
+    "Wilgotnym",
+    "Przytulnym",
+    "Mosiężnym",
+    "Zwiędłym",
+    "Wiernym",
+    "Przewiewnym"
+  ],
+  "shopQuirks": [
+    "Z zasady odmawia targowania się",
+    "Targuje się zaciekle i z przyjemnością",
+    "Wszystko jest oprószone mąką",
+    "Przy drzwiach trzyma żuka na smyczy",
+    "Tylko wymiana, nigdy pestki",
+    "Co godzinę zapisuje ceny kredą i je ściera",
+    "Koniecznie opowiada historię każdego przedmiotu",
+    "Jest bardzo podejrzliwy wobec obcych",
+    "Zawsze częstuje herbatą przed interesami",
+    "Połowa towaru jest już zarezerwowana",
+    "Sprzedaje ze stratą i nie potrafi wyjaśnić dlaczego",
+    "Dobry towar chowa pod ladą",
+    "Ma dług u kogoś przerażającego",
+    "Prowadzi sklep z hamaka",
+    "Liczy pestki trzy razy na głos",
+    "Daje kredyt każdemu ze smutną historią",
+    "Idealny porządek i zapach wosku pszczelego",
+    "Śpi na zapleczu i nie lubi, gdy go budzą",
+    "Zniżki dla każdego, kto chwali szyld z pancerza żuka",
+    "Jest przekonany, że konkurent go okrada"
+  ]
+}

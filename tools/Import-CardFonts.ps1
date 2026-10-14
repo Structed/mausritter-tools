@@ -8,8 +8,8 @@
     1.1, so this app can set its cards the same way.
 
     The site is static and must work offline, so the fonts are fetched once and served from
-    wwwroot rather than linked from Google's CDN. Only the latin subset is taken: it covers the
-    German umlauts and eszett, and the app ships in no other language.
+    wwwroot rather than linked from Google's CDN. The latin and latin-ext subsets cover English,
+    German and Polish, including Polish diacritics on printed cards.
 
     Note the second family is Open Sans itself, at the narrow end of its width axis, not the
     "Open Sans Condensed" family the Studio names. That family is a deprecated static cut of the
@@ -45,7 +45,10 @@ $BrowserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' 
 
 # The subset that carries ASCII, the accented latin letters and the punctuation and currency
 # marks the app uses. Google names its subsets only in comments, so they are matched by range.
-$LatinRange = 'U+0000-00FF'
+$SubsetRanges = [ordered]@{
+    'latin' = 'U+0000-00FF'
+    'latin-ext' = 'U+0100-02BA'
+}
 
 $Families = @(
     [pscustomobject]@{
@@ -101,7 +104,11 @@ function Get-FontFileName {
     .SYNOPSIS
         Names a font file after what it holds, so the folder can be read without the stylesheet.
     #>
-    param([Parameter(Mandatory)] [string] $Slug, [Parameter(Mandatory)] [hashtable] $Declarations)
+    param(
+        [Parameter(Mandatory)] [string] $Slug,
+        [Parameter(Mandatory)] [hashtable] $Declarations,
+        [Parameter(Mandatory)] [string] $Subset
+    )
 
     $parts = @($Slug)
     $weight = $Declarations['font-weight']
@@ -109,6 +116,7 @@ function Get-FontFileName {
     $stretch = $Declarations['font-stretch']
     if ($stretch) { $parts += ($stretch -replace '%', '' -replace '\s+', '-') + 'w' }
     if ($Declarations['font-style'] -eq 'italic') { $parts += 'italic' }
+    if ($Subset -ne 'latin') { $parts += $Subset }
 
     ($parts -join '-') + '.woff2'
 }
@@ -127,16 +135,23 @@ foreach ($family in $Families) {
     $cssUrl = "https://fonts.googleapis.com/css2?family=$($family.Spec)&display=swap"
     $css = (Invoke-WebRequest -Uri $cssUrl -Headers @{ 'User-Agent' = $BrowserAgent }).Content
 
-    $taken = 0
+    $taken = @{}
     foreach ($block in Get-FontFaceBlock -Css $css) {
         $declarations = $block.Declarations
         if (-not $declarations['unicode-range']) { continue }
-        if (-not $declarations['unicode-range'].StartsWith($LatinRange)) { continue }
+        $subset = $null
+        foreach ($candidate in $SubsetRanges.Keys) {
+            if ($declarations['unicode-range'].StartsWith($SubsetRanges[$candidate])) {
+                $subset = $candidate
+                break
+            }
+        }
+        if (-not $subset) { continue }
 
         $source = [regex]::Match($declarations['src'], "url\((?<url>[^)]+)\)")
         if (-not $source.Success) { throw "No font URL in the $($family.Name) rule." }
 
-        $fileName = Get-FontFileName -Slug $family.Slug -Declarations $declarations
+        $fileName = Get-FontFileName -Slug $family.Slug -Declarations $declarations -Subset $subset
         $target = Join-Path $FontDir $fileName
 
         if ($Refresh -or -not (Test-Path -LiteralPath $target)) {
@@ -155,10 +170,14 @@ foreach ($family in $Families) {
 
         $declarations['src'] = "url(`"../fonts/$fileName`") format(`"woff2`")"
         $faces.Add($declarations)
-        $taken++
+        $taken[$subset] = $true
     }
 
-    if ($taken -eq 0) { throw "No latin subset came back for $($family.Name)." }
+    foreach ($subset in $SubsetRanges.Keys) {
+        if (-not $taken.ContainsKey($subset)) {
+            throw "No $subset subset came back for $($family.Name)."
+        }
+    }
 
     $licenceFile = "$($family.Slug)-OFL.txt"
     $licenceTarget = Join-Path $FontDir $licenceFile
@@ -214,7 +233,7 @@ $provenance = [ordered]@{
         describes   = 'Web fonts for the item cards'
         generatedBy = 'tools/Import-CardFonts.ps1'
         stylesheet  = 'css/card-fonts.css'
-        subset      = 'latin'
+        subset      = 'latin, latin-ext'
         warning     = 'Imported files. Do not edit by hand; re-run the importer instead.'
     }
     families = $provenanceFamilies
