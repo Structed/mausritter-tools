@@ -1,0 +1,618 @@
+{
+  "_source": {
+    "describes": "Wyposażenie i ceny",
+    "work": "Mausritter System Reference Document",
+    "version": "2.3.1",
+    "url": "https://mausritter.com/srd/",
+    "sourceFiles": [
+      "12-inventory.md",
+      "16-gear-and-prices.md"
+    ],
+    "licence": "CC BY 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "Ten utwór opiera się na Mausritter (https://mausritter.com), grze Losing Games i Isaaca Williamsa, i jest udostępniany na licencji Creative Commons Uznanie autorstwa 4.0 Międzynarodowe (CC BY 4.0).",
+    "generatedBy": "tools/Import-SrdTables.ps1",
+    "warning": "Ręcznie utrzymywane tłumaczenie. Zachowaj kolejność wierszy i identyfikatory z oryginału.",
+    "translationNote": "Nazwy i terminologia wyposażenia na podstawie oficjalnego polskiego wydania Mausritter, s. 8–9; nazwy najemników na podstawie tabeli „Profesja najemników” (zdjęcia dostarczone przez użytkownika). Pozostałe teksty są tłumaczeniem fanowskim SRD. Angielskie identyfikatory i mechaniczne wartości pozostają zgodne z SRD. Integracja z narzędziem jest nieoficjalna."
+  },
+  "currency": {
+    "name": "pestka",
+    "abbreviation": "p",
+    "note": "Sakiewka mieści 250 pestek. Wszystkie pestki ponad ten limit muszą być dźwigane w ekwipunku (250p na jedno miejsce). W mysich osadach handel odbywa się przeważnie przez wymianę, umowy lub weksle. Pestki można zdeponować w banku."
+  },
+  "categories": [
+    {
+      "id": "tools-mouse-made",
+      "name": "Narzędzia mysiej produkcji",
+      "items": [
+        {
+          "name": "Bedroll",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Posłanie"
+        },
+        {
+          "name": "Bellows",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Miech"
+        },
+        {
+          "name": "Book",
+          "qualifier": "pusta",
+          "priceText": "300p",
+          "pips": 300,
+          "label": "Książka"
+        },
+        {
+          "name": "Book",
+          "qualifier": "do czytania",
+          "priceText": "600p",
+          "pips": 600,
+          "label": "Książka"
+        },
+        {
+          "name": "Bottle",
+          "priceText": "1p",
+          "pips": 1,
+          "label": "Butelka"
+        },
+        {
+          "name": "Bucket",
+          "priceText": "5p",
+          "pips": 5,
+          "label": "Wiadro"
+        },
+        {
+          "name": "Caltrops",
+          "qualifier": "worek",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Kolce"
+        },
+        {
+          "name": "Chalk",
+          "priceText": "1p",
+          "pips": 1,
+          "label": "Kreda"
+        },
+        {
+          "name": "Chisel",
+          "priceText": "5p",
+          "pips": 5,
+          "label": "Dłuto"
+        },
+        {
+          "name": "Cookpots",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Garnki"
+        },
+        {
+          "name": "Crowbar",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Łom"
+        },
+        {
+          "name": "Drill",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Wiertło"
+        },
+        {
+          "name": "Glue",
+          "priceText": "5p",
+          "pips": 5,
+          "label": "Klej"
+        },
+        {
+          "name": "Grease",
+          "priceText": "5p",
+          "pips": 5,
+          "label": "Smar"
+        },
+        {
+          "name": "Hammer",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Młotek"
+        },
+        {
+          "name": "Horn",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Róg"
+        },
+        {
+          "name": "Hourglass",
+          "priceText": "300p",
+          "pips": 300,
+          "label": "Klepsydra"
+        },
+        {
+          "name": "Lockpicks",
+          "priceText": "100p",
+          "pips": 100,
+          "label": "Wytrychy"
+        },
+        {
+          "name": "Metal file",
+          "priceText": "5p",
+          "pips": 5,
+          "label": "Pilnik do metalu"
+        },
+        {
+          "name": "Mirror",
+          "priceText": "200p",
+          "pips": 200,
+          "label": "Lustro"
+        },
+        {
+          "name": "Musical instrument",
+          "priceText": "200p",
+          "pips": 200,
+          "label": "Instrument muzyczny"
+        },
+        {
+          "name": "Net",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Sieć"
+        },
+        {
+          "name": "Padlock and key",
+          "qualifier": "mała",
+          "priceText": "20p",
+          "pips": 20,
+          "label": "Kłódka z kluczem"
+        },
+        {
+          "name": "Perfume",
+          "priceText": "50p",
+          "pips": 50,
+          "label": "Perfumy"
+        },
+        {
+          "name": "Pick",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Kilof"
+        },
+        {
+          "name": "Set of loaded dice",
+          "priceText": "5p",
+          "pips": 5,
+          "label": "Zestaw oszukanych kości"
+        },
+        {
+          "name": "Shovel",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Łopata"
+        },
+        {
+          "name": "Tent",
+          "priceText": "80p",
+          "pips": 80,
+          "label": "Namiot"
+        },
+        {
+          "name": "Waterskin",
+          "priceText": "5p",
+          "pips": 5,
+          "label": "Bukłak"
+        },
+        {
+          "name": "Whistle",
+          "priceText": "5p",
+          "pips": 5,
+          "label": "Gwizdek"
+        },
+        {
+          "name": "Wooden pole",
+          "qualifier": "6\"",
+          "priceText": "1p",
+          "pips": 1,
+          "label": "Drewniany drąg"
+        },
+        {
+          "name": "Wooden spikes",
+          "priceText": "1p",
+          "pips": 1,
+          "label": "Drewniane kołki"
+        }
+      ],
+      "availability": "Dostępne w większości mysich osad. Przedmioty w mysim rozmiarze."
+    },
+    {
+      "id": "tools-human-made",
+      "name": "Narzędzia ludzkiej produkcji",
+      "items": [
+        {
+          "name": "Fishing hook",
+          "priceText": "20p",
+          "pips": 20,
+          "label": "Haczyk wędkarski"
+        },
+        {
+          "name": "Incense stick",
+          "priceText": "20p",
+          "pips": 20,
+          "label": "Kadzidełko"
+        },
+        {
+          "name": "Lens",
+          "priceText": "200p",
+          "pips": 200,
+          "label": "Soczewka"
+        },
+        {
+          "name": "Necklace chain",
+          "priceText": "40p",
+          "pips": 40,
+          "label": "Łańcuszek"
+        },
+        {
+          "name": "Needle",
+          "priceText": "20p",
+          "pips": 20,
+          "label": "Igła"
+        },
+        {
+          "name": "Matches",
+          "qualifier": "paczka",
+          "priceText": "80p",
+          "pips": 80,
+          "label": "Zapałki"
+        },
+        {
+          "name": "Padlock and key",
+          "qualifier": "duża",
+          "priceText": "100p",
+          "pips": 100,
+          "label": "Kłódka z kluczem"
+        },
+        {
+          "name": "Twine",
+          "qualifier": "zwój",
+          "priceText": "40p",
+          "pips": 40,
+          "label": "Sznurek"
+        },
+        {
+          "name": "Soap",
+          "qualifier": "mała kostka",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Mydło"
+        },
+        {
+          "name": "Thread",
+          "qualifier": "szpulka",
+          "priceText": "20p",
+          "pips": 20,
+          "label": "Nić"
+        },
+        {
+          "name": "Mouse trap",
+          "priceText": "100p",
+          "pips": 100,
+          "label": "Pułapka na myszy"
+        },
+        {
+          "name": "Poison",
+          "priceText": "100p",
+          "pips": 100,
+          "label": "Trucizna"
+        }
+      ],
+      "availability": "Dostępne w mysich osadach w pobliżu ludzi."
+    },
+    {
+      "id": "weapons-and-armour",
+      "name": "Broń i zbroje",
+      "items": [
+        {
+          "name": "Improvised",
+          "note": "Pierwsza łapka lub obie łapki. Zaznacz zużycie po każdym wykorzystaniu w walce.",
+          "damage": "d6",
+          "priceText": "1p",
+          "pips": 1,
+          "label": "Improwizowana"
+        },
+        {
+          "name": "Light",
+          "note": "Pierwsza łapka lub obie łapki. Jeśli walczysz dwiema lekkimi broniami jednocześnie, rzuć dwiema kostkami i wybierz wyższy wynik.",
+          "damage": "d6",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Lekka"
+        },
+        {
+          "name": "Medium",
+          "note": "Pierwsza łapka lub obie łapki. Dzierżona w jednej łapce zadaje k6 obrażeń. W obu — k8.",
+          "damage": "d6/d8",
+          "priceText": "20p",
+          "pips": 20,
+          "label": "Średnia"
+        },
+        {
+          "name": "Heavy",
+          "note": "Obie łapki.",
+          "damage": "d10",
+          "priceText": "40p",
+          "pips": 40,
+          "label": "Ciężka"
+        },
+        {
+          "name": "Light ranged",
+          "note": "Pierwsza łapka.",
+          "damage": "d6",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Lekka dystansowa"
+        },
+        {
+          "name": "Heavy ranged",
+          "note": "Obie łapki.",
+          "damage": "d8",
+          "priceText": "40p",
+          "pips": 40,
+          "label": "Ciężka dystansowa"
+        },
+        {
+          "name": "Arrows",
+          "qualifier": "kołczan",
+          "priceText": "5p",
+          "pips": 5,
+          "label": "Strzały"
+        },
+        {
+          "name": "Stones",
+          "qualifier": "torba",
+          "priceText": "1p",
+          "pips": 1,
+          "label": "Pociski"
+        },
+        {
+          "name": "Light armour",
+          "defence": 1,
+          "priceText": "150p",
+          "pips": 150,
+          "label": "Lekka zbroja"
+        },
+        {
+          "name": "Heavy armour",
+          "defence": 1,
+          "priceText": "500p",
+          "pips": 500,
+          "label": "Ciężka zbroja"
+        },
+        {
+          "name": "Silvered weapons",
+          "note": "zawsze zaznacz zużycie po walce",
+          "priceText": "x10p",
+          "label": "Broń posrebrzana"
+        },
+        {
+          "name": "Repairs",
+          "qualifier": "za kropkę",
+          "priceText": "10%",
+          "label": "Naprawy"
+        }
+      ]
+    },
+    {
+      "id": "light-sources",
+      "name": "Pochodnie i latarnie",
+      "items": [
+        {
+          "name": "Torches",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Pochodnie"
+        },
+        {
+          "name": "Lantern",
+          "priceText": "50p",
+          "pips": 50,
+          "label": "Latarnia"
+        },
+        {
+          "name": "Oil",
+          "qualifier": "do latarni",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Olej"
+        },
+        {
+          "name": "Electric lantern",
+          "note": "Latarnia zasilana bateriami; ma 6 kropek zużycia zamiast 3.",
+          "priceText": "200p",
+          "pips": 200,
+          "label": "Latarnia elektryczna"
+        },
+        {
+          "name": "Batteries",
+          "qualifier": "do latarni elektrycznej",
+          "priceText": "50p",
+          "pips": 50,
+          "label": "Baterie"
+        }
+      ]
+    },
+    {
+      "id": "clothing",
+      "name": "Odzież",
+      "items": [
+        {
+          "name": "Poor",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Ubogie ubranie"
+        },
+        {
+          "name": "Standard",
+          "priceText": "50p",
+          "pips": 50,
+          "label": "Zwykłe ubranie"
+        },
+        {
+          "name": "Noble",
+          "priceText": "1000p",
+          "pips": 1000,
+          "label": "Szlacheckie ubranie"
+        },
+        {
+          "name": "Winter cloak",
+          "priceText": "150p",
+          "pips": 150,
+          "label": "Płaszcz zimowy"
+        },
+        {
+          "name": "Waterproof cloak",
+          "priceText": "100p",
+          "pips": 100,
+          "label": "Płaszcz nieprzemakalny"
+        }
+      ]
+    },
+    {
+      "id": "lodging-and-food",
+      "name": "Nocleg i jedzenie",
+      "items": [
+        {
+          "name": "Bunkhouse bed",
+          "priceText": "1p",
+          "pips": 1,
+          "perUnit": "noc",
+          "label": "Łóżko w noclegowni"
+        },
+        {
+          "name": "Private room",
+          "priceText": "5p",
+          "pips": 5,
+          "perUnit": "noc",
+          "label": "Prywatny pokój"
+        },
+        {
+          "name": "Hot bath",
+          "priceText": "2p",
+          "pips": 2,
+          "label": "Gorąca kąpiel"
+        },
+        {
+          "name": "Travel rations",
+          "priceText": "5p",
+          "pips": 5,
+          "label": "Prowiant"
+        },
+        {
+          "name": "Meal",
+          "priceText": "2p",
+          "pips": 2,
+          "label": "Posiłek"
+        },
+        {
+          "name": "Grand meal",
+          "priceText": "50p",
+          "pips": 50,
+          "label": "Wystawny posiłek"
+        },
+        {
+          "name": "Night out on the town",
+          "priceText": "100p",
+          "pips": 100,
+          "label": "Wieczór na mieście"
+        }
+      ]
+    },
+    {
+      "id": "transport-hire",
+      "name": "Wynajem transportu",
+      "items": [
+        {
+          "name": "Rabbit wagon",
+          "priceText": "5p",
+          "pips": 5,
+          "label": "Króliczy wóz"
+        },
+        {
+          "name": "River raft",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Rzeczna tratwa"
+        },
+        {
+          "name": "Pigeon flight",
+          "priceText": "200p",
+          "pips": 200,
+          "label": "Lot na gołębiu"
+        }
+      ],
+      "availability": "Ceny za mysz, za heks."
+    },
+    {
+      "id": "hired-help",
+      "name": "Najemnicy",
+      "items": [
+        {
+          "name": "Torchbearer",
+          "priceText": "1p",
+          "pips": 1,
+          "label": "Latarnik"
+        },
+        {
+          "name": "Labourer",
+          "priceText": "2p",
+          "pips": 2,
+          "label": "Robotnik"
+        },
+        {
+          "name": "Tunnel digger",
+          "priceText": "5p",
+          "pips": 5,
+          "label": "Rębacz tunelowy"
+        },
+        {
+          "name": "Armourer/blacksmith",
+          "priceText": "8p",
+          "pips": 8,
+          "label": "Kowal/płatnerz"
+        },
+        {
+          "name": "Local guide",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Miejscowy przewodnik"
+        },
+        {
+          "name": "Mouse-at-arms",
+          "priceText": "10p",
+          "pips": 10,
+          "label": "Zbrojny"
+        },
+        {
+          "name": "Scholar",
+          "priceText": "20p",
+          "pips": 20,
+          "label": "Uczony"
+        },
+        {
+          "name": "Knight",
+          "priceText": "25p",
+          "pips": 25,
+          "label": "Rycerz"
+        },
+        {
+          "name": "Interpreter",
+          "priceText": "30p",
+          "pips": 30,
+          "label": "Tłumacz"
+        }
+      ],
+      "availability": "Ceny za dzień, bez jedzenia i noclegu."
+    }
+  ]
+}

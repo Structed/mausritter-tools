@@ -1,0 +1,322 @@
+{
+  "_source": {
+    "describes": "Obiekty, w których, na których lub wokół których powstają osady",
+    "status": "Zasada domowa opracowana na podstawie SRD.",
+    "rationale": "SRD opisuje mysie osady jako garstkę rodzin w dębowej dziupli lub w ścianie starego gospodarstwa. Tabele punktów orientacyjnych dostarczają obiektów w ludzkiej skali. Ich nazwy pochodzą z SRD (CC BY 4.0); metadane kształtu, rozmiaru i układu są pomysłem tego projektu i służą tworzeniu map.",
+    "licence": "Landmark names from the Mausritter SRD (CC BY 4.0). Metadata is original work by the mausritter-tools authors.",
+    "attribution": "Ten utwór opiera się na Mausritter (https://mausritter.com), grze Losing Games i Isaaca Williamsa, i jest udostępniany na licencji Creative Commons Uznanie autorstwa 4.0 Międzynarodowe (CC BY 4.0).",
+    "warning": "Ręcznie utrzymywane tłumaczenie. Zachowaj kolejność wierszy i identyfikatory z oryginału.",
+    "translationNote": "Nieoficjalne tłumaczenie fanowskie na język polski autorstwa współtwórców mausritter-tools. Nie jest to oficjalne polskie wydanie Mausritter; nie korzystano z oficjalnego tłumaczenia."
+  },
+  "designNote": "Mysia osada powinna wyglądać jak jeden obiekt w ludzkiej skali, opisany w skali myszy. Licencja dla twórców zewnętrznych zaleca niewielkie i gęste zabudowania. Każdy obiekt poniżej wyznacza więc granice wnętrza, w którym powstaje mapa.",
+  "shapes": {
+    "hollow": "Zaokrąglone, organiczne wnętrze. Drogi wiją się spiralnie do środka.",
+    "linear": "Długie i wąskie. Jedna główna droga z budynkami po obu stronach.",
+    "vessel": "Zaokrąglony korpus z wąskim otworem lub dziobkiem. Jedno wejście, gęsta zabudowa.",
+    "boxy": "Prostokątny ludzki przedmiot. Drogi przypominają siatkę, krawędzie są ostre.",
+    "warren": "Rozgałęziona sieć podziemna. Tunele zamiast ulic.",
+    "sprawl": "Otwarta przestrzeń wokół centralnego obiektu. Luźne, kręte drogi."
+  },
+  "hosts": [
+    {
+      "id": "hollow-tree-stump",
+      "name": "Wydrążony pień",
+      "preposition": "inside",
+      "shape": "hollow",
+      "terrain": [
+        "countryside",
+        "forest"
+      ],
+      "weight": 100,
+      "vertical": true,
+      "description": "Pierścień komnat wyciętych w nadgniłym rdzeniu drewna, z kominem dostarczającym światło dzienne nad głową.",
+      "phrase": "wewnątrz wydrążonego pnia"
+    },
+    {
+      "id": "old-farmhouse-wall",
+      "name": "Ściana starego gospodarstwa",
+      "preposition": "inside",
+      "shape": "linear",
+      "terrain": [
+        "countryside",
+        "human-town"
+      ],
+      "weight": 100,
+      "vertical": true,
+      "description": "Pokolenia myszy żyją w szczelinie między listwami a tynkiem.",
+      "phrase": "w ścianie starego gospodarstwa"
+    },
+    {
+      "id": "craggy-oak",
+      "name": "Stary, sękaty dąb",
+      "preposition": "in and under",
+      "shape": "hollow",
+      "terrain": [
+        "countryside",
+        "forest"
+      ],
+      "weight": 80,
+      "vertical": true,
+      "description": "Pokoje w pniu, magazyny w korzeniach, posterunki w koronie.",
+      "phrase": "w starym, sękatym dębie i pod nim"
+    },
+    {
+      "id": "cow-skeleton",
+      "name": "Szkielet krowy",
+      "preposition": "within",
+      "shape": "sprawl",
+      "terrain": [
+        "countryside"
+      ],
+      "weight": 45,
+      "vertical": false,
+      "description": "Żebra służą za krokwie, a czaszka jest najokazalszym budynkiem w okolicy.",
+      "phrase": "w szkielecie krowy"
+    },
+    {
+      "id": "stone-wall",
+      "name": "Mur z luźnych kamieni",
+      "preposition": "inside",
+      "shape": "linear",
+      "terrain": [
+        "countryside"
+      ],
+      "weight": 85,
+      "vertical": true,
+      "description": "Osada snuje się przez szczeliny między ułożonymi kamieniami.",
+      "phrase": "wewnątrz muru z luźnych kamieni"
+    },
+    {
+      "id": "massive-fallen-tree",
+      "name": "Ogromne powalone drzewo",
+      "preposition": "inside",
+      "shape": "linear",
+      "terrain": [
+        "forest",
+        "countryside"
+      ],
+      "weight": 75,
+      "vertical": false,
+      "description": "Jedna długa galeria biegnie przez cały pień i rozgałęzia się w konarach.",
+      "phrase": "wewnątrz ogromnego powalonego drzewa"
+    },
+    {
+      "id": "rabbit-warren",
+      "name": "Opuszczona królicza nora",
+      "preposition": "in",
+      "shape": "warren",
+      "terrain": [
+        "countryside"
+      ],
+      "weight": 70,
+      "vertical": true,
+      "description": "Tunele poszerzono i podparto. Dawni właściciele odeszli lub zostali uprzejmie wyproszeni.",
+      "phrase": "w opuszczonej króliczej norze"
+    },
+    {
+      "id": "drainpipe-outlet",
+      "name": "Wylot rury odpływowej",
+      "preposition": "around",
+      "shape": "vessel",
+      "terrain": [
+        "human-town",
+        "river"
+      ],
+      "weight": 65,
+      "vertical": true,
+      "description": "Latem sucho, jesienią ewakuacja. Każdy zna procedurę.",
+      "phrase": "wokół wylotu rury odpływowej"
+    },
+    {
+      "id": "abandoned-car",
+      "name": "Porzucony samochód",
+      "preposition": "inside",
+      "shape": "boxy",
+      "terrain": [
+        "human-town",
+        "countryside"
+      ],
+      "weight": 60,
+      "vertical": true,
+      "description": "Pianka z siedzeń na posłania, komora silnika na kuźnię, bagażnik na spichlerz.",
+      "phrase": "wewnątrz porzuconego samochodu"
+    },
+    {
+      "id": "woodshed",
+      "name": "Drewutnia",
+      "preposition": "inside",
+      "shape": "boxy",
+      "terrain": [
+        "human-town",
+        "countryside"
+      ],
+      "weight": 70,
+      "vertical": true,
+      "description": "Piętrowe miasto z polan, każdej zimy przebudowywane przez olbrzymów.",
+      "phrase": "w drewutni"
+    },
+    {
+      "id": "trash-pile",
+      "name": "Sterta śmieci",
+      "preposition": "within",
+      "shape": "sprawl",
+      "terrain": [
+        "human-town"
+      ],
+      "weight": 60,
+      "vertical": true,
+      "description": "Ciągle przybywa nowych skarbów, ciągle ktoś je przeszukuje. Bogactwo większe, niż się wydaje.",
+      "phrase": "w stercie śmieci"
+    },
+    {
+      "id": "dumped-furniture",
+      "name": "Wyrzucone meble",
+      "preposition": "in",
+      "article": "",
+      "shape": "boxy",
+      "terrain": [
+        "human-town"
+      ],
+      "weight": 55,
+      "vertical": true,
+      "description": "Kredens przewrócony na plecy, szuflady stały się piętrami.",
+      "phrase": "w wyrzuconych meblach"
+    },
+    {
+      "id": "shopping-trolley",
+      "name": "Wózek sklepowy",
+      "preposition": "in",
+      "shape": "boxy",
+      "terrain": [
+        "human-town",
+        "river"
+      ],
+      "weight": 35,
+      "vertical": true,
+      "description": "Na wpół zatopiony w mule; kosz osłonięto plecioną trawą.",
+      "phrase": "w wózku sklepowym"
+    },
+    {
+      "id": "upturned-boot",
+      "name": "Odwrócony but",
+      "preposition": "inside",
+      "shape": "vessel",
+      "terrain": [
+        "human-town",
+        "countryside"
+      ],
+      "weight": 40,
+      "vertical": true,
+      "description": "Podeszwa służy za dach, dziurki na sznurówki za okna. O stałym zapachu nikt nie mówi.",
+      "phrase": "wewnątrz odwróconego buta"
+    },
+    {
+      "id": "cracked-teapot",
+      "name": "Pęknięty czajniczek",
+      "preposition": "inside",
+      "shape": "vessel",
+      "terrain": [
+        "human-town",
+        "countryside"
+      ],
+      "weight": 30,
+      "vertical": false,
+      "description": "Dzióbek jest główną bramą, a pokrywka salą rady.",
+      "phrase": "wewnątrz pękniętego czajniczka"
+    },
+    {
+      "id": "stone-bridge",
+      "name": "Kamienny most",
+      "preposition": "under",
+      "shape": "linear",
+      "terrain": [
+        "river",
+        "countryside"
+      ],
+      "weight": 60,
+      "vertical": true,
+      "description": "Zabudowa w łuku mostu, ponad poziomem wody. Zazwyczaj.",
+      "phrase": "pod kamiennym mostem"
+    },
+    {
+      "id": "sunken-barge",
+      "name": "Zatopiona barka",
+      "preposition": "aboard",
+      "shape": "boxy",
+      "terrain": [
+        "river"
+      ],
+      "weight": 45,
+      "vertical": true,
+      "description": "Przechylona, częściowo zalana i zaciekle broniona przez mieszkańców suchej połowy.",
+      "phrase": "na zatopionej barce"
+    },
+    {
+      "id": "termite-riddled-tree",
+      "name": "Drzewo przeżarte przez termity",
+      "preposition": "inside",
+      "shape": "warren",
+      "terrain": [
+        "forest"
+      ],
+      "weight": 50,
+      "vertical": true,
+      "description": "Cudze tunele, odziedziczone i pośpiesznie wzmocnione.",
+      "phrase": "wewnątrz drzewa przeżartego przez termity"
+    },
+    {
+      "id": "huge-flat-rock",
+      "name": "Wielki płaski głaz",
+      "preposition": "beneath",
+      "shape": "sprawl",
+      "terrain": [
+        "countryside",
+        "forest"
+      ],
+      "weight": 55,
+      "vertical": false,
+      "description": "Kamienny dach nad szerokim, suchym placem, na którym zawsze panuje półmrok.",
+      "phrase": "pod wielkim płaskim głazem"
+    },
+    {
+      "id": "greenhouse",
+      "name": "Szklarnia",
+      "preposition": "inside",
+      "shape": "boxy",
+      "terrain": [
+        "human-town"
+      ],
+      "weight": 40,
+      "vertical": true,
+      "description": "Ciepło, wilgotno i bujnie. Jedzenie rośnie przez cały rok, podobnie jak wszystko inne.",
+      "phrase": "wewnątrz szklarni"
+    },
+    {
+      "id": "blackberry-hedge",
+      "name": "Żywopłot z jeżyn",
+      "preposition": "within",
+      "shape": "linear",
+      "terrain": [
+        "human-town",
+        "countryside"
+      ],
+      "weight": 65,
+      "vertical": false,
+      "description": "Cierniste ściany nie wpuszczą drapieżnika, a plony przychodzą same.",
+      "phrase": "w żywopłocie z jeżyn"
+    },
+    {
+      "id": "trash-filled-skip",
+      "name": "Kontener ze śmieciami",
+      "preposition": "inside",
+      "shape": "boxy",
+      "terrain": [
+        "human-town"
+      ],
+      "weight": 35,
+      "vertical": true,
+      "description": "Stalowe ściany, brak drapieżników i ciągły strach przed opróżnieniem.",
+      "phrase": "wewnątrz kontenera pełnego śmieci"
+    }
+  ]
+}
